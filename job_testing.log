@@ -1,0 +1,1841 @@
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2873264 3625658            NA       3625658     NA 2013-08-19 00:00:00
+ 2 2861675 3609098            NA       3609098     NA 2012-05-15 00:00:00
+ 3    5556    8203            NA          8203     NA 2001-01-11 00:00:00
+ 4 2865505 3614618            NA       3614618     NA 2013-07-26 00:00:00
+ 5    8195   10963            NA         10963     NA 2004-01-23 00:00:00
+ 6   10947   13723            NA         13723     NA 2001-10-12 00:00:00
+ 7   13645   16483            NA         16483     NA 2002-08-06 00:00:00
+ 8 2871202 3622898            NA       3622898     NA 2012-10-23 00:00:00
+ 9   20882   24763            NA         24763     NA 2003-09-26 00:00:00
+10   23199   27523            NA         27523     NA 2003-04-30 00:00:00
+# ℹ 3,608,296 more rows
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2648154 3624227       3319326       3319326      5 2012-12-18 00:00:00
+ 2 2597730 3604907       3540139       3252156      1 2011-12-06 00:00:00
+ 3 2868388 3618707            NA       3618707     NA 2013-02-14 00:00:00
+ 4 2663095 3610427       3476069       3339401      5 2009-02-02 00:00:00
+ 5   21841   26092            NA         26092     NA 2002-02-25 00:00:00
+ 6 2870268 3621467            NA       3621467     NA 2013-04-11 00:00:00
+ 7 2346078 3626987       3566354       3566354      5 2012-01-27 00:00:00
+ 8 2868482 3629747       3618827       3618827      5 2012-08-16 00:00:00
+ 9 2847191 3589066            NA       3589066     NA 2013-06-18 00:00:00
+10   24399   28852            NA         28852     NA 2002-10-17 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    6400    9072            NA          9072     NA 2002-12-10 00:00:00
+ 2 2757491 3839650       3567519       3466316      1 2013-04-12 00:00:00
+ 3    9062   11832            NA         11832     NA 2002-05-14 00:00:00
+ 4 2171152 3623767       2689170       2689170      5 2011-07-16 00:00:00
+ 5 1306741 3618247       2908138       1566151      5 2008-12-11 00:00:00
+ 6   26586   31152            NA         31152     NA 2003-02-07 00:00:00
+ 7   29200   33912            NA         33912     NA 2003-06-30 00:00:00
+ 8 2870295 3648607       3621498       3621498      5 2011-01-06 00:00:00
+ 9 2858260 3604447            NA       3604447     NA 2013-07-24 00:00:00
+10   57002   66313            NA         66313     NA 2004-05-28 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    1675    4242            NA          4242     NA 2001-11-15 00:00:00
+ 2 2866678 3616177            NA       3616177     NA 2013-03-14 00:00:00
+ 3 2196958 3607897       3217891       2721046      5 2011-05-06 00:00:00
+ 4 2862698 3610657            NA       3610657     NA 2013-07-31 00:00:00
+ 5 2876444 3629977            NA       3629977     NA 2013-03-06 00:00:00
+ 6   17654   20802            NA         20802     NA 2003-01-09 00:00:00
+ 7 2870412 3621697            NA       3621697     NA 2013-02-21 00:00:00
+ 8   24623   29082            NA         29082     NA 1996-05-14 00:00:00
+ 9 2858772 3605137            NA       3605137     NA 2013-07-26 00:00:00
+10 2868553 3618937            NA       3618937     NA 2013-08-01 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    6315    8985            NA          8985     NA 2003-04-28 00:00:00
+ 2    8975   11745            NA         11745     NA 2002-02-28 00:00:00
+ 3 2860165 3607120            NA       3607120     NA 2013-07-30 00:00:00
+ 4 3047615 4426492       3859770       3859770      1 2014-02-24 10:23:26
+ 5 1939718 3612640       2393945       2393945      5 2010-11-26 00:00:00
+ 6 2869886 3620920            NA       3620920     NA 2013-08-12 00:00:00
+ 7 3688025 4702376            NA       4702376     NA 2016-01-18 00:00:00
+ 8   23890   28305            NA         28305     NA 2003-07-11 00:00:00
+ 9 2833174 3615400       3600808       3569364      1 2013-06-26 00:00:00
+10 2889882 3648520            NA       3648520     NA 2013-08-05 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     918    3460            NA          3460     NA 2003-05-13 00:00:00
+ 2 2860161 3607115            NA       3607115     NA 2013-07-30 00:00:00
+ 3 2866105 3615395            NA       3615395     NA 2013-08-05 00:00:00
+ 4 2867984 3618155            NA       3618155     NA 2013-08-08 00:00:00
+ 5    8970   11740            NA         11740     NA 2002-02-19 00:00:00
+ 6   11687   14500            NA         14500     NA 2003-07-07 00:00:00
+ 7 2875912 3629195            NA       3629195     NA 2013-06-13 00:00:00
+ 8 3221495 4093362            NA       4093362     NA 2014-09-04 17:28:11
+ 9 2961438 3743677            NA       3743677     NA 2013-11-22 00:00:00
+10   16921   20020            NA         20020     NA 2002-01-28 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     918    3460            NA          3460     NA 2003-05-13 00:00:00
+ 2 2860161 3607115            NA       3607115     NA 2013-07-30 00:00:00
+ 3 2866105 3615395            NA       3615395     NA 2013-08-05 00:00:00
+ 4 2867984 3618155            NA       3618155     NA 2013-08-08 00:00:00
+ 5    8970   11740            NA         11740     NA 2002-02-19 00:00:00
+ 6   11687   14500            NA         14500     NA 2003-07-07 00:00:00
+ 7 2875912 3629195            NA       3629195     NA 2013-06-13 00:00:00
+ 8 3221495 4093362            NA       4093362     NA 2014-09-04 17:28:11
+ 9 2961438 3743677            NA       3743677     NA 2013-11-22 00:00:00
+10   16921   20020            NA         20020     NA 2002-01-28 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     918    3460            NA          3460     NA 2003-05-13 00:00:00
+ 2 2860161 3607115            NA       3607115     NA 2013-07-30 00:00:00
+ 3 2866105 3615395            NA       3615395     NA 2013-08-05 00:00:00
+ 4 2867984 3618155            NA       3618155     NA 2013-08-08 00:00:00
+ 5    8970   11740            NA         11740     NA 2002-02-19 00:00:00
+ 6   11687   14500            NA         14500     NA 2003-07-07 00:00:00
+ 7 2875912 3629195            NA       3629195     NA 2013-06-13 00:00:00
+ 8 3221495 4093362            NA       4093362     NA 2014-09-04 17:28:11
+ 9 2961438 3743677            NA       3743677     NA 2013-11-22 00:00:00
+10   16921   20020            NA         20020     NA 2002-01-28 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     918    3460            NA          3460     NA 2003-05-13 00:00:00
+ 2 2860161 3607115            NA       3607115     NA 2013-07-30 00:00:00
+ 3 2866105 3615395            NA       3615395     NA 2013-08-05 00:00:00
+ 4 2867984 3618155            NA       3618155     NA 2013-08-08 00:00:00
+ 5    8970   11740            NA         11740     NA 2002-02-19 00:00:00
+ 6   11687   14500            NA         14500     NA 2003-07-07 00:00:00
+ 7 2875912 3629195            NA       3629195     NA 2013-06-13 00:00:00
+ 8 3221495 4093362            NA       4093362     NA 2014-09-04 17:28:11
+ 9 2961438 3743677            NA       3743677     NA 2013-11-22 00:00:00
+10   16921   20020            NA         20020     NA 2002-01-28 00:00:00
+# ℹ 3,608,296 more rows
+Erreur : RStudio not running
+Exécution arrêtée
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1   11573   14367            NA         14367     NA 2002-05-14 00:00:00
+ 2 2875806 3629062            NA       3629062     NA 2013-08-23 00:00:00
+ 3 2871649 3623542            NA       3623542     NA 2013-04-26 00:00:00
+ 4   16790   19887            NA         19887     NA 2003-09-03 00:00:00
+ 5   28975   33687            NA         33687     NA 2001-06-04 00:00:00
+ 6   54961   64047            NA         64047     NA 2002-12-18 00:00:00
+ 7   52391   61287            NA         61287     NA 1995-09-29 00:00:00
+ 8   45020   53007            NA         53007     NA 2003-05-16 00:00:00
+ 9 2912097 3678023            NA       3678023     NA 2013-10-02 00:00:00
+10 2907891 3672503            NA       3672503     NA 2011-06-22 00:00:00
+# ℹ 3,608,296 more rows
+
+Exécution arrêtée
+
+Exécution arrêtée
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     751    3281            NA          3281     NA 2003-03-17 00:00:00
+ 2    3423    6041            NA          6041     NA 2003-04-24 00:00:00
+ 3 2375484 3620736       3603185       2955607      5 2011-01-12 00:00:00
+ 4 2860031 3606936            NA       3606936     NA 2013-07-30 00:00:00
+ 5 2864008 3612456            NA       3612456     NA 2013-07-25 00:00:00
+ 6    6143    8801            NA          8801     NA 2003-11-04 00:00:00
+ 7 3042604 4426308       3852981       3852981      5 2010-10-14 00:00:00
+ 8   28929   33641            NA         33641     NA 2003-04-09 00:00:00
+ 9 2692403 3664896       3379103       3379103      1 2012-07-04 00:00:00
+10   52345   61241            NA         61241     NA 2003-10-17 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 1211165 3607304       1444578       1444578      5 2008-08-21 00:00:00
+ 2    3787    6409            NA          6409     NA 2003-10-03 00:00:00
+ 3    6489    9169            NA          9169     NA 2003-05-23 00:00:00
+ 4 3162814 4014230            NA       4014230     NA 2012-06-08 00:00:00
+ 5 2770692 3610064       3484305       3484305      5 2013-04-24 00:00:00
+ 6 2961601 3743866            NA       3743866     NA 2007-04-06 00:00:00
+ 7   24050   28489            NA         28489     NA 2003-09-29 00:00:00
+ 8 2843248 3708705       3583681       3583681      1 2012-12-14 00:00:00
+ 9 2866243 3615584            NA       3615584     NA 2013-08-06 00:00:00
+10 2733781 3672825       3434357       3434329      1 2011-05-16 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2869923 3620961            NA       3620961     NA 2010-10-22 00:00:00
+ 2    6355    9026            NA          9026     NA 2003-11-19 00:00:00
+ 3 3029543 3869245       3835723       3835723      1 2014-02-06 00:00:00
+ 4 2804788 3637521       3530807       3530807      5 2011-06-26 00:00:00
+ 5 2335220 3623721       2901624       2901624      5 2011-10-25 00:00:00
+ 6 3477115 4426533            NA       4426533     NA 2015-05-04 00:00:00
+ 7   19304   22826            NA         22826     NA 2003-02-18 00:00:00
+ 8   23925   28346            NA         28346     NA 2003-03-21 00:00:00
+ 9   29154   33866            NA         33866     NA 2003-05-02 00:00:00
+10   55131   64226            NA         64226     NA 2003-03-26 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    1454    4017            NA          4017     NA 2002-11-18 00:00:00
+ 2 2872193 3624232            NA       3624232     NA 2008-10-08 00:00:00
+ 3    9526   12297            NA         12297     NA 2003-02-26 00:00:00
+ 4 2864544 3613192            NA       3613192     NA 2012-02-01 09:40:30
+ 5 2789721 4176000       3551868       3510702      1 2013-05-17 00:00:00
+ 6 2874295 3626992            NA       3626992     NA 2013-08-20 00:00:00
+ 7   24404   28857            NA         28857     NA 1991-07-12 00:00:00
+ 8   48017   56457            NA         56457     NA 2004-05-06 00:00:00
+ 9   55628   64737            NA         64737     NA 2004-03-09 00:00:00
+10 2383659 3673193       2966767       2966767      5 2012-03-07 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2776437 3609926       3492193       3492193      5 2010-05-06 00:00:00
+ 2 2866143 3615446            NA       3615446     NA 2013-06-20 00:00:00
+ 3    3653    6271            NA          6271     NA 2003-08-18 00:00:00
+ 4    6359    9031            NA          9031     NA 2003-10-27 00:00:00
+ 5 2911785 3839609       3677618       3677618      1 2013-10-02 00:00:00
+ 6    9021   11791            NA         11791     NA 2003-05-06 00:00:00
+ 7 2869927 3620966            NA       3620966     NA 2013-08-13 14:59:57
+ 8 2860192 3607166            NA       3607166     NA 2013-05-28 00:00:00
+ 9   14366   17311            NA         17311     NA 2003-10-24 00:00:00
+10   16965   20071            NA         20071     NA 2003-03-11 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2870149 3621283            NA       3621283     NA 2012-09-21 00:00:00
+ 2    9338   12108            NA         12108     NA 2003-02-28 00:00:00
+ 3   12047   14868            NA         14868     NA 2004-01-22 00:00:00
+ 4 3688311 4702739            NA       4702739     NA 2012-11-19 00:00:00
+ 5 2926867 3708884       3697546       3697546      5 2010-09-27 00:00:00
+ 6 2862424 3610243            NA       3610243     NA 2013-08-01 00:00:00
+ 7 2874143 3626803            NA       3626803     NA 2013-06-26 00:00:00
+ 8   40831   47988            NA         47988     NA 2003-04-02 00:00:00
+ 9 2937438 3711644            NA       3711644     NA 2013-10-28 00:00:00
+10 2929140 3700604            NA       3700604     NA 2013-06-26 17:00:32
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    1319    3879            NA          3879     NA 2003-03-19 00:00:00
+ 2    4008    6639            NA          6639     NA 2003-09-25 00:00:00
+ 3    6707    9399            NA          9399     NA 2003-09-03 00:00:00
+ 4 2870172 3621334            NA       3621334     NA 2013-08-13 00:00:00
+ 5    9389   12159            NA         12159     NA 2002-07-16 00:00:00
+ 6 2872086 3624094            NA       3624094     NA 2013-08-16 00:00:00
+ 7 2745055 3604774       3449577       3449577      1 2013-02-05 00:00:00
+ 8 2876210 3629614            NA       3629614     NA 2013-09-04 00:00:00
+ 9   24272   28719            NA         28719     NA 2003-10-02 00:00:00
+10 2874188 3626854            NA       3626854     NA 2013-07-11 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2869923 3620961            NA       3620961     NA 2010-10-22 00:00:00
+ 2    6355    9026            NA          9026     NA 2003-11-19 00:00:00
+ 3 3029543 3869245       3835723       3835723      1 2014-02-06 00:00:00
+ 4 2804788 3637521       3530807       3530807      5 2011-06-26 00:00:00
+ 5 2335220 3623721       2901624       2901624      5 2011-10-25 00:00:00
+ 6 3477115 4426533            NA       4426533     NA 2015-05-04 00:00:00
+ 7   19304   22826            NA         22826     NA 2003-02-18 00:00:00
+ 8   23925   28346            NA         28346     NA 2003-03-21 00:00:00
+ 9   29154   33866            NA         33866     NA 2003-05-02 00:00:00
+10   55131   64226            NA         64226     NA 2003-03-26 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     237    2729            NA          2729     NA 2002-04-23 00:00:00
+ 2    8241   11009            NA         11009     NA 2000-11-14 00:00:00
+ 3 2865561 3614664            NA       3614664     NA 2013-08-01 00:00:00
+ 4 2861701 3609144            NA       3609144     NA 2013-07-29 00:00:00
+ 5 2792570 3617424       3514550       3514550      5 2013-05-22 00:00:00
+ 6 2627373 3645024       3486695       3291575      1 2012-11-28 00:00:00
+ 7 2873301 3625704            NA       3625704     NA 2013-08-19 00:00:00
+ 8 2869374 3620184            NA       3620184     NA 2012-09-18 00:00:00
+ 9   25818   30329            NA         30329     NA 2003-07-30 00:00:00
+10   28377   33089            NA         33089     NA 2002-06-26 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3280    5898            NA          5898     NA 2003-06-03 00:00:00
+ 2 2869658 3620593       3620592       3620592      5 2009-11-05 00:00:00
+ 3 1646464 3626113       2013206       2013206      5 2009-06-19 00:00:00
+ 4    6009    8658            NA          8658     NA 2002-06-06 00:00:00
+ 5 2861955 3609553            NA       3609553     NA 2013-08-01 00:00:00
+ 6 1252676 3623353       1773388       1497474      5 2008-10-09 00:00:00
+ 7 2867755 3617833            NA       3617833     NA 2013-02-08 00:00:00
+ 8 3185119 4175121       4044929       4044929      1 2014-07-17 15:50:49
+ 9   26199   30738            NA         30738     NA 2001-10-18 00:00:00
+10 2859921 3606793            NA       3606793     NA 2013-07-23 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2873014 3625331            NA       3625331     NA 2011-05-11 00:00:00
+ 2 2869118 3619811            NA       3619811     NA 2012-07-04 00:00:00
+ 3 2870971 3622571            NA       3622571     NA 2013-06-05 16:20:30
+ 4 2471080 3628091       3083048       3083040      1 2012-03-26 00:00:00
+ 5   20587   24436            NA         24436     NA 1989-06-02 00:00:00
+ 6 2865291 3614291       3614237       3614237      1 2013-08-02 00:00:00
+ 7   25465   29956            NA         29956     NA 2001-06-18 00:00:00
+ 8   28128   32716            NA         32716     NA 2000-02-15 00:00:00
+ 9   46403   54796            NA         54796     NA 2003-02-14 00:00:00
+10 2930095 3701892            NA       3701892     NA 2013-10-16 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     324    2821            NA          2821     NA 2002-12-23 00:00:00
+ 2 2861768 3609236            NA       3609236     NA 2013-02-05 00:00:00
+ 3 2848997 3614756       3591537       3591537      5 2013-07-15 00:00:00
+ 4 2489665 3631316       3596003       3107766      5 2012-06-29 00:00:00
+ 5   23329   27661            NA         27661     NA 2003-03-03 00:00:00
+ 6 2875468 3628556            NA       3628556     NA 2011-10-18 00:00:00
+ 7   49379   58021            NA         58021     NA 2002-01-23 00:00:00
+ 8 2305882 3634076       2862197       2862197      5 2011-12-15 00:00:00
+ 9   46865   55261            NA         55261     NA 2004-02-09 00:00:00
+10 3162191 4013402            NA       4013402     NA 2014-06-18 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2667091 3605602       3348518       3344827      1 2012-12-17 00:00:00
+ 2 2853425 3622162       3597677       3597677      5 2012-11-07 00:00:00
+ 3 2868837 3619402            NA       3619402     NA 2013-05-21 00:00:00
+ 4   15485   18507            NA         18507     NA 2003-10-14 00:00:00
+ 5   18097   21267            NA         21267     NA 2001-04-23 00:00:00
+ 6 2886747 3644242            NA       3644242     NA 2013-09-05 00:00:00
+ 7 2806291 3608362       3533133       3533133      5 2012-03-05 00:00:00
+ 8   22518   26787            NA         26787     NA 2004-01-28 00:00:00
+ 9 2874777 3627682            NA       3627682     NA 2013-08-22 00:00:00
+10 2847732 3589761            NA       3589761     NA 2010-05-26 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2302607 3623537       3378104       2857957      5 2011-11-10 00:00:00
+ 2   14202   17122            NA         17122     NA 2003-03-07 00:00:00
+ 3   16785   19882            NA         19882     NA 2003-10-09 00:00:00
+ 4   19221   22642            NA         22642     NA 2002-09-30 00:00:00
+ 5 2770646 3620777       3620776       3484221      2 2011-02-22 00:00:00
+ 6 2860066 3606977            NA       3606977     NA 2013-07-29 00:00:00
+ 7 2877832 3631817            NA       3631817     NA 2013-08-21 00:00:00
+ 8   28970   33682            NA         33682     NA 2002-10-14 00:00:00
+ 9 2875801 3629057            NA       3629057     NA 2013-07-04 00:00:00
+10 2907887 3672498            NA       3672498     NA 2013-09-09 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2862980 3611030            NA       3611030     NA 2012-04-03 14:40:35
+ 2    4743    7375            NA          7375     NA 2003-07-23 00:00:00
+ 3 2872637 3624830            NA       3624830     NA 2013-07-25 14:00:30
+ 4 2870660 3622070            NA       3622070     NA 2013-05-30 00:00:00
+ 5   15400   18415            NA         18415     NA 2003-10-09 00:00:00
+ 6 2861041 3608270            NA       3608270     NA 2013-05-16 00:00:00
+ 7   24988   29455            NA         29455     NA 1999-06-03 00:00:00
+ 8 3312828 4211759            NA       4211759     NA 2014-12-07 00:00:00
+ 9   27628   32215            NA         32215     NA 2003-10-24 00:00:00
+10 2770724 3652430       3552422       3484369      1 2013-04-23 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2874672 3627539            NA       3627539     NA 2013-05-29 00:00:00
+ 2 2632480 3610979       3298126       3298126      5 2010-09-29 00:00:00
+ 3    4692    7324            NA          7324     NA 2003-07-17 00:00:00
+ 4 2575946 3624779       3223303       3223303      1 2012-09-05 00:00:00
+ 5   15349   18364            NA         18364     NA 2003-02-26 00:00:00
+ 6   17957   21124            NA         21124     NA 2003-10-28 00:00:00
+ 7 2864945 3613739            NA       3613739     NA 2013-08-02 00:00:00
+ 8   24937   29404            NA         29404     NA 1999-03-08 00:00:00
+ 9 2866919 3616499            NA       3616499     NA 2013-08-08 00:00:00
+10   59941   70085            NA         70085     NA 2003-09-25 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    5597    8244            NA          8244     NA 2001-04-12 00:00:00
+ 2    8236   11004            NA         11004     NA 2003-11-07 00:00:00
+ 3 2873297 3625699            NA       3625699     NA 2009-04-03 00:00:00
+ 4   10986   13764            NA         13764     NA 2003-09-02 00:00:00
+ 5   13686   16524            NA         16524     NA 2003-09-29 00:00:00
+ 6 2871236 3622939            NA       3622939     NA 2013-08-09 00:00:00
+ 7   25813   30324            NA         30324     NA 2002-05-17 00:00:00
+ 8 2867540 3617419            NA       3617419     NA 2012-02-20 00:00:00
+ 9   28372   33084            NA         33084     NA 2000-10-13 00:00:00
+10 2721458 3642259       3417533       3417533      1 2013-03-11 15:06:31
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2870207 3621380            NA       3621380     NA 2013-08-13 00:00:00
+ 2   17350   20485            NA         20485     NA 2001-04-13 00:00:00
+ 3   19476   23245            NA         23245     NA 2003-12-19 00:00:00
+ 4 2876241 3629660            NA       3629660     NA 2013-06-12 00:00:00
+ 5   26951   31525            NA         31525     NA 2002-09-30 00:00:00
+ 6   55537   64645            NA         64645     NA 2003-02-10 00:00:00
+ 7   45215   53605            NA         53605     NA 1998-09-09 00:00:00
+ 8 2878296 3632420            NA       3632420     NA 2013-08-27 00:00:00
+ 9 2858555 3604820            NA       3604820     NA 2013-03-12 00:00:00
+10 3165047 4017266            NA       4017266     NA 2013-12-12 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    1675    4242            NA          4242     NA 2001-11-15 00:00:00
+ 2 2866678 3616177            NA       3616177     NA 2013-03-14 00:00:00
+ 3 2196958 3607897       3217891       2721046      5 2011-05-06 00:00:00
+ 4 2862698 3610657            NA       3610657     NA 2013-07-31 00:00:00
+ 5 2876444 3629977            NA       3629977     NA 2013-03-06 00:00:00
+ 6   17654   20802            NA         20802     NA 2003-01-09 00:00:00
+ 7 2870412 3621697            NA       3621697     NA 2013-02-21 00:00:00
+ 8   24623   29082            NA         29082     NA 1996-05-14 00:00:00
+ 9 2858772 3605137            NA       3605137     NA 2013-07-26 00:00:00
+10 2868553 3618937            NA       3618937     NA 2013-08-01 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1   11573   14367            NA         14367     NA 2002-05-14 00:00:00
+ 2 2875806 3629062            NA       3629062     NA 2013-08-23 00:00:00
+ 3 2871649 3623542            NA       3623542     NA 2013-04-26 00:00:00
+ 4   16790   19887            NA         19887     NA 2003-09-03 00:00:00
+ 5   28975   33687            NA         33687     NA 2001-06-04 00:00:00
+ 6   54961   64047            NA         64047     NA 2002-12-18 00:00:00
+ 7   52391   61287            NA         61287     NA 1995-09-29 00:00:00
+ 8   45020   53007            NA         53007     NA 2003-05-16 00:00:00
+ 9 2912097 3678023            NA       3678023     NA 2013-10-02 00:00:00
+10 2907891 3672503            NA       3672503     NA 2011-06-22 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     152    2637            NA          2637     NA 2001-11-28 00:00:00
+ 2    2781    5397            NA          5397     NA 1998-02-19 00:00:00
+ 3 2873225 3625612            NA       3625612     NA 2011-09-20 00:00:00
+ 4    5511    8157            NA          8157     NA 1998-12-07 00:00:00
+ 5 2869307 3620092            NA       3620092     NA 2013-08-13 00:00:00
+ 6    8149   10917            NA         10917     NA 2003-06-03 00:00:00
+ 7 2863547 3611812            NA       3611812     NA 2013-08-05 08:35:59
+ 8 2865471 3614572            NA       3614572     NA 2013-08-06 17:42:48
+ 9   13599   16437            NA         16437     NA 2002-06-28 00:00:00
+10   16136   19197            NA         19197     NA 2002-04-19 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+Erreur dans dbConnect(drv, str_connexion, getUser(), unserialize(sodium::simple_decrypt(msg,  : 
+  Unable to connect JDBC to jdbc:netezza://10.21.0.111:5480//DTL_ADAM_MARSAL
+  JDBC ERROR: Aucun chemin d'accès pour atteindre l'hôte cible (Host unreachable)
+Appels : connectNzSDSE ... dbConnect -> .local -> .verify.JDBC.result -> .verify.ex
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+Erreur dans dbConnect(drv, str_connexion, getUser(), unserialize(sodium::simple_decrypt(msg,  : 
+  Unable to connect JDBC to jdbc:netezza://10.21.0.111:5480//DTL_ADAM_MARSAL
+  JDBC ERROR: Aucun chemin d'accès pour atteindre l'hôte cible (Host unreachable)
+Appels : connectNzSDSE ... dbConnect -> .local -> .verify.JDBC.result -> .verify.ex
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    2424    5024            NA          5024     NA 2002-06-03 00:00:00
+ 2    7776   10544            NA         10544     NA 2004-02-03 00:00:00
+ 3 3161764 4012845            NA       4012845     NA 2014-06-11 00:00:00
+ 4 2865186 3614199       3614069       3614069      1 2013-08-06 15:24:02
+ 5   13226   16064            NA         16064     NA 2003-09-26 00:00:00
+ 6 2870899 3622479            NA       3622479     NA 2013-08-14 16:24:15
+ 7   18393   21584            NA         21584     NA 2002-05-17 00:00:00
+ 8 2863276 3611439            NA       3611439     NA 2013-08-02 15:50:28
+ 9 2875027 3627999            NA       3627999     NA 2012-01-04 00:00:00
+10 2869059 3619719            NA       3619719     NA 2013-06-14 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    6404    9077            NA          9077     NA 2003-11-20 00:00:00
+ 2 2860232 3607212            NA       3607212     NA 2013-06-27 00:00:00
+ 3 2866175 3615492            NA       3615492     NA 2013-04-10 00:00:00
+ 4 2725423 3609972       3423150       3423150      5 2013-03-13 00:00:00
+ 5   21662   25637            NA         25637     NA 2004-03-19 00:00:00
+ 6   23963   28397            NA         28397     NA 2003-10-24 00:00:00
+ 7 2691894 3623772       3378402       3378402      1 2013-01-30 00:00:00
+ 8   29205   33917            NA         33917     NA 2003-10-06 00:00:00
+ 9   59038   69078            NA         69078     NA 2004-02-17 00:00:00
+10 1985864 3686533       3641360       2454555      5 2010-10-29 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2870149 3621283            NA       3621283     NA 2012-09-21 00:00:00
+ 2    9338   12108            NA         12108     NA 2003-02-28 00:00:00
+ 3   12047   14868            NA         14868     NA 2004-01-22 00:00:00
+ 4 3688311 4702739            NA       4702739     NA 2012-11-19 00:00:00
+ 5 2926867 3708884       3697546       3697546      5 2010-09-27 00:00:00
+ 6 2862424 3610243            NA       3610243     NA 2013-08-01 00:00:00
+ 7 2874143 3626803            NA       3626803     NA 2013-06-26 00:00:00
+ 8   40831   47988            NA         47988     NA 2003-04-02 00:00:00
+ 9 2937438 3711644            NA       3711644     NA 2013-10-28 00:00:00
+10 2929140 3700604            NA       3700604     NA 2013-06-26 17:00:32
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    6315    8985            NA          8985     NA 2003-04-28 00:00:00
+ 2    8975   11745            NA         11745     NA 2002-02-28 00:00:00
+ 3 2860165 3607120            NA       3607120     NA 2013-07-30 00:00:00
+ 4 3047615 4426492       3859770       3859770      1 2014-02-24 10:23:26
+ 5 1939718 3612640       2393945       2393945      5 2010-11-26 00:00:00
+ 6 2869886 3620920            NA       3620920     NA 2013-08-12 00:00:00
+ 7 3688025 4702376            NA       4702376     NA 2016-01-18 00:00:00
+ 8   23890   28305            NA         28305     NA 2003-07-11 00:00:00
+ 9 2833174 3615400       3600808       3569364      1 2013-06-26 00:00:00
+10 2889882 3648520            NA       3648520     NA 2013-08-05 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2866072 3615354            NA       3615354     NA 2013-08-06 00:00:00
+ 2    3561    6179            NA          6179     NA 2002-12-06 00:00:00
+ 3 2881926 3637434            NA       3637434     NA 2013-09-02 00:00:00
+ 4 2822531 3623634       3554917       3554917      1 2011-04-19 00:00:00
+ 5   11660   14459            NA         14459     NA 2002-06-19 00:00:00
+ 6   14276   17219            NA         17219     NA 2003-11-12 00:00:00
+ 7   19272   22739            NA         22739     NA 2002-12-05 00:00:00
+ 8 2877903 3631914            NA       3631914     NA 2013-03-12 00:00:00
+ 9 2428667 3629154       3399778       3025737      5 2012-03-05 00:00:00
+10   26460   31019            NA         31019     NA 2002-09-30 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2863644 3611950            NA       3611950     NA 2013-08-02 00:00:00
+ 2     282    2775            NA          2775     NA 1995-12-21 00:00:00
+ 3    2919    5535            NA          5535     NA 2002-01-04 00:00:00
+ 4    5648    8295            NA          8295     NA 2002-03-06 00:00:00
+ 5    8285   11055            NA         11055     NA 2004-02-04 00:00:00
+ 6 2555313 3617470       3195770       3195770      1 2012-09-20 09:44:09
+ 7   16267   19335            NA         19335     NA 2002-03-23 00:00:00
+ 8 2875433 3628510            NA       3628510     NA 2013-08-20 00:00:00
+ 9 2960880 3742992            NA       3742992     NA 2013-10-22 00:00:00
+10 3100008 4120277       3929540       3929540      5 2012-07-06 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2667091 3605602       3348518       3344827      1 2012-12-17 00:00:00
+ 2 2853425 3622162       3597677       3597677      5 2012-11-07 00:00:00
+ 3 2868837 3619402            NA       3619402     NA 2013-05-21 00:00:00
+ 4   15485   18507            NA         18507     NA 2003-10-14 00:00:00
+ 5   18097   21267            NA         21267     NA 2001-04-23 00:00:00
+ 6 2886747 3644242            NA       3644242     NA 2013-09-05 00:00:00
+ 7 2806291 3608362       3533133       3533133      5 2012-03-05 00:00:00
+ 8   22518   26787            NA         26787     NA 2004-01-28 00:00:00
+ 9 2874777 3627682            NA       3627682     NA 2013-08-22 00:00:00
+10 2847732 3589761            NA       3589761     NA 2010-05-26 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    5340    7973            NA          7973     NA 2002-12-20 00:00:00
+ 2    7965   10733            NA         10733     NA 2003-02-26 00:00:00
+ 3   10718   13493            NA         13493     NA 2001-09-05 00:00:00
+ 4   13415   16253            NA         16253     NA 2003-07-22 00:00:00
+ 5 2609094 3625428       3267494       3267494      1 2012-10-26 00:00:00
+ 6 2728074 3622668       3426689       3426689      5 2013-03-16 00:00:00
+ 7   51634   60413            NA         60413     NA 2003-08-21 00:00:00
+ 8 2903584 3666828            NA       3666828     NA 2013-08-08 00:00:00
+ 9   49034   57653            NA         57653     NA 2001-09-26 00:00:00
+10 2877174 3630948            NA       3630948     NA 2013-07-15 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1      62    2545            NA          2545     NA 2003-02-05 00:00:00
+ 2    2689    5305            NA          5305     NA 1993-10-19 00:00:00
+ 3 2687354 3620000       3371917       3371917      1 2011-12-08 00:00:00
+ 4 2864047 3628280       3612510       3612510      5 2013-02-15 00:00:00
+ 5   13507   16345            NA         16345     NA 2003-10-14 00:00:00
+ 6   16048   19105            NA         19105     NA 2003-03-19 00:00:00
+ 7   18658   21865            NA         21865     NA 2003-05-22 00:00:00
+ 8 2979593 4013126       3768177       3768177      1 2013-11-04 00:00:00
+ 9   20756   24625            NA         24625     NA 1998-05-11 00:00:00
+10 2780070 3625520       3551745       3497145      1 2013-03-01 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3782    6404            NA          6404     NA 2003-10-05 00:00:00
+ 2 2868122 3618339            NA       3618339     NA 2013-08-05 00:00:00
+ 3 3221641 4093546            NA       4093546     NA 2014-09-06 00:00:00
+ 4 3284604 4175627            NA       4175627     NA 2014-11-08 00:00:00
+ 5   26676   31244            NA         31244     NA 2003-01-23 00:00:00
+ 6   29273   34004            NA         34004     NA 2004-03-23 00:00:00
+ 7 2870014 3621099            NA       3621099     NA 2013-05-23 00:00:00
+ 8   55269   64364            NA         64364     NA 2003-11-27 00:00:00
+ 9 1967735 3670060       2430860       2430860      5 2010-12-15 00:00:00
+10 2878069 3632139            NA       3632139     NA 2013-07-04 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3005    5622            NA          5622     NA 2002-05-29 00:00:00
+ 2 2861791 3609277            NA       3609277     NA 2013-02-12 00:00:00
+ 3    5735    8382            NA          8382     NA 2002-05-23 00:00:00
+ 4    8372   11142            NA         11142     NA 2002-11-13 00:00:00
+ 5   16346   19422            NA         19422     NA 2002-11-20 00:00:00
+ 6   28510   33222            NA         33222     NA 2002-08-21 00:00:00
+ 7 2936681 3710678       3710632       3710632      5 2013-07-24 00:00:00
+ 8   52016   60822            NA         60822     NA 2004-05-24 00:00:00
+ 9 2579727 3590676       3405549       3228571      1 2012-10-13 00:00:00
+10   46906   55302            NA         55302     NA 2004-01-28 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     623    3143            NA          3143     NA 2002-03-22 00:00:00
+ 2 2861957 3609558            NA       3609558     NA 2013-05-21 00:00:00
+ 3   11394   14183            NA         14183     NA 2001-11-28 00:00:00
+ 4 2867757 3617838            NA       3617838     NA 2013-08-08 00:00:00
+ 5 2873621 3626118            NA       3626118     NA 2013-04-02 00:00:00
+ 6 2197522 3612318       2721771       2721771      5 2010-01-28 00:00:00
+ 7   19125   22463            NA         22463     NA 2001-10-02 00:00:00
+ 8 2871522 3623358            NA       3623358     NA 2012-12-05 00:00:00
+ 9   28791   33503            NA         33503     NA 2003-03-17 00:00:00
+10   47187   55583            NA         55583     NA 2004-03-31 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     666    3189            NA          3189     NA 2002-05-07 00:00:00
+ 2    6056    8709            NA          8709     NA 2003-06-12 00:00:00
+ 3  272038 3623404       3571780        298653      5 2002-10-02 00:00:00
+ 4 2869700 3620644            NA       3620644     NA 2013-08-13 12:03:51
+ 5   16661   19749            NA         19749     NA 2002-04-17 00:00:00
+ 6 2859959 3606844       3606841       3606841      5 2013-05-27 00:00:00
+ 7 2962243 4175172       3744700       3744700      5 2013-11-25 00:00:00
+ 8   28837   33549            NA         33549     NA 2003-01-09 00:00:00
+ 9 2881757 3637204            NA       3637204     NA 2011-09-22 00:00:00
+10 2899964 3662044            NA       3662044     NA 2013-09-20 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2866619 3616090            NA       3616090     NA 2013-05-13 00:00:00
+ 2    9664   12435            NA         12435     NA 2003-07-31 00:00:00
+ 3   14964   17955            NA         17955     NA 2002-07-19 00:00:00
+ 4 2868495 3618850            NA       3618850     NA 2013-05-22 00:00:00
+ 5 2864655 3613330            NA       3613330     NA 2012-12-20 00:00:00
+ 6   19653   23475            NA         23475     NA 2003-05-22 00:00:00
+ 7 3285008 4176138            NA       4176138     NA 2014-09-10 00:00:00
+ 8 2860675 3607810            NA       3607810     NA 2013-03-01 00:00:00
+ 9   24541   28995            NA         28995     NA 2003-08-26 00:00:00
+10 2878487 3632650            NA       3632650     NA 2013-07-02 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2865184 3614066            NA       3614066     NA 2012-03-13 00:00:00
+ 2    5018    7651            NA          7651     NA 2003-06-27 00:00:00
+ 3 2206911 3605786       2733498       2733498      1 2011-08-20 00:00:00
+ 4   13093   15931            NA         15931     NA 2004-03-12 15:29:34
+ 5   18264   21451            NA         21451     NA 2001-12-14 00:00:00
+ 6   25249   29731            NA         29731     NA 2000-12-06 00:00:00
+ 7 2870796 3622346            NA       3622346     NA 2013-08-09 00:00:00
+ 8 2863195 3611306            NA       3611306     NA 2013-06-24 00:00:00
+ 9 2861261 3608546            NA       3608546     NA 2013-07-31 00:00:00
+10 2903324 3666506            NA       3666506     NA 2013-09-23 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2864004 3612451            NA       3612451     NA 2013-08-03 00:00:00
+ 2   16742   19836            NA         19836     NA 2003-07-24 00:00:00
+ 3 2869759 3620731            NA       3620731     NA 2008-12-19 00:00:00
+ 4 2737953 3615211       3439933       3439933      1 2013-03-20 00:00:00
+ 5   28924   33636            NA         33636     NA 2003-01-10 00:00:00
+ 6   58840   68797            NA         68797     NA 2002-01-21 00:00:00
+ 7 2883848 3640051            NA       3640051     NA 2013-08-29 00:00:00
+ 8 2904242 3667651            NA       3667651     NA 2011-11-08 00:00:00
+ 9 2932996 3705572            NA       3705572     NA 2011-10-11 00:00:00
+10 2747751 3716612       3716609       3453230      5 2009-09-24 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    5202    7835            NA          7835     NA 2003-02-13 00:00:00
+ 2 2309717 3617010       3617009       2867264      2 2011-12-29 00:00:00
+ 3   13277   16115            NA         16115     NA 2003-10-14 00:00:00
+ 4 2870940 3622530            NA       3622530     NA 2010-05-26 00:00:00
+ 5   15831   18875            NA         18875     NA 2002-10-31 00:00:00
+ 6 2861556 3625290       3608926       3608926      5 2013-07-31 00:00:00
+ 7 2865297 3614250            NA       3614250     NA 2013-07-23 00:00:00
+ 8 2915498 3682531            NA       3682531     NA 2013-06-20 00:00:00
+ 9   51496   60275            NA         60275     NA 2003-02-07 00:00:00
+10 2847986 3590129            NA       3590129     NA 2013-04-25 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2862980 3611030            NA       3611030     NA 2012-04-03 14:40:35
+ 2    4743    7375            NA          7375     NA 2003-07-23 00:00:00
+ 3 2872637 3624830            NA       3624830     NA 2013-07-25 14:00:30
+ 4 2870660 3622070            NA       3622070     NA 2013-05-30 00:00:00
+ 5   15400   18415            NA         18415     NA 2003-10-09 00:00:00
+ 6 2861041 3608270            NA       3608270     NA 2013-05-16 00:00:00
+ 7   24988   29455            NA         29455     NA 1999-06-03 00:00:00
+ 8 3312828 4211759            NA       4211759     NA 2014-12-07 00:00:00
+ 9   27628   32215            NA         32215     NA 2003-10-24 00:00:00
+10 2770724 3652430       3552422       3484369      1 2013-04-23 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    7223    9951            NA          9951     NA 2000-12-05 00:00:00
+ 2 2860895 3608086            NA       3608086     NA 2013-07-26 00:00:00
+ 3 2866827 3616366            NA       3616366     NA 2013-04-08 00:00:00
+ 4   19920   23751            NA         23751     NA 2002-03-27 00:00:00
+ 5 2844741 3621886       3621885       3585757      2 2012-12-20 00:00:00
+ 6   22256   26511            NA         26511     NA 2003-02-24 00:00:00
+ 7   24811   29271            NA         29271     NA 2004-03-11 00:00:00
+ 8 2982527 3772248            NA       3772248     NA 2013-12-16 00:00:00
+ 9   59813   69952            NA         69952     NA 2002-06-11 00:00:00
+10 2676818 3673607       3417548       3358106      1 2011-12-02 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2870149 3621283            NA       3621283     NA 2012-09-21 00:00:00
+ 2    9338   12108            NA         12108     NA 2003-02-28 00:00:00
+ 3   12047   14868            NA         14868     NA 2004-01-22 00:00:00
+ 4 3688311 4702739            NA       4702739     NA 2012-11-19 00:00:00
+ 5 2926867 3708884       3697546       3697546      5 2010-09-27 00:00:00
+ 6 2862424 3610243            NA       3610243     NA 2013-08-01 00:00:00
+ 7 2874143 3626803            NA       3626803     NA 2013-06-26 00:00:00
+ 8   40831   47988            NA         47988     NA 2003-04-02 00:00:00
+ 9 2937438 3711644            NA       3711644     NA 2013-10-28 00:00:00
+10 2929140 3700604            NA       3700604     NA 2013-06-26 17:00:32
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2869695 3620639            NA       3620639     NA 2013-07-29 00:00:00
+ 2 3054713 3868923            NA       3868923     NA 2013-10-18 00:00:00
+ 3    8694   11464            NA         11464     NA 2003-05-28 00:00:00
+ 4 2867790 3617879            NA       3617879     NA 2013-06-14 00:00:00
+ 5 2526660 3623399       3157452       3157452      1 2012-08-13 00:00:00
+ 6 2873648 3626159            NA       3626159     NA 2013-01-23 00:00:00
+ 7 2831422 3631679       3628682       3566860      5 2013-06-21 00:00:00
+ 8 2865904 3615119            NA       3615119     NA 2013-08-07 11:20:39
+ 9 2787349 3612359       3507532       3507532      1 2010-09-20 00:00:00
+10   28832   33544            NA         33544     NA 2002-05-13 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1   10672   13447            NA         13447     NA 2001-01-12 00:00:00
+ 2 2670486 3628142       3349434       3349434      1 2012-12-28 00:00:00
+ 3   15918   18967            NA         18967     NA 2003-09-01 00:00:00
+ 4 2754886 3619862       3462770       3462770      1 2010-06-18 00:00:00
+ 5   18527   21727            NA         21727     NA 2003-03-24 00:00:00
+ 6 3068681 3887466            NA       3887466     NA 2014-01-29 00:00:00
+ 7   22943   27247            NA         27247     NA 2001-11-30 00:00:00
+ 8 2915572 3682623            NA       3682623     NA 2013-09-23 00:00:00
+ 9   48989   57607            NA         57607     NA 2003-10-02 00:00:00
+10 2883167 3639182            NA       3639182     NA 2013-08-26 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2873264 3625658            NA       3625658     NA 2013-08-19 00:00:00
+ 2 2861675 3609098            NA       3609098     NA 2012-05-15 00:00:00
+ 3    5556    8203            NA          8203     NA 2001-01-11 00:00:00
+ 4 2865505 3614618            NA       3614618     NA 2013-07-26 00:00:00
+ 5    8195   10963            NA         10963     NA 2004-01-23 00:00:00
+ 6   10947   13723            NA         13723     NA 2001-10-12 00:00:00
+ 7   13645   16483            NA         16483     NA 2002-08-06 00:00:00
+ 8 2871202 3622898            NA       3622898     NA 2012-10-23 00:00:00
+ 9   20882   24763            NA         24763     NA 2003-09-26 00:00:00
+10   23199   27523            NA         27523     NA 2003-04-30 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2875600 3628786            NA       3628786     NA 2012-11-21 00:00:00
+ 2    3194    5811            NA          5811     NA 2002-09-05 00:00:00
+ 3    5924    8571            NA          8571     NA 2002-12-19 00:00:00
+ 4 2538993 3623266       3590098       3174107      5 2012-08-31 00:00:00
+ 5   11305   14091            NA         14091     NA 2002-02-27 00:00:00
+ 6   19068   22371            NA         22371     NA 2004-01-06 00:00:00
+ 7   21207   25131            NA         25131     NA 2003-05-30 00:00:00
+ 8 2321776 3612226       3558844       2883358      5 2007-03-20 00:00:00
+ 9 2867707 3617746            NA       3617746     NA 2013-05-02 00:00:00
+10   28699   33411            NA         33411     NA 2001-12-21 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    1454    4017            NA          4017     NA 2002-11-18 00:00:00
+ 2 2872193 3624232            NA       3624232     NA 2008-10-08 00:00:00
+ 3    9526   12297            NA         12297     NA 2003-02-26 00:00:00
+ 4 2864544 3613192            NA       3613192     NA 2012-02-01 09:40:30
+ 5 2789721 4176000       3551868       3510702      1 2013-05-17 00:00:00
+ 6 2874295 3626992            NA       3626992     NA 2013-08-20 00:00:00
+ 7   24404   28857            NA         28857     NA 1991-07-12 00:00:00
+ 8   48017   56457            NA         56457     NA 2004-05-06 00:00:00
+ 9   55628   64737            NA         64737     NA 2004-03-09 00:00:00
+10 2383659 3673193       2966767       2966767      5 2012-03-07 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2831804 3621835       3567407       3567407      5 2013-06-26 00:00:00
+ 2 2252192 3605275       2791592       2791592      5 2011-10-25 00:00:00
+ 3    1809    4380            NA          4380     NA 2002-01-24 00:00:00
+ 4   12586   15420            NA         15420     NA 2001-09-18 00:00:00
+ 5 2843947 3627355       3626569       3584687      5 2013-06-29 00:00:00
+ 6 2868658 3619075            NA       3619075     NA 2013-07-26 00:00:00
+ 7   19870   23700            NA         23700     NA 2002-09-05 00:00:00
+ 8 2864806 3613555       3613554       3613543      2 2013-07-26 00:00:00
+ 9 2872467 3624595            NA       3624595     NA 2013-08-19 15:58:36
+10 2866785 3616315            NA       3616315     NA 2013-08-07 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    1405    3966            NA          3966     NA 2003-09-12 00:00:00
+ 2 2830105 3624181       3565046       3565046      1 2013-01-29 00:00:00
+ 3 2858588 3604861            NA       3604861     NA 2013-07-26 00:00:00
+ 4   12183   15006            NA         15006     NA 2004-03-05 17:13:34
+ 5   19495   23286            NA         23286     NA 2003-01-30 00:00:00
+ 6   21795   26046            NA         26046     NA 2001-02-13 00:00:00
+ 7 2862510 3610381            NA       3610381     NA 2013-08-01 00:00:00
+ 8   26992   31566            NA         31566     NA 2002-12-11 00:00:00
+ 9   55577   64686            NA         64686     NA 2004-02-05 00:00:00
+10   59362   69487            NA         69487     NA 2002-11-26 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3005    5622            NA          5622     NA 2002-05-29 00:00:00
+ 2 2861791 3609277            NA       3609277     NA 2013-02-12 00:00:00
+ 3    5735    8382            NA          8382     NA 2002-05-23 00:00:00
+ 4    8372   11142            NA         11142     NA 2002-11-13 00:00:00
+ 5   16346   19422            NA         19422     NA 2002-11-20 00:00:00
+ 6   28510   33222            NA         33222     NA 2002-08-21 00:00:00
+ 7 2936681 3710678       3710632       3710632      5 2013-07-24 00:00:00
+ 8   52016   60822            NA         60822     NA 2004-05-24 00:00:00
+ 9 2579727 3590676       3405549       3228571      1 2012-10-13 00:00:00
+10   46906   55302            NA         55302     NA 2004-01-28 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2874148 3626808            NA       3626808     NA 2013-07-31 00:00:00
+ 2 2811394 3621288       3588053       3540287      1 2013-02-06 00:00:00
+ 3 2872027 3624048       3624025       3624025      1 2013-07-18 00:00:00
+ 4 2866381 3615768            NA       3615768     NA 2012-01-06 00:00:00
+ 5   14666   17633            NA         17633     NA 2002-06-27 00:00:00
+ 6 2860432 3607488            NA       3607488     NA 2010-05-06 00:00:00
+ 7 2878226 3632328            NA       3632328     NA 2013-08-27 00:00:00
+ 8   24227   28673            NA         28673     NA 2003-10-01 00:00:00
+ 9 2868250 3618528            NA       3618528     NA 2013-07-16 00:00:00
+10 2888105 3646128            NA       3646128     NA 2013-09-10 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    6580    9261            NA          9261     NA 2003-11-28 00:00:00
+ 2    9251   12021            NA         12021     NA 2002-12-11 00:00:00
+ 3   11962   14781            NA         14781     NA 2004-01-19 00:00:00
+ 4 2868188 3618436            NA       3618436     NA 2013-07-04 00:00:00
+ 5   29351   34101            NA         34101     NA 2003-06-02 00:00:00
+ 6 2935338 3708797            NA       3708797     NA 2013-10-03 00:00:00
+ 7   55358   64461            NA         64461     NA 2003-07-29 00:00:00
+ 8 2864342 3612916            NA       3612916     NA 2013-08-03 00:00:00
+ 9 3688241 4702652            NA       4702652     NA 2016-02-05 00:00:00
+10   38207   45141            NA         45141     NA 2004-04-26 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2873264 3625658            NA       3625658     NA 2013-08-19 00:00:00
+ 2 2861675 3609098            NA       3609098     NA 2012-05-15 00:00:00
+ 3    5556    8203            NA          8203     NA 2001-01-11 00:00:00
+ 4 2865505 3614618            NA       3614618     NA 2013-07-26 00:00:00
+ 5    8195   10963            NA         10963     NA 2004-01-23 00:00:00
+ 6   10947   13723            NA         13723     NA 2001-10-12 00:00:00
+ 7   13645   16483            NA         16483     NA 2002-08-06 00:00:00
+ 8 2871202 3622898            NA       3622898     NA 2012-10-23 00:00:00
+ 9   20882   24763            NA         24763     NA 2003-09-26 00:00:00
+10   23199   27523            NA         27523     NA 2003-04-30 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    4921    7554            NA          7554     NA 2002-04-26 00:00:00
+ 2 2847799 3589848            NA       3589848     NA 2013-07-15 00:00:00
+ 3 2861191 3608449            NA       3608449     NA 2013-07-08 00:00:00
+ 4 2308031 3613969       3555966       2864978      1 2011-12-26 00:00:00
+ 5   10300   13074            NA         13074     NA 2002-05-03 00:00:00
+ 6   18177   21354            NA         21354     NA 2002-01-08 00:00:00
+ 7 2859172 3605689            NA       3605689     NA 2009-08-12 00:00:00
+ 8 2684363 3625009       3368084       3368084      5 2013-01-28 00:00:00
+ 9   53679   62754            NA         62754     NA 2003-07-28 00:00:00
+10 2871086 3698810       3622740       3622740      1 2011-02-09 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2870207 3621380            NA       3621380     NA 2013-08-13 00:00:00
+ 2   17350   20485            NA         20485     NA 2001-04-13 00:00:00
+ 3   19476   23245            NA         23245     NA 2003-12-19 00:00:00
+ 4 2876241 3629660            NA       3629660     NA 2013-06-12 00:00:00
+ 5   26951   31525            NA         31525     NA 2002-09-30 00:00:00
+ 6   55537   64645            NA         64645     NA 2003-02-10 00:00:00
+ 7   45215   53605            NA         53605     NA 1998-09-09 00:00:00
+ 8 2878296 3632420            NA       3632420     NA 2013-08-27 00:00:00
+ 9 2858555 3604820            NA       3604820     NA 2013-03-12 00:00:00
+10 3165047 4017266            NA       4017266     NA 2013-12-12 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2195788 3607713       3269744       2719636      5 2011-08-29 00:00:00
+ 2    1494    4058            NA          4058     NA 2001-07-06 00:00:00
+ 3   24444   28898            NA         28898     NA 1999-02-25 00:00:00
+ 4 2870305 3621513            NA       3621513     NA 2013-08-14 00:00:00
+ 5   48057   56498            NA         56498     NA 2002-05-23 00:00:00
+ 6   52950   62018            NA         62018     NA 2002-10-02 00:00:00
+ 7 2896445 3657393            NA       3657393     NA 2013-09-18 00:00:00
+ 8 2792380 3635313       3514285       3514285      5 2013-05-22 00:00:00
+ 9 2346413 3632553       3632552       2916973      2 2012-02-03 00:00:00
+10 2927277 3698074            NA       3698074     NA 2013-03-26 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2874672 3627539            NA       3627539     NA 2013-05-29 00:00:00
+ 2 2632480 3610979       3298126       3298126      5 2010-09-29 00:00:00
+ 3    4692    7324            NA          7324     NA 2003-07-17 00:00:00
+ 4 2575946 3624779       3223303       3223303      1 2012-09-05 00:00:00
+ 5   15349   18364            NA         18364     NA 2003-02-26 00:00:00
+ 6   17957   21124            NA         21124     NA 2003-10-28 00:00:00
+ 7 2864945 3613739            NA       3613739     NA 2013-08-02 00:00:00
+ 8   24937   29404            NA         29404     NA 1999-03-08 00:00:00
+ 9 2866919 3616499            NA       3616499     NA 2013-08-08 00:00:00
+10   59941   70085            NA         70085     NA 2003-09-25 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3377    5995            NA          5995     NA 2002-06-17 00:00:00
+ 2 2871597 3623450            NA       3623450     NA 2010-05-10 00:00:00
+ 3 2869732 3620690            NA       3620690     NA 2013-07-29 00:00:00
+ 4    8745   11515            NA         11515     NA 2002-10-23 00:00:00
+ 5   11481   14275            NA         14275     NA 2002-06-26 00:00:00
+ 6   16704   19795            NA         19795     NA 2003-08-21 00:00:00
+ 7 2873690 3626210            NA       3626210     NA 2011-06-09 00:00:00
+ 8 2865936 3615170            NA       3615170     NA 2013-08-07 00:00:00
+ 9   26287   30835            NA         30835     NA 2002-10-09 00:00:00
+10 2883817 3640010            NA       3640010     NA 2013-08-29 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1   10672   13447            NA         13447     NA 2001-01-12 00:00:00
+ 2 2670486 3628142       3349434       3349434      1 2012-12-28 00:00:00
+ 3   15918   18967            NA         18967     NA 2003-09-01 00:00:00
+ 4 2754886 3619862       3462770       3462770      1 2010-06-18 00:00:00
+ 5   18527   21727            NA         21727     NA 2003-03-24 00:00:00
+ 6 3068681 3887466            NA       3887466     NA 2014-01-29 00:00:00
+ 7   22943   27247            NA         27247     NA 2001-11-30 00:00:00
+ 8 2915572 3682623            NA       3682623     NA 2013-09-23 00:00:00
+ 9   48989   57607            NA         57607     NA 2003-10-02 00:00:00
+10 2883167 3639182            NA       3639182     NA 2013-08-26 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2861111 3608357            NA       3608357     NA 2013-04-02 00:00:00
+ 2 2865042 3613877            NA       3613877     NA 2013-06-07 00:00:00
+ 3 2936033 3709758            NA       3709758     NA 2013-09-06 00:00:00
+ 4   10208   12982            NA         12982     NA 2002-08-07 00:00:00
+ 5   12907   15742            NA         15742     NA 2003-12-10 00:00:00
+ 6 2850966 3622157       3622156       3594230      2 2012-07-13 00:00:00
+ 7   22513   26782            NA         26782     NA 2003-07-03 00:00:00
+ 8   27715   32302            NA         32302     NA 2001-05-10 00:00:00
+ 9   48549   57142            NA         57142     NA 2003-09-16 00:00:00
+10   53588   62662            NA         62662     NA 2003-09-11 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3051    5668            NA          5668     NA 2002-10-23 00:00:00
+ 2 1917122 3612083       2806152       2364795      5 2010-11-03 00:00:00
+ 3   11168   13948            NA         13948     NA 2000-02-08 00:00:00
+ 4 2669677 3628643       3348262       3348261      5 2013-01-16 00:00:00
+ 5   13870   16708            NA         16708     NA 2003-11-25 00:00:00
+ 6 2646419 3623123       3623122       3316985      2 2012-12-18 00:00:00
+ 7   18977   22228            NA         22228     NA 2003-04-14 00:00:00
+ 8 2859780 3606563            NA       3606563     NA 2013-06-28 00:00:00
+ 9 2873430 3625883       3625868       3625868      1 2012-11-02 18:20:33
+10 2457693 3614843       3520863       3064905      5 2011-12-08 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    3280    5898            NA          5898     NA 2003-06-03 00:00:00
+ 2 2869658 3620593       3620592       3620592      5 2009-11-05 00:00:00
+ 3 1646464 3626113       2013206       2013206      5 2009-06-19 00:00:00
+ 4    6009    8658            NA          8658     NA 2002-06-06 00:00:00
+ 5 2861955 3609553            NA       3609553     NA 2013-08-01 00:00:00
+ 6 1252676 3623353       1773388       1497474      5 2008-10-09 00:00:00
+ 7 2867755 3617833            NA       3617833     NA 2013-02-08 00:00:00
+ 8 3185119 4175121       4044929       4044929      1 2014-07-17 15:50:49
+ 9   26199   30738            NA         30738     NA 2001-10-18 00:00:00
+10 2859921 3606793            NA       3606793     NA 2013-07-23 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    2252    4840            NA          4840     NA 2002-08-28 00:00:00
+ 2 2861222 3608495            NA       3608495     NA 2012-07-13 00:00:00
+ 3 2863156 3611255            NA       3611255     NA 2013-08-01 00:00:00
+ 4 2859200 3605735            NA       3605735     NA 2013-07-16 00:00:00
+ 5    7603   10360            NA         10360     NA 2004-01-22 00:00:00
+ 6   10346   13120            NA         13120     NA 2002-11-26 00:00:00
+ 7 2859093 3622295       3605581       3605581      5 2009-03-20 00:00:00
+ 8 2868926 3619535            NA       3619535     NA 2013-08-02 00:00:00
+ 9   22639   26920            NA         26920     NA 2002-01-10 00:00:00
+10 2874885 3627815            NA       3627815     NA 2013-08-20 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1     751    3281            NA          3281     NA 2003-03-17 00:00:00
+ 2    3423    6041            NA          6041     NA 2003-04-24 00:00:00
+ 3 2375484 3620736       3603185       2955607      5 2011-01-12 00:00:00
+ 4 2860031 3606936            NA       3606936     NA 2013-07-30 00:00:00
+ 5 2864008 3612456            NA       3612456     NA 2013-07-25 00:00:00
+ 6    6143    8801            NA          8801     NA 2003-11-04 00:00:00
+ 7 3042604 4426308       3852981       3852981      5 2010-10-14 00:00:00
+ 8   28929   33641            NA         33641     NA 2003-04-09 00:00:00
+ 9 2692403 3664896       3379103       3379103      1 2012-07-04 00:00:00
+10   52345   61241            NA         61241     NA 2003-10-17 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2861111 3608357            NA       3608357     NA 2013-04-02 00:00:00
+ 2 2865042 3613877            NA       3613877     NA 2013-06-07 00:00:00
+ 3 2936033 3709758            NA       3709758     NA 2013-09-06 00:00:00
+ 4   10208   12982            NA         12982     NA 2002-08-07 00:00:00
+ 5   12907   15742            NA         15742     NA 2003-12-10 00:00:00
+ 6 2850966 3622157       3622156       3594230      2 2012-07-13 00:00:00
+ 7   22513   26782            NA         26782     NA 2003-07-03 00:00:00
+ 8   27715   32302            NA         32302     NA 2001-05-10 00:00:00
+ 9   48549   57142            NA         57142     NA 2003-09-16 00:00:00
+10   53588   62662            NA         62662     NA 2003-09-11 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    6530    9210            NA          9210     NA 2003-09-18 00:00:00
+ 2    9200   11970            NA         11970     NA 2002-11-15 00:00:00
+ 3   11912   14730            NA         14730     NA 2004-02-03 00:00:00
+ 4 2655126 3623905       3471485       3328534      5 2012-10-18 00:00:00
+ 5 2737254 3604585       3549005       3439034      5 2013-03-24 00:00:00
+ 6 2671352 3615625       3350705       3350705      1 2013-01-11 00:00:00
+ 7 1481861 3612865       3380760       1795352      5 2009-06-26 00:00:00
+ 8  537809 3626665        615340        615340      5 2005-06-28 00:00:00
+ 9   52609   61650            NA         61650     NA 2002-01-31 00:00:00
+10 2559412 3621145       3201254       3201254      1 2012-01-10 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2870207 3621380            NA       3621380     NA 2013-08-13 00:00:00
+ 2   17350   20485            NA         20485     NA 2001-04-13 00:00:00
+ 3   19476   23245            NA         23245     NA 2003-12-19 00:00:00
+ 4 2876241 3629660            NA       3629660     NA 2013-06-12 00:00:00
+ 5   26951   31525            NA         31525     NA 2002-09-30 00:00:00
+ 6   55537   64645            NA         64645     NA 2003-02-10 00:00:00
+ 7   45215   53605            NA         53605     NA 1998-09-09 00:00:00
+ 8 2878296 3632420            NA       3632420     NA 2013-08-27 00:00:00
+ 9 2858555 3604820            NA       3604820     NA 2013-03-12 00:00:00
+10 3165047 4017266            NA       4017266     NA 2013-12-12 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+
+Attachement du package : ‘dplyr’
+
+Les objets suivants sont masqués depuis ‘package:stats’:
+
+    filter, lag
+
+Les objets suivants sont masqués depuis ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Attachement du package : ‘dbplyr’
+
+L'objet suivant est masqué _par_ ‘.GlobalEnv’:
+
+    in_schema
+
+Les objets suivants sont masqués depuis ‘package:dplyr’:
+
+    ident, sql
+
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1    2379    4978            NA          4978     NA 2003-09-10 00:00:00
+ 2 2859300 3605873            NA       3605873     NA 2013-07-24 00:00:00
+ 3 2870866 3622433            NA       3622433     NA 2008-09-04 00:00:00
+ 4 2730450 3614153       3433344       3429782      1 2012-10-04 00:00:00
+ 5   20450   24298            NA         24298     NA 2000-08-02 00:00:00
+ 6 2872913 3625193            NA       3625193     NA 2013-08-16 00:00:00
+ 7 2869013 3619673       3619672       3619655      2 2013-07-24 00:00:00
+ 8   25334   29818            NA         29818     NA 2003-11-06 00:00:00
+ 9 2610618 3616913       3269472       3269472      1 2012-11-15 00:00:00
+10   51399   60178            NA         60178     NA 2003-09-12 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 2874672 3627539            NA       3627539     NA 2013-05-29 00:00:00
+ 2 2632480 3610979       3298126       3298126      5 2010-09-29 00:00:00
+ 3    4692    7324            NA          7324     NA 2003-07-17 00:00:00
+ 4 2575946 3624779       3223303       3223303      1 2012-09-05 00:00:00
+ 5   15349   18364            NA         18364     NA 2003-02-26 00:00:00
+ 6   17957   21124            NA         21124     NA 2003-10-28 00:00:00
+ 7 2864945 3613739            NA       3613739     NA 2013-08-02 00:00:00
+ 8   24937   29404            NA         29404     NA 1999-03-08 00:00:00
+ 9 2866919 3616499            NA       3616499     NA 2013-08-08 00:00:00
+10   59941   70085            NA         70085     NA 2003-09-25 00:00:00
+# ℹ 3,608,296 more rows
+# A tibble: 3,608,306 × 6
+    AFG_ID  AFF_ID AFF_ID_PARENT AFF_ID_RACINE ATL_ID AFF_DATE_RACINE    
+     <dbl>   <dbl>         <dbl>         <dbl>  <dbl> <dttm>             
+ 1 1211165 3607304       1444578       1444578      5 2008-08-21 00:00:00
+ 2    3787    6409            NA          6409     NA 2003-10-03 00:00:00
+ 3    6489    9169            NA          9169     NA 2003-05-23 00:00:00
+ 4 3162814 4014230            NA       4014230     NA 2012-06-08 00:00:00
+ 5 2770692 3610064       3484305       3484305      5 2013-04-24 00:00:00
+ 6 2961601 3743866            NA       3743866     NA 2007-04-06 00:00:00
+ 7   24050   28489            NA         28489     NA 2003-09-29 00:00:00
+ 8 2843248 3708705       3583681       3583681      1 2012-12-14 00:00:00
+ 9 2866243 3615584            NA       3615584     NA 2013-08-06 00:00:00
+10 2733781 3672825       3434357       3434329      1 2011-05-16 00:00:00
+# ℹ 3,608,296 more rows
+Erreur dans normalizePath(path, winslash = "/", mustWork = TRUE) : 
+  path[1]="./R/job_testing.R": Aucun fichier ou dossier de ce type
+Appels : <Anonymous> -> normalizePath
+Exécution arrêtée
