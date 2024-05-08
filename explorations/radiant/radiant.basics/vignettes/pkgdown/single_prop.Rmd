@@ -1,0 +1,11 @@
+---
+title: "Basics > Single proportion"
+author: "Vincent R. Nijs, Rady School of Management (UCSD)"
+---
+
+```{r child = "_single_prop.Rmd"}
+```
+
+```{r child = "_footer.md"}
+```
+

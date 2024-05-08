@@ -1,0 +1,11 @@
+---
+title: "Basics > Compare means"
+author: "Vincent R. Nijs, Rady School of Management (UCSD)"
+---
+
+```{r child = "_compare_means.Rmd"}
+```
+
+```{r child = "_footer.md"}
+```
+

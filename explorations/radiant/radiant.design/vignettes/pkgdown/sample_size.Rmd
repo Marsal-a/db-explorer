@@ -1,0 +1,10 @@
+---
+title: "Design > Sample size"
+author: "Vincent R. Nijs, Rady School of Management (UCSD)"
+---
+
+```{r child = "_sample_size.Rmd"}
+```
+
+```{r child = "_footer.md"}
+```

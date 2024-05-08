@@ -1,0 +1,10 @@
+---
+title: "Design > Random assignment"
+author: "Vincent R. Nijs, Rady School of Management (UCSD)"
+---
+
+```{r child = "_randomizer.Rmd"}
+```
+
+```{r child = "_footer.md"}
+```
