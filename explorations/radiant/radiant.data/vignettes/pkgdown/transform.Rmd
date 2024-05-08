@@ -1,0 +1,11 @@
+---
+title: "Transform variables (Data > Transform)"
+author: "Vincent R. Nijs, Rady School of Management (UCSD)"
+---
+
+```{r child = "_transform.Rmd"}
+```
+
+```{r child = "_footer.md"}
+```
+

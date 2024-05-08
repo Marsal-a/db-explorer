@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+radiant.data.Rproj
+.DS_Store
+revdep/
+.vscode
+radiant-data.dcf
+radiant-data.Rproj
+R/app.R

@@ -1,0 +1,14 @@
+---
+title: "View data in an interactive table (Data > View)"
+author: "Vincent R. Nijs, Rady School of Management (UCSD)"
+---
+
+```{r include = FALSE}
+library(dplyr)
+```
+
+```{r child = "_view.Rmd"}
+```
+
+```{r child = "_footer.md"}
+```
