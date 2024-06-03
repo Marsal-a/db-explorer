@@ -5,7 +5,7 @@ options(
 # browser()
 source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
 
-db_choices=c("sqlite","nz")
+db_choices=c("SQLite","Netezza")
 
 list_schema_SQLite<- function(con){
   return("Default")

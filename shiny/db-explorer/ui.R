@@ -11,7 +11,7 @@ ui <- fluidPage(
         sidebarPanel(
             selectInput("db","Selection de la base :",choices = db_choices),
             uiOutput("ui_schemas"),
-            selectInput("table","Select de la table",""),
+            uiOutput("ui_tables"),
             width=3
         ),
         mainPanel()
