@@ -15,7 +15,7 @@ if(Sys.info()['nodename']=="man-iotlabdev.directory.manitou.com"){
   path_data<-"/01. Data/05. Shinyapp data/"
 }else{
   path_root<-"./explorations/pb_detection/"
-  path_data<-
+  path_data<-""
 }
 
 
