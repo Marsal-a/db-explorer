@@ -31,7 +31,7 @@ shinyServer(function(input, output) {
         if(input$db=="SQLite"){
             tables <- dbGetQuery(connexion(), "SELECT name FROM sqlite_master WHERE type='table'")
         }else if(input$db=="Netezza"){
-            browser()
+            # browser()
             tables_table <- nzsdse:::nzSDSEListTablesAndViews(connexion(),input$schema)
             tables <- tables_table$name
             
