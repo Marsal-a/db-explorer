@@ -86,7 +86,7 @@ output$dataviewer <- DT::renderDataTable(
     input$view_clear
     req(available(input$view_vars))
     dat <- select_at(.get_data(), .vars = input$view_vars)
-
+    # browser()    
     style <- if (exists("bslib_current_version") && "4" %in% bslib_current_version()) "bootstrap4" else "bootstrap"
 
     search <- r_state$dataviewer_state$search$search

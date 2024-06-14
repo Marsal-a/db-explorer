@@ -118,7 +118,7 @@ saveStateOnRefresh <- function(session = session) {
     gsub("\\n", "", .) %>%
     gsub("\"", "\'", .) %>%
     fix_smart()
-
+  # browser()
   arrange_cmd <- input$data_arrange
   if (!is.empty(arrange_cmd)) {
     arrange_cmd <- arrange_cmd %>%
@@ -155,6 +155,8 @@ saveStateOnRefresh <- function(session = session) {
       }
     }
   }
+  
+  # browser()
   if ("grouped_df" %in% class(r_data[[input$dataset]])) {
     ungroup(r_data[[input$dataset]])
   } else {

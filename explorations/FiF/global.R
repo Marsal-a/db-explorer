@@ -8,6 +8,8 @@ library(shinyvalidate)
 library(fs)
 library(htmltools)
 
+print(getOption("FIFWD"))
+
 roots <- c(wd = getOption("FIFWD"), getVolumes()())
 
 smallInput <- function(Input) {
