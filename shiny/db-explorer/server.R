@@ -16,7 +16,8 @@ shinyServer(function(input, output, session) {
             cona <- connectNzSDSE()
             print("connec nz")
         }else if(input$db=="PostgreSQL - Prod"){
-          cona <- connectPostgreSDSE(password=input$password_pg)
+          # browser()
+          cona <- connectPostgreSDSE(user = input$username_pg, password=input$password_pg)
         }else if(input$db=="Oracle - Prod"){
             cona <- connectOraSDSE()
         }
@@ -68,22 +69,16 @@ shinyServer(function(input, output, session) {
     })
     
     output$ui_schemas <- renderUI({
+        
+        
         schema <- schema_list()
-        req(schema)
-        # selectizeInput("schema","Sélection du schéma :",choices = schema,
-        #                options = list(
-        #                    placeholder = 'Please select an option below',
-        #                    onInitialize = I('function() { this.setValue(""); }')
-        #                )
-        # )
-        # browser()
+        
         selectInput("selected_schema",
                     "Sélection du schéma :",
                     choices = c('Please select the schema to explore'="",schema),
                     selectize=T,selected = default_schema)
         
     })
-    
     
     output$ui_tables  <- renderUI({
       tables <- table_list()
@@ -145,6 +140,7 @@ shinyServer(function(input, output, session) {
 
     displayTable <- reactive({
       req(input$selected_table)
+      req(input$view_vars)
       # browser()
       
       tb <- prepared_data_lz() %>% 
@@ -209,12 +205,12 @@ shinyServer(function(input, output, session) {
                     ),
                     caption = caption,
                     ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155
-                    callback = DT::JS('$(window).on("unload", function() { table.state.clear(); }); '),
-                    # callback = JS(
-                    #   "table.on( 'search.dt', function () {",
-                    #   "Shiny.setInputValue( 'search', table.search() );",
-                    #   "} );"
-                    # ),
+                    # callback = DT::JS('$(window).on("unload", function() { table.state.clear(); }); '),
+                    callback = DT::JS(c(
+                      "table.on( 'search.dt', function () {",
+                      "Shiny.setInputValue( 'search', table.search() );",
+                      "} );",'$(window).on("unload", function() { table.state.clear(); }); ')
+                    ),
                     selection = list(target = 'cell')
                 ) 
                 # %>%
@@ -239,28 +235,49 @@ shinyServer(function(input, output, session) {
             set_names(., paste0(., " {", var_class, "}"))
     })
     
+    output$ui_filters <- renderUI({
+      req(input$selected_table)
+      wellPanel(
+        checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
+        checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
+        br(),
+        actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+        returnTextAreaInput("data_filter",
+                            label = "Data filter:",
+                            value = "",
+                            rows=2,
+                            placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
+                            # placeholder = "Ecrire une condition de filtre et appuyer sur Entrée. Exemple :\nPER_ID==\"123\"\nou\nPER_ID %in% c(\"1\",\"2\",\"3\")\n"
+                            
+        )
+      )
+    })
+    
     output$ui_view_vars <- renderUI({
         
         req(input$selected_table)
-        
         vars <- varnames()
         # browser()
-        selectInput(
+        wellPanel(selectInput(
             "view_vars", "Select variables to show:",
             choices = vars,
             multiple = TRUE,
             selectize = FALSE, size = min(20, length(vars))+1
-        )
+        ))
     })
 
     observeEvent(input$selected_schema,{
-        updateSelectizeInput(session=session,inputId = "table",selected = "")
+
+        # updateSelectizeInput(session=session,inputId = "table",selected = "")
+
+        updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
         updateTextAreaInput(session,inputId = "data_filter",value ="")
-        # browser()
+
     })
     
     observeEvent(input$selected_table,{
         
+        updateTextAreaInput(session,inputId = "data_filter",value ="")
         updateTextAreaInput(session,inputId = "data_filter",value ="")
         
     },priority = 1)
@@ -314,9 +331,22 @@ shinyServer(function(input, output, session) {
       removeModal()
     })
     
+    observeEvent(input$search,{
+      browser()
+    })
+    
     session$onSessionEnded(function() {
       cat("Log onSessionEnded")
       stopApp()
+    })
+    
+    observeEvent(input$trigtest,{
+      
+
+      # updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
+      updateTextAreaInput(session,inputId = "data_filter",value ="")
+      browser()
+      
     })
 
 })
