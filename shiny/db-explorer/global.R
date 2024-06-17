@@ -1,29 +1,19 @@
+### Fonction utilitaires pour l'application : 
+### La plupart des fonctions sont issues ou inspirées du package Radiant : 
+### https://github.com/radiant-rstats
+
 options(
   path_db_explorer = ifelse(grepl("/shiny/db-explorer", getwd()),"../../",".")
 )
 
-
-# source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
-
-db_choices=c("SQLite","Netezza","PostgreSQL - Prod","Oracle - Prod")
+options(shiny.reactlog = TRUE)
 
 
 
-default_db     <- ifelse(exists("dbexplorer_dbhost"), dbexplorer_dbhost, "")
-default_schema <- ifelse(exists("dbexplorer_schema"), dbexplorer_schema, "")
-default_table  <- ifelse(exists("dbexplorer_table"), dbexplorer_table, "")
+source(paste0(getOption("path_db_explorer"),"/shiny/db-explorer/init.R"))
 
-
-list_schema_SQLite<- function(con){
-  return("Default")
-}
-
-list_table_SQLite <- function(con){
-  "SELECT name FROM sqlite_master WHERE type='table'"
-  tables <- dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='table'")  
-  return(tables)
-}
-
+### Issu du package radiant
+### > Permet d'ajouter le type de variable à la liste des variables 
 get_class <- function(dat) {
   sapply(dat, function(x) class(x)[1]) %>%
     sub("ordered", "factor", .) %>%
@@ -34,7 +24,9 @@ get_class <- function(dat) {
 }
 
 
-
+### Issu du package radiant
+### permet de corriger certains caractères spéciaux dans la création de la condition de filtre
+### Ainsi que de traiter les retour à la ligne  
 fix_smart <- function(text, all = FALSE) {
   if (all) {
     ## to remove all non-ascii symbols use ...
@@ -55,25 +47,30 @@ fix_smart <- function(text, all = FALSE) {
     gsub("\f", "\n", .)
 }
 
+
+### Issu du package radiant
 ## check if a variable is null or not in the selected data.frame
 not_available <- function(x) any(is.null(x)) || (sum(x %in% varnames()) < length(x))
 
+### Issu du package radiant
 ## check if a variable is null or not in the selected data.frame
 available <- function(x) !not_available(x)
 
+### Issu du package radiant
 is.empty <- function(x, empty = "\\s*") {
   # any should not be needed here but patchwork objects can have length == 1
   # and yet still return a vector of logicals
   is_not(x) || (length(x) == 1 && any(grepl(paste0("^", empty, "$"), x)))
 }
 
+### Issu du package radiant
 is_not <- function(x) {
   # any should not be needed here but patchwork objects can have length == 1
   # and yet still return a vector of logicals
   length(x) == 0 || (length(x) == 1 && any(is.na(x)))
 }
 
-
+### Issu du package radiant
 `%AND%` <- function(x, y) {
   if (!all(is.null(x)) && !all(is.na(x))) {
     if (!all(is.null(y)) && !all(is.na(y))) {
@@ -83,6 +80,39 @@ is_not <- function(x) {
   return(NULL)
 }
 
+### Issu du package radiant
+### Propose un textAreaInput surchageant celui de base de shiny afin d'éliminer certains comportement navigateurs
+
+################################################################
+## functions used to create Shiny in and outputs
+################################################################
+
+## using a custom version of textInput to avoid browser "smartness"
+# textInput <- function(inputId, label, value = "", width = NULL,
+#                       placeholder = NULL, autocomplete = "off",
+#                       autocorrect = "off", autocapitalize = "off",
+#                       spellcheck = "false", ...) {
+#   value <- restoreInput(id = inputId, default = value)
+#   div(
+#     class = "form-group shiny-input-container",
+#     style = if (!is.null(width)) paste0("width: ", validateCssUnit(width), ";"),
+#     label %AND% tags$label(label, `for` = inputId),
+#     tags$input(
+#       id = inputId,
+#       type = "text",
+#       class = "form-control",
+#       value = value,
+#       placeholder = placeholder,
+#       autocomplete = autocomplete,
+#       autocorrect = autocorrect,
+#       autocapitalize = autocapitalize,
+#       spellcheck = spellcheck,
+#       ...
+#     )
+#   )
+# }
+
+## using a custom version of textAreaInput to avoid browser "smartness"
 textAreaInput <- function(inputId, label, value = "", width = NULL,
                           height = NULL, cols = NULL, rows = NULL,
                           placeholder = NULL, resize = NULL,
@@ -126,6 +156,30 @@ textAreaInput <- function(inputId, label, value = "", width = NULL,
   )
 }
 
+### ces 2 fonctions "return" permettent d'utiliser les composants js returnTextAreaBinding et returnTextInputBinding
+### afin de "valider" l'input uniquement au moment ou l'on tappel la touche "Enter" (event.keyCode == 13)
+
+## avoid all sorts of 'helpful' behavior from your browser
+## based on https://stackoverflow.com/a/35514029/1974918
+returnTextInput <- function(inputId, label = NULL,
+                            placeholder = NULL, value = "") {
+  tagList(
+    tags$label(label, `for` = inputId),
+    tags$input(
+      id = inputId,
+      type = "text",
+      value = value,
+      placeholder = placeholder,
+      autocomplete = "off",
+      autocorrect = "off",
+      autocapitalize = "off",
+      spellcheck = "false",
+      class = "returnTextInput form-control"
+    )
+  )
+}
+
+## textarea where the return key submits the content
 returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
                                 placeholder = NULL, resize = "vertical",
                                 value = "") {
@@ -152,5 +206,3 @@ returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
     )
   )
 }
-
-
