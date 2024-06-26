@@ -1,5 +1,10 @@
-library(shiny)
 library(bslib)
+library(shiny)
+library(dplyr)
+library(dbplyr)
+library(purrr)
+library(rlang)
+library(shinyAce)
 
 
 ui <- fluidPage(
@@ -9,7 +14,11 @@ ui <- fluidPage(
     includeScript("www/js/returnTextAreaBinding.js"),
     includeScript("www/js/returnTextInputBinding.js"),
     includeScript("www/js/run_return.js"),
-
+    tags$style(HTML("
+                  .shiny-output-error {
+                    color: red;
+                  }
+                  ")),
     
     titlePanel("Explore db"),
     sidebarLayout(
@@ -35,7 +44,8 @@ ui <- fluidPage(
                                     placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
                                     # placeholder = "Ecrire une condition de filtre et appuyer sur Entrée. Exemple :\nPER_ID==\"123\"\nou\nPER_ID %in% c(\"1\",\"2\",\"3\")\n"
 
-                )
+                ),
+                uiOutput("ui_filter_error")
             ),
             uiOutput("ui_view_vars"),
             actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black")
@@ -43,8 +53,12 @@ ui <- fluidPage(
         ),
         mainPanel(
             tabsetPanel(
-                # tabPanel("Table",tableOutput('table')),
-                tabPanel("Table2",DT::dataTableOutput("dataviewer"))
+                tabPanel("Table2",DT::dataTableOutput("dataviewer")),
+                tabPanel("Table3",
+                         aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
+                         actionButton("run_sql", "Run"),
+                         DT::dataTableOutput("sql_dt")
+                         )
             )
         )
     )

@@ -206,3 +206,11 @@ returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
     )
   )
 }
+
+
+ts_print <- function(x,...){
+  
+  p=paste0(format(Sys.time(), "%H:%M:%OS3")," - ",x)
+  print(p,...)
+  
+}
