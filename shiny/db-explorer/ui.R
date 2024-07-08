@@ -59,14 +59,15 @@ ui <- fluidPage(
                 checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
                 checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
                 br(),
+                # actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black") %>% 
+                #     shinyhelper::helper(type = "markdown",
+                #                         title = "Inline Help",
+                #                         content = "help_filters",
+                #                         size = "l"),
                 fluidRow(
                     column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
                     column(width = 2,actionLink("help_filter", "", icon = icon("fa fa-question-circle", verify_fa = FALSE), style = "color:black"))
                 ),
-                # actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
-                # bsModal("modalExample", "fancy report", "help_filter", size = "large",
-                #         uiOutput("ui_filter_help")
-                # ),
                 returnTextAreaInput("data_filter",
                                     label = "Data filter:",
                                     value = "",

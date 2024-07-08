@@ -47,9 +47,10 @@ shinyServer(function(input, output, session) {
       schema <- orasdse:::listSchemas(connexion())
     }
     schema
-  })
+  }) 
   
-  table_list=eventReactive(input$selected_schema,{
+  table_list=reactive({
+  # table_list=eventReactive(input$selected_schema,{
       
     req(input$selected_schema)
     ts_print("table_list")
@@ -57,9 +58,12 @@ shinyServer(function(input, output, session) {
     if(input$db=="SQLite"){
       tables <- dbGetQuery(connexion(), "SELECT name FROM sqlite_master WHERE type='table'")
     }else if(input$db=="Netezza"){
-      tables_table <- nzsdse:::nzSDSEListTablesAndViews(connexion(),input$selected_schema)
-      tables <- tables_table$name
-      tables <- stringr::str_extract(tables, "^[^ ]*")
+      # tables_table <- nzsdse:::nzSDSEListTablesAndViews(connexion(),input$selected_schema)
+      # tables <- tables_table$name
+      # tables <- stringr::str_extract(tables, "^[^ ]*")
+      # browser()
+      tables <- all_nz_tables() %>% filter(DBNAME==input$selected_schema) %>% pull(OBJNAME)
+      
     }else if(input$db=="PostgreSQL - Prod"){
       tables_table <- pgsdse:::pgsdseListTablesAndViews(connexion(),"prod",input$selected_schema)
       tables <- tables_table$name
@@ -69,7 +73,7 @@ shinyServer(function(input, output, session) {
     }
     
     return(tables)
-  })
+  })  %>% bindCache(input$selected_schema) %>% bindEvent(input$selected_schema) 
   
   output$ui_schemas <- renderUI({
     ts_print("ui_schema")
@@ -277,8 +281,17 @@ shinyServer(function(input, output, session) {
       current_query <- dbplyr::remote_query(prepared_data_lz())
       rowcount_query <- glue::glue("SELECT COUNT(*) FROM (\n{current_query}\n) SUB")
       rowcount <- DBI::dbGetQuery(con, rowcount_query)
-      glue1 <- glue::glue("\n\n  ### Prévisualisation du résultat de la requête:\n  {crayon::blue$italic(current_query)}\n\n  ### Nombre de ligne pour la requête : {crayon::bold(rowcount)}\n  ")
-      glue1
+      rowcount <- trimws(prettyNum(rowcount, big.mark = ","))
+     
+      glue1 <- glue::glue("
+      Prévisualisation de la table {crayon::bold$blue(input$selected_table)} (1000 premières lignes)
+    
+      Nombre de lignes   : {crayon::bold$blue(rowcount)}
+      Nombre de colonnes : {crayon::bold$blue(dim(prepared_data_lz())[2])}
+
+      ")
+      return(glue1)
+      
       
     }
   )  
@@ -460,28 +473,15 @@ shinyServer(function(input, output, session) {
     # browser()
   })
   
+
   observeEvent(input$help_filter,{
-    
+  # observeEvent(input$`shinyhelper-modal_params`,{
+  # observeEvent(c(input$help_filter,input$`shinyhelper-modal_params`),{
     showModal(modalDialog(
-      
       tags$iframe(src="help/help_filters.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
-      # tags$iframe(src="/data/samba/adam.marsal/R/Travaux sser/db-explorer/shiny/db-explorer/tools/help/help_filters.html")
-      # tags$iframe(src="https://stackoverflow.com/questions/69212592/print-crayon-output-colors-in-shiny")
-      
       # includeHTML("tools/help/help_filters.html"),
       size="l"
     ))
-    
-    # showModal(modalDialog(
-    #   tags$h2('Login for PostgreSQL (Production)'),
-    #   textInput('username_pg', 'Username',value = system("whoami", intern = TRUE)),
-    #   passwordInput('password_pg', 'Password'),
-    #   footer=tagList(
-    #     actionButton('submit_pg_login', 'Submit'),
-    #     modalButton('cancel')
-    #   )
-    # ))
-    
   })
   
   session$onSessionEnded(function() {
@@ -495,6 +495,10 @@ shinyServer(function(input, output, session) {
     # updateTextAreaInput(session,inputId = "data_filter",value ="")
     
   })
+  
+
+  
+
   
 
 })
