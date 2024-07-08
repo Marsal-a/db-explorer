@@ -29,6 +29,10 @@ table.dataTable thead td {
   padding: 0 0 0 0;
 }
 
+table {
+  white-space: nowrap;
+}
+
 td.top {
   padding-top: 33px;
 }

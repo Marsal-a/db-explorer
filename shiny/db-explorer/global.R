@@ -2,15 +2,25 @@
 ### La plupart des fonctions sont issues ou inspirées du package Radiant : 
 ### https://github.com/radiant-rstats
 
+# options(
+#   path_db_explorer = ifelse(grepl("/shiny/db-explorer", getwd()),"../../","./")
+# )
+
+
+## Si l'application est lancé depuis le projet Rstudio : on veut path_db_explorer = "./"
+## Si l'application est lancé par un job rstudio, stocké sur R_commun (temporaire pour les tests beta) : on veut path_db_explorer = "./"
+
 options(
-  path_db_explorer = ifelse(grepl("/shiny/db-explorer", getwd()),"../../",".")
+  path_db_explorer = ifelse(grepl("/shiny/db-explorer|R_Commun/Adam", getwd()),"./","./shiny/db-explorer/")
 )
 
 options(shiny.reactlog = TRUE)
 
 
-
-source(paste0(getOption("path_db_explorer"),"/shiny/db-explorer/init.R"))
+# print(getwd())
+# print(usethis::proj_get())
+# print(paste0(getOption("path_db_explorer"),"init.R"))
+source(paste0(getOption("path_db_explorer"),"init.R"))
 
 ### Issu du package radiant
 ### > Permet d'ajouter le type de variable à la liste des variables 
@@ -208,9 +218,19 @@ returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
 }
 
 
+### Fonction de débogage, à insérer dans les fonctions réactives pour suivre l'éxecution des déclenchements
 ts_print <- function(x,...){
   
   p=paste0(format(Sys.time(), "%H:%M:%OS3")," - ",x)
   print(p,...)
   
 }
+
+
+ansi2html <- function(ansi){
+  HTML(sprintf(
+    "<pre>%s</pre>",
+    gsub("\n", "<br/>", as.character(fansi::sgr_to_html(ansi)))
+  ))
+}
+

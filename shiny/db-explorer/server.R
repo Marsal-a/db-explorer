@@ -1,55 +1,7 @@
-try2<-function(expr, silent = FALSE, outFile = getOption("try.outFile",default = stderr())){
-  ts_print("tc_0") 
-  tryCatch(expr, error = function(e) {
-    ts_print("tc_1") 
-    call <- conditionCall(e)
-    ts_print("tc_2") 
-    if (!is.null(call)) {
-      if (identical(call[[1L]], quote(doTryCatch))){ 
-        ts_print("tc_3") 
-        call <- sys.call(-4L)
-      }
-      ts_print("tc_4") 
-      dcall <- deparse(call, nlines = 1L)
-      ts_print("tc_5") 
-      prefix <- paste("Error in", dcall, ": ")
-      ts_print("tc_6") 
-      LONG <- 75L
-      ts_print("tc_7") 
-      sm <- strsplit(conditionMessage(e), "\n")[[1L]]
-      ts_print("tc_8") 
-      w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], 
-                                                  type = "w")
-      ts_print("tc_9") 
-      if (is.na(w)){
-        w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L], 
-                                                    type = "b")
-        ts_print("tc_10") 
-      }
-      if (w > LONG){ 
-        prefix <- paste0(prefix, "\n  ")
-        ts_print("tc_11") 
-      }
-    }
-    else prefix <- "Error : "
-    msg <- paste0(prefix, conditionMessage(e), "\n")
-    .Internal(seterrmessage(msg[1L]))
-    ts_print("tc_12") 
-    if (!silent && isTRUE(getOption("show.error.messages"))) {
-      cat(msg, file = outFile)
-      .Internal(printDeferredWarnings())
-    }
-    ts_print("tc_13") 
-    invisible(structure(msg, class = "try-error", condition = e))
-    # ts_print("tc_14") 
-  })
-}
-
-
 shinyServer(function(input, output, session) {
     
   enc <- getOption("db-explorer.encoding", "UTF-8")
-  source("init.R", encoding = enc, local = TRUE)
+  # source("init.R", encoding = enc, local = TRUE)
   
   for (file in list.files(c("tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
     source(file, encoding = enc, local = TRUE)
@@ -187,7 +139,6 @@ shinyServer(function(input, output, session) {
     ))
   })
     
-  
   prepared_data_lz <- eventReactive(
     eventExpr=c(input$view_vars,input$data_filter),
     ignoreNULL = F,{
@@ -308,14 +259,35 @@ shinyServer(function(input, output, session) {
     return(tb)
         
   })
-    
+  
+  
+  output$ui_summary <- renderUI({
+    # browser()tableSummary()
+    # HTML(tableSummary())
+    ansi2html(tableSummary())
+  })
+  
+  
+  tableSummary <- eventReactive(
+    eventExpr = c(input$view_vars,input$data_filter),
+    ignoreInit = TRUE,
+    ignoreNULL=FALSE,{
+      
+      con <- connexion()
+      current_query <- dbplyr::remote_query(prepared_data_lz())
+      rowcount_query <- glue::glue("SELECT COUNT(*) FROM (\n{current_query}\n) SUB")
+      rowcount <- DBI::dbGetQuery(con, rowcount_query)
+      glue1 <- glue::glue("\n\n  ### Prévisualisation du résultat de la requête:\n  {crayon::blue$italic(current_query)}\n\n  ### Nombre de ligne pour la requête : {crayon::bold(rowcount)}\n  ")
+      glue1
+      
+    }
+  )  
   output$ui_filter_error <- renderUI({
     if (is.empty(filter_error[["val"]])) {
       return()
     }
     helpText(filter_error[["val"]],class = "shiny-output-error")
   })
-  
   
   output$dataviewer <- DT::renderDataTable({
     
@@ -328,6 +300,7 @@ shinyServer(function(input, output, session) {
           
     search <- ""
     fbox <- if (nrow(dat) > 5e6) "none" else list(position = "top")
+    fbox <- "none"
     
     isBigFct <- sapply(dat, function(x) is.factor(x) && length(levels(x)) > 1000)
     if (sum(isBigFct) > 0) {
@@ -353,6 +326,7 @@ shinyServer(function(input, output, session) {
             escape = FALSE,
             style = style,
             options = list(
+                dom="tpli",
                 stateSave = TRUE, ## maintains state
                 search = list(search = search, regex = TRUE),
                 columnDefs = list(
@@ -361,10 +335,7 @@ shinyServer(function(input, output, session) {
                 ),
                 autoWidth = TRUE,
                 processing = isTRUE(fbox == "none"),
-                pageLength = {
-                    # if (is.null(r_state$dataviewer_state$length)) 10 else r_state$dataviewer_state$length
-                    10
-                },
+                pageLength = 10,
                 lengthMenu = list(c(5, 10, 25, 50, -1), c("5", "10", "25", "50", "All"))
             ),
             caption = caption,
@@ -377,9 +348,7 @@ shinyServer(function(input, output, session) {
             ),
             selection = list(target = 'cell')
         ) 
-        # %>%
-        #     (function(x) if (sum(isDbl) > 0) DT::formatRound(x, names(isDbl)[isDbl], dec) else x) %>%
-        #     (function(x) if (sum(isInt) > 0) DT::formatRound(x, names(isInt)[isInt], 0) else x)
+    
     )
   })
   
@@ -485,10 +454,34 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$cancel,{
-    browser()
+    # browser()
   })
   observeEvent(input$search,{
     # browser()
+  })
+  
+  observeEvent(input$help_filter,{
+    
+    showModal(modalDialog(
+      
+      tags$iframe(src="help/help_filters.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+      # tags$iframe(src="/data/samba/adam.marsal/R/Travaux sser/db-explorer/shiny/db-explorer/tools/help/help_filters.html")
+      # tags$iframe(src="https://stackoverflow.com/questions/69212592/print-crayon-output-colors-in-shiny")
+      
+      # includeHTML("tools/help/help_filters.html"),
+      size="l"
+    ))
+    
+    # showModal(modalDialog(
+    #   tags$h2('Login for PostgreSQL (Production)'),
+    #   textInput('username_pg', 'Username',value = system("whoami", intern = TRUE)),
+    #   passwordInput('password_pg', 'Password'),
+    #   footer=tagList(
+    #     actionButton('submit_pg_login', 'Submit'),
+    #     modalButton('cancel')
+    #   )
+    # ))
+    
   })
   
   session$onSessionEnded(function() {
