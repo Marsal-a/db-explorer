@@ -2,7 +2,8 @@
 
 La fenêtre 'data fitler' permet d'appliquer des filtres sur les données visualisées.
 
-La syntaxe est similaire à celle que l'on appliquerait dans la fonction `filter` du package *dplyr* Ici sont présentés quelques exemples de syntaxes à faire et à éviter :
+La syntaxe est similaire à celle que l'on appliquerait dans la fonction `filter` du package **`dplyr`**   
+Ici sont présentés quelques exemples de syntaxes à faire et à éviter :
 
 <p>
 
@@ -13,7 +14,7 @@ La syntaxe est similaire à celle que l'on appliquerait dans la fonction `filter
 +------------------------------------------------------+---------------------------------------+
 | ✅ Syntaxe acceptée                                   | ❌ Syntaxe incorrecte                  |
 +======================================================+=======================================+
-| **Filtrer sur un éléments d'une colonne :**          |                                       |
+| **Filtrer sur un élément d'une colonne :**           |                                       |
 +------------------------------------------------------+---------------------------------------+
 | ```{=html}                                           | ```{=html}                            |
 | <pre>                                                | <pre>                                 |
