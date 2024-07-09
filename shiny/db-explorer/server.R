@@ -7,8 +7,8 @@ shinyServer(function(input, output, session) {
     source(file, encoding = enc, local = TRUE)
   }
   
-  connexion <- eventReactive(c(input$db,input$password_pg),{
-    ts_print("connexion")
+  connexion <- eventReactive(c(input$db),{
+    ts_print("connexion_start")
     if(input$db=="SQLite"){
       source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
       cona <- con_sqlite
@@ -20,10 +20,13 @@ shinyServer(function(input, output, session) {
       if(!is.null(pg_password_ok())){
         
         cona <- connectPostgreSDSE(user = input$username_pg, password=input$password_pg)
+        updateTextInput(session = session,inputId = "password_pg",value = "")
+        
       }
     }else if(input$db=="Oracle - Prod"){
       cona <- connectOraSDSE()
     }
+    ts_print("connexion_end")
     return(cona)
   })
   
@@ -235,7 +238,6 @@ shinyServer(function(input, output, session) {
         tb <- raw_data_lz() %>% head(1000) %>% collect()
       }
       
-
       ### Capture des erreurs tentative 2 avec try :
       # tb_try <- try({
       #   collect_tb(prepared_data,1000)
@@ -252,10 +254,6 @@ shinyServer(function(input, output, session) {
       tb <- prepared_data %>% head(1000) %>% collect()
     }
     
-    
-    
-    
-    
     if(!is.null(input$view_vars)){
       tb <- select_at(tb, .vars = input$view_vars)
     }
@@ -266,8 +264,6 @@ shinyServer(function(input, output, session) {
   
   
   output$ui_summary <- renderUI({
-    # browser()tableSummary()
-    # HTML(tableSummary())
     ansi2html(tableSummary())
   })
   
@@ -279,22 +275,23 @@ shinyServer(function(input, output, session) {
       
       con <- connexion()
       current_query <- dbplyr::remote_query(prepared_data_lz())
-      rowcount_query <- glue::glue("SELECT COUNT(*) FROM (\n{current_query}\n) SUB")
+      rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
       rowcount <- DBI::dbGetQuery(con, rowcount_query)
-      rowcount <- trimws(prettyNum(rowcount, big.mark = ","))
-     
+      rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
+      
+      # browser()
       glue1 <- glue::glue("
-      Prévisualisation de la table {crayon::bold$blue(input$selected_table)} (1000 premières lignes)
+      Prévisualisation de la table {crayon::bold$blue(input$selected_table)} ({min(1000,as.integer(rowcount))} premières lignes)
     
-      Nombre de lignes   : {crayon::bold$blue(rowcount)}
+      Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
       Nombre de colonnes : {crayon::bold$blue(dim(prepared_data_lz())[2])}
 
       ")
       return(glue1)
       
-      
     }
   )  
+  
   output$ui_filter_error <- renderUI({
     if (is.empty(filter_error[["val"]])) {
       return()
@@ -328,7 +325,7 @@ shinyServer(function(input, output, session) {
     
     caption <- if (is.empty(input$view_tab_slice)) NULL else htmltools::tags$caption(glue("Table slice {input$view_tab_slice} will be applied on Download, Store, or Report"))
 
-          
+
     withProgress(
         message = "Generating view table", value = 1,
         DT::datatable(
@@ -339,7 +336,8 @@ shinyServer(function(input, output, session) {
             escape = FALSE,
             style = style,
             options = list(
-                dom="tpli",
+                dom="tpil",
+                # dom="Bfrtip",
                 stateSave = TRUE, ## maintains state
                 search = list(search = search, regex = TRUE),
                 columnDefs = list(
@@ -348,8 +346,8 @@ shinyServer(function(input, output, session) {
                 ),
                 autoWidth = TRUE,
                 processing = isTRUE(fbox == "none"),
-                pageLength = 10,
-                lengthMenu = list(c(5, 10, 25, 50, -1), c("5", "10", "25", "50", "All"))
+                pageLength = 15,
+                lengthMenu = list(c(15, 25, 50, 100, -1), c("15", "25", "50", "100", "All"))
             ),
             caption = caption,
             ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155
@@ -360,8 +358,8 @@ shinyServer(function(input, output, session) {
               "} );",'$(window).on("unload", function() { table.state.clear(); }); ')
             ),
             selection = list(target = 'cell')
-        ) 
-    
+        )
+
     )
   })
   
@@ -433,6 +431,8 @@ shinyServer(function(input, output, session) {
     str <- paste0(string_filter,collapse = " &\n")
     updateTextAreaInput(session,inputId = "data_filter",value =str)
     
+    session$sendCustomMessage(type="refocus",message=list("data_filter"))
+    
   })
   
   observeEvent(input$db,{
@@ -455,6 +455,7 @@ shinyServer(function(input, output, session) {
   pg_password_ok <- reactiveVal(NULL)
   
   observeEvent(input$submit_pg_login,{
+    # browser()
     cona <- try(connectPostgreSDSE(user = input$username_pg, password=input$password_pg),silent=TRUE)
     if(inherits(cona, "try-error")){
       showModal(pg_connexion_modal(failed=T))

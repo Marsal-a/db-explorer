@@ -2,6 +2,7 @@
 unloadNamespace("nzsdse")
 unloadNamespace("dbplyr")
 unloadNamespace("dplyr")
+unloadNamespace("readr")
 unloadNamespace("tibble")
 unloadNamespace("pillar")
 unloadNamespace("tidyselect")
@@ -32,9 +33,17 @@ library(nzsdse)
 library(fontawesome)
 
 
-ui <- fluidPage(
+ui <- navbarPage(title = "database-explorer",
+                 tabPanel("Navigation",
+    
     
     includeCSS("www/style.css"),
+    
+    tags$script('
+      Shiny.addCustomMessageHandler("refocus",
+            function(e_id) {
+            document.getElementById(e_id).focus();
+                                  });'),
     
     includeScript("www/js/returnTextAreaBinding.js"),
     includeScript("www/js/returnTextInputBinding.js"),
@@ -45,7 +54,7 @@ ui <- fluidPage(
                   }
                   ")),
     
-    titlePanel("Explore db"),
+    # titlePanel("Explore db"),
     sidebarLayout(
         sidebarPanel(
             wellPanel(
@@ -59,21 +68,15 @@ ui <- fluidPage(
                 checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
                 checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
                 br(),
-                # actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black") %>% 
-                #     shinyhelper::helper(type = "markdown",
-                #                         title = "Inline Help",
-                #                         content = "help_filters",
-                #                         size = "l"),
                 fluidRow(
                     column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
-                    column(width = 2,actionLink("help_filter", "", icon = icon("fa fa-question-circle", verify_fa = FALSE), style = "color:black"))
+                    column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
                 ),
                 returnTextAreaInput("data_filter",
                                     label = "Data filter:",
                                     value = "",
                                     rows=2,
                                     placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
-                                    # placeholder = "Ecrire une condition de filtre et appuyer sur Entrée. Exemple :\nPER_ID==\"123\"\nou\nPER_ID %in% c(\"1\",\"2\",\"3\")\n"
 
                 ),
                 uiOutput("ui_filter_error")
@@ -83,18 +86,24 @@ ui <- fluidPage(
             
         ),
         mainPanel(
-            tabsetPanel(
-                tabPanel("Table2",
-                         htmlOutput("ui_summary"),
-                         DT::dataTableOutput("dataviewer")
-                         ),
-                tabPanel("Table3",
-                         aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
-                         actionButton("run_sql", "Run"),
-                         DT::dataTableOutput("sql_dt")
-                         )
-            )
+            htmlOutput("ui_summary"),
+            br(),
+            DT::dataTableOutput("dataviewer")
         )
+        # mainPanel(
+        #     tabsetPanel(
+        #         tabPanel("Table2",
+        #                  htmlOutput("ui_summary"),
+        #                  br(),
+        #                  DT::dataTableOutput("dataviewer")
+        #                  ),
+        #         tabPanel("Table3",
+        #                  aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
+        #                  actionButton("run_sql", "Run"),
+        #                  DT::dataTableOutput("sql_dt")
+        #                  )
+        #     )
+        # )
     )
 )
-
+)
