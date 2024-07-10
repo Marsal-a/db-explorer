@@ -34,32 +34,38 @@
 ### PARAMETRAGE DU NAVBAR 
 */
 
-/*
 .navbar {
   margin-bottom: 10px;
   background-color: #000091;
 }
 
-
+/* met le titre navbar en blanc: */
 .navbar-default .navbar-brand {
   color: white;
 }
 
-
+/* met les éléments par défaut en blanc */
 .navbar-default .navbar-nav > li > a {
   color: white;
 }
-*/
 
-/*
-### PARAMETRAGE DU TabPanel 
-*/
 
-.tabbable > .nav > li > a                  {background-color: aqua;  color:black}
-.tabbable > .nav > li > a[data-value='t1'] {background-color: red;   color:white}
-.tabbable > .nav > li > a[data-value='t2'] {background-color: blue;  color:white}
-.tabbable > .nav > li > a[data-value='t3'] {background-color: green; color:white}
-.tabbable > .nav > li[class=active]    > a {background-color: black; color:white}
+.navbar-default .navbar-nav>li>a:hover, {
+    color: red !important;
+    background-color: red !important;
+}
+
+.navbar-nav > .active > a {
+  color: #000091 !important;
+  background-color:white !important;
+}
+
+.navbar-nav li a:hover {
+  color: #000091 !important;
+  background-color:white !important;
+  background-image: none !important;
+}
+
 
 
 
