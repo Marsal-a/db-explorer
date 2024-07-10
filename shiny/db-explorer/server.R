@@ -76,7 +76,8 @@ shinyServer(function(input, output, session) {
     }
     
     return(tables)
-  })  %>% bindCache(input$selected_schema) %>% bindEvent(input$selected_schema) 
+  })  
+  # %>% bindCache(input$selected_schema) %>% bindEvent(input$selected_schema) 
   
   output$ui_schemas <- renderUI({
     ts_print("ui_schema")
@@ -269,10 +270,12 @@ shinyServer(function(input, output, session) {
   
   
   tableSummary <- eventReactive(
-    eventExpr = c(input$view_vars,input$data_filter),
+    eventExpr = c(input$selected_table,input$data_filter),
     ignoreInit = TRUE,
-    ignoreNULL=FALSE,{
+    ignoreNULL=T,{
       
+      req(input$selected_table)
+      # browser()
       con <- connexion()
       current_query <- dbplyr::remote_query(prepared_data_lz())
       rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
@@ -369,15 +372,17 @@ shinyServer(function(input, output, session) {
       checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
       checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
       br(),
-      actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      fluidRow(
+        column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
+        column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
+      ),
       returnTextAreaInput("data_filter",
                           label = "Data filter:",
                           value = "",
                           rows=2,
                           placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
-                          # placeholder = "Ecrire une condition de filtre et appuyer sur Entrée. Exemple :\nPER_ID==\"123\"\nou\nPER_ID %in% c(\"1\",\"2\",\"3\")\n"
-                          
-      )
+      ),
+      uiOutput("ui_filter_error")
     )
   })
 
@@ -449,6 +454,13 @@ shinyServer(function(input, output, session) {
     #     modalButton('cancel')
     #   )
     # ))
+  })
+  
+  observeEvent(input$db,{
+    updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
+    updateTextAreaInput(session,inputId = "data_filter",value ="")
+    updateSelectInput(session,inputId = "view_vars",selected ="")
+    isolate(filter_error[["val"]] <- "")
   })
   
   # pg_password_ok <- reactiveValues()
