@@ -33,77 +33,78 @@ library(nzsdse)
 library(fontawesome)
 
 
-ui <- navbarPage(title = "database-explorer",
-                 tabPanel("Navigation",
-    
-    
-    includeCSS("www/style.css"),
-    
-    tags$script('
-      Shiny.addCustomMessageHandler("refocus",
-            function(e_id) {
-            document.getElementById(e_id).focus();
-                                  });'),
-    
+ui <- navbarPage(
+  
+  title = "database-explorer",
+  
+  # includeCSS("www/dbexplorer-style.css"),
+  # includeCSS("www/style.css"),
+  tabPanel("Navigation",
+     tags$head(
+       tags$link(rel = "stylesheet", type = "text/css", href = "dbexplorer-style.css")
+     ),
+    includeScript("www/js/refocus_cursor.js"),
     includeScript("www/js/returnTextAreaBinding.js"),
     includeScript("www/js/returnTextInputBinding.js"),
     includeScript("www/js/run_return.js"),
-    tags$style(HTML("
-                  .shiny-output-error {
-                    color: red;
-                  }
-                  ")),
+    includeScript("www/js/enter_password.js"),
     
     # titlePanel("Explore db"),
+    
     sidebarLayout(
-        sidebarPanel(
-            wellPanel(
-                selectInput("db","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
-                uiOutput("ui_schemas"),
-                uiOutput("ui_tables"),
-                width=3
-            ),
-            # uiOutput("ui_filters"),
-            wellPanel(
-                checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
-                checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
-                br(),
-                fluidRow(
-                    column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
-                    column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
-                ),
-                returnTextAreaInput("data_filter",
-                                    label = "Data filter:",
-                                    value = "",
-                                    rows=2,
-                                    placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
-
-                ),
-                uiOutput("ui_filter_error")
-            ),
-            uiOutput("ui_view_vars"),
-            actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black")
-            
+      sidebarPanel(
+        wellPanel(
+          selectInput("db","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+          uiOutput("ui_schemas"),
+          uiOutput("ui_tables"),
+          width=3
         ),
-        mainPanel(
-            htmlOutput("ui_summary"),
-            br(),
-            DT::dataTableOutput("dataviewer")
-        )
-        # mainPanel(
-        #     tabsetPanel(
-        #         tabPanel("Table2",
-        #                  htmlOutput("ui_summary"),
-        #                  br(),
-        #                  DT::dataTableOutput("dataviewer")
-        #                  ),
-        #         tabPanel("Table3",
-        #                  aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
-        #                  actionButton("run_sql", "Run"),
-        #                  DT::dataTableOutput("sql_dt")
-        #                  )
-        #     )
-        # )
+        # uiOutput("ui_filters"),
+        wellPanel(
+          checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
+          checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
+          br(),
+          fluidRow(
+            column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
+            column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
+          ),
+          returnTextAreaInput("data_filter",
+            label = "Data filter:",
+            value = "",
+            rows=2,
+            placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
+          ),
+          uiOutput("ui_filter_error")
+        ),
+        uiOutput("ui_view_vars"),
+        actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black")
+        
+      ),
+      mainPanel(
+        htmlOutput("ui_summary"),
+        br(),
+        DT::dataTableOutput("dataviewer")
+      )
+      # mainPanel(
+      #     tabsetPanel(
+      #         tabPanel("Table2",
+      #                  htmlOutput("ui_summary"),
+      #                  br(),
+      #                  DT::dataTableOutput("dataviewer")
+      #                  ),
+      #         tabPanel("Table3",
+      #                  aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
+      #                  actionButton("run_sql", "Run"),
+      #                  DT::dataTableOutput("sql_dt")
+      #                  )
+      #     )
+      # )
     )
-)
+  ),
+  tabPanel("Console SQL",
+           selectInput("db","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+           aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
+           actionButton("run_sql", "Run"),
+           DT::dataTableOutput("sql_dt")
+  )
 )
