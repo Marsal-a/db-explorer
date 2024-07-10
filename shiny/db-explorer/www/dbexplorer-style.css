@@ -1,0 +1,89 @@
+
+.table {
+  width: auto;
+}
+
+/*
+### PARAMETRAGE DU NAVBAR 
+*/
+.well {
+  padding: 7px;
+  margin-bottom: 5px;
+}
+
+/* Espacement entre checkbox */
+.checkbox {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+/* Espacement les boites */
+.form-group {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Permet de limiter la taille de la colonne  */
+.col-sm-4 {
+  max-width: 315px;
+}
+
+
+/*
+### PARAMETRAGE DU NAVBAR 
+*/
+
+/*
+.navbar {
+  margin-bottom: 10px;
+  background-color: #000091;
+}
+
+
+.navbar-default .navbar-brand {
+  color: white;
+}
+
+
+.navbar-default .navbar-nav > li > a {
+  color: white;
+}
+*/
+
+/*
+### PARAMETRAGE DU TabPanel 
+*/
+
+.tabbable > .nav > li > a                  {background-color: aqua;  color:black}
+.tabbable > .nav > li > a[data-value='t1'] {background-color: red;   color:white}
+.tabbable > .nav > li > a[data-value='t2'] {background-color: blue;  color:white}
+.tabbable > .nav > li > a[data-value='t3'] {background-color: green; color:white}
+.tabbable > .nav > li[class=active]    > a {background-color: black; color:white}
+
+
+
+
+
+/*
+### PARAMETRAGE DU DATATABLE 
+*/
+
+table.dataTable tfoot td,
+table.dataTable thead td {
+  padding: 0 0 0 0;
+}
+table {
+  white-space: nowrap;
+}
+
+
+
+
+/*
+### PARAMETRAGE DES ERREURS 
+*/
+
+.shiny-output-error {
+  color: red;
+}
