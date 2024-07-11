@@ -52,6 +52,41 @@ shinyServer(function(input, output, session) {
     schema
   }) 
   
+  ### Gestion des fonctions de connexions aux base de données
+  
+  ## Fonctions pour la connexion à Netezza :
+  
+  all_nz_tables <- reactive({
+    
+    ts_print("all_nz_table_start")
+    
+    # query_nz_tables <- "SELECT * FROM _V_OBJECT_DATA"
+    query_nz_tables <- "
+      SELECT
+        _V_OBJECT_DATA.OBJTYPE,
+        _V_OBJECT_DATA.OBJNAME,
+        _V_OBJECT_DATA.DBNAME,
+        _V_TABLE_ONLY_STORAGE_STAT.RELTUPLES AS nrows
+      FROM _V_OBJECT_DATA
+      LEFT JOIN  _V_TABLE_ONLY_STORAGE_STAT
+      ON _V_OBJECT_DATA.OBJNAME=_V_TABLE_ONLY_STORAGE_STAT.TABLENAME
+      WHERE LOWER(_V_OBJECT_DATA.OBJTYPE) IN ('table','view')
+      ORDER BY _V_OBJECT_DATA.OBJNAME
+      "
+    
+    all_tables <- dplyr::as_tibble(DBI::dbGetQuery(connexion(), query_nz_tables))
+    
+    all_tables <- all_tables %>% filter(OBJTYPE %in% c("TABLE","VIEW"))
+    
+    ts_print("all_nz_table_end")
+    return(all_tables)
+    
+  }) %>% bindCache(input$db) 
+  # %>% 
+  # bindEvent(c(input$db,input$password_pg,input$selected_schema))
+  # Le bind event fait planter l'application, surement lié à un problème du package rJava référencé ici : 
+  # https://forum.posit.co/t/error-in-jcheck-java-exception-no-description-because-tostring-failed/161960/11
+  
   table_list=reactive({
   # table_list=eventReactive(input$selected_schema,{
       
@@ -212,9 +247,11 @@ shinyServer(function(input, output, session) {
     eventExpr = c( input$view_vars,input$data_filter),
     ignoreNULL=T,{
     
+    # browser()
     req(input$selected_table)
     prepared_data <- prepared_data_lz()
     
+    # browser()
     ### Capture des erreurs renvoyées par la base de données
     ### Ex : XXX=1 au lieu de ==
     
@@ -271,23 +308,42 @@ shinyServer(function(input, output, session) {
   
   tableSummary <- eventReactive(
     eventExpr = c(input$selected_table,input$data_filter),
+    # eventExpr = displayTable(),
     ignoreInit = TRUE,
-    ignoreNULL=T,{
+    ignoreNULL=F,{
       
+      # browser()
       req(input$selected_table)
       # browser()
+
+      # if(is.null(input$data_filter) | input$data_filter==""){
+      #   ts_print("rowcount_NOquery")
+      #   rowcount <- all_nz_tables() %>% filter(DBNAME==input$selected_schema) %>% filter(OBJNAME==input$selected_table) %>% pull(NROWS)
+      # }else{
+      #   ts_print("rowcount_DOquery")
+      #   con <- connexion()
+      #   current_query <- dbplyr::remote_query(prepared_data_lz())
+      #   rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
+      #   rowcount <- DBI::dbGetQuery(con, rowcount_query)
+      # }
+      # rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
+      
       con <- connexion()
+      # browser()
       current_query <- dbplyr::remote_query(prepared_data_lz())
       rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
       rowcount <- DBI::dbGetQuery(con, rowcount_query)
       rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
       
       # browser()
+      # colcount=dim(displayTable())[2]
+      colcount=dim(raw_data_lz())[2]
+      # browser()
       glue1 <- glue::glue("
       Prévisualisation de la table {crayon::bold$blue(input$selected_table)} ({min(1000,as.integer(rowcount))} premières lignes)
     
       Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
-      Nombre de colonnes : {crayon::bold$blue(dim(prepared_data_lz())[2])}
+      Nombre de colonnes : {crayon::bold$blue(colcount)}
 
       ")
       return(glue1)
@@ -305,7 +361,6 @@ shinyServer(function(input, output, session) {
   output$dataviewer <- DT::renderDataTable({
     
     ts_print("output$dataviewer")
-    
     dat <- displayTable()
     ts_print("output$dataviewer")
     

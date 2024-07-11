@@ -1,4 +1,5 @@
 .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
+# .libPaths(.libPaths()[1])
 unloadNamespace("nzsdse")
 unloadNamespace("dbplyr")
 unloadNamespace("dplyr")
@@ -49,8 +50,6 @@ ui <- navbarPage(
     includeScript("www/js/run_return.js"),
     includeScript("www/js/enter_password.js"),
     
-    # titlePanel("Explore db"),
-    
     sidebarLayout(
       sidebarPanel(
         wellPanel(
@@ -85,26 +84,23 @@ ui <- navbarPage(
         br(),
         DT::dataTableOutput("dataviewer")
       )
-      # mainPanel(
-      #     tabsetPanel(
-      #         tabPanel("Table2",
-      #                  htmlOutput("ui_summary"),
-      #                  br(),
-      #                  DT::dataTableOutput("dataviewer")
-      #                  ),
-      #         tabPanel("Table3",
-      #                  aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
-      #                  actionButton("run_sql", "Run"),
-      #                  DT::dataTableOutput("sql_dt")
-      #                  )
-      #     )
-      # )
     )
   ),
   tabPanel("Console SQL",
-           selectInput("db","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
-           aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ..."),
-           actionButton("run_sql", "Run"),
-           DT::dataTableOutput("sql_dt")
-  )
+           sidebarLayout(
+             sidebarPanel(
+               wellPanel(
+                selectInput("db_sql","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+                uiOutput("ui_schemas_sql_panel"),
+                uiOutput("ui_tables_sql_panel")
+               )
+             ),
+             mainPanel(
+               fluidRow(aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ...")),
+               fluidRow(actionButton("run_sql", "Run")),
+               tags$br(),
+               fluidRow(DT::dataTableOutput("sql_dt")) 
+             )
+           )
+    )
 )

@@ -71,6 +71,9 @@ $(document).keydown(function (event) {
     $("#pvt_store").click();
   } else if ($("#expl_name").is(":focus") && event.keyCode == 13) {
     $("#expl_store").click();
+  //} else if ($("#sql_code").is(":focus") && event.keyCode == "Enter") {
+  //  $("#run_sql").click();
+  // a changer en ctrl + enter
   } else if ($("#tr_name").is(":focus") && event.keyCode == 13) {
     $("#tr_store").click();
   } else if ($("#cmb_name").is(":focus") && event.keyCode == 13) {
