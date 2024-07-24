@@ -28,10 +28,18 @@
   margin-bottom: 0;
 }
 
-/* Permet de limiter la taille de la colonne  */
-.col-sm-4 {
+/* Permet de fixer la taille de la premiere colonne et ajuster la 2eme  */
+
+.col-sm-3{
   max-width: 315px;
+  min-width: 300px;
 }
+.col-sm-9{
+  width: calc(100% - 330px);
+}
+
+
+
 
 
 /*
@@ -71,6 +79,10 @@
 }
 
 
+#dataviewer{
+  overflow-y:auto;
+  min-height:750px;
+}
 
 
 

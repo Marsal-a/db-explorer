@@ -61,8 +61,7 @@ ui <- navbarPage(
         wellPanel(
           selectInput("db","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
           uiOutput("ui_schemas"),
-          uiOutput("ui_tables"),
-          width=3
+          uiOutput("ui_tables")
         ),
         # uiOutput("ui_filters"),
         wellPanel(
@@ -82,13 +81,14 @@ ui <- navbarPage(
           uiOutput("ui_filter_error")
         ),
         uiOutput("ui_view_vars"),
-        actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black")
-        
+        actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+        width = 3
       ),
       mainPanel(
         htmlOutput("ui_summary"),
         br(),
-        DT::dataTableOutput("dataviewer")
+        DT::dataTableOutput("dataviewer",height = NULL), # le height = NULL permet de laisse la taille ajusté par CSS 
+        width = 9
       )
     )
   ),

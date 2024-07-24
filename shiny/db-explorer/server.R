@@ -390,7 +390,7 @@ shinyServer(function(input, output, session) {
             dat,
             filter = fbox,
             rownames = FALSE,
-            fillContainer = FALSE,
+            fillContainer = T,
             escape = FALSE,
             style = style,
             options = list(
