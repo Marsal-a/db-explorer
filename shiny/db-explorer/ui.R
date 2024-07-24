@@ -10,6 +10,7 @@ unloadNamespace("tidyselect")
 unloadNamespace("pgsdse")
 unloadNamespace("orasdse")
 unloadNamespace("RJDBC")
+unloadNamespace("crayon")
 
 
 unloadNamespace("RPostgres")
@@ -18,6 +19,7 @@ unloadNamespace("DBI")
 unloadNamespace("stringr")
 unloadNamespace("glue")
 
+library(crayon)
 library(shinyAce)
 library(shiny)
 library(shinyhelper)
@@ -32,6 +34,10 @@ library(orasdse)
 library(pgsdse)
 library(nzsdse)
 library(fontawesome)
+library(stringi)
+library(stringr)
+library(sodium)
+
 
 
 ui <- navbarPage(

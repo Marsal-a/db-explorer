@@ -307,9 +307,9 @@ shinyServer(function(input, output, session) {
   
   
   tableSummary <- eventReactive(
-    eventExpr = c(input$selected_table,input$data_filter),
+    eventExpr = c(input$selected_table,input$data_filter,prepared_data_lz()),
     # eventExpr = displayTable(),
-    ignoreInit = TRUE,
+    ignoreInit = F,
     ignoreNULL=F,{
       
       # browser()
@@ -455,7 +455,7 @@ shinyServer(function(input, output, session) {
   observeEvent(input$selected_table,{
       updateTextAreaInput(session,inputId = "data_filter",value ="")
       
-    ### Le reset du select input permet de combler le cas d'un changement de table qui aurait les memes colonnes exactemetn. 
+      ### Le reset du select input permet de combler le cas d'un changement de table qui aurait les memes colonnes exactemetn. 
       ### En effet dans ce cas l'inputId view_vars ne changerait pas et la table affiché ne serait pas raffraichie
       updateSelectInput(session,inputId = "view_vars",selected ="")  
       updateSelectInput(session,inputId = "view_vars",selected =varnames())
@@ -558,7 +558,8 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$trigtest,{
-    browser()
+    print_session()
+    # browser()
     # updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
     # updateTextAreaInput(session,inputId = "data_filter",value ="")
     
