@@ -148,7 +148,14 @@ output$sql_dt <- DT::renderDataTable({
   
   d=withProgress(
     message = "Generating view table", value = 1,
-    DT::datatable(dat) 
+    DT::datatable(dat,
+                  options = list(
+                    dom="tpil",
+                    pageLength = 15,
+                    lengthMenu = list(c(15, 25, 50, 100, -1), c("15", "25", "50", "100", "All"))
+                    )
+    )
+                  
   )
   ts_print("output$sql_dt-end")
   return(d)
