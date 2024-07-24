@@ -31,14 +31,14 @@ list_table_SQLite <- function(con){
 
 
 ### Render des .md
-rmarkdown::render(paste0(getOption("path_db_explorer"),"tools/help/help_filters.md"))
+# rmarkdown::render(paste0(getOption("path_db_explorer"),"tools/help/help_filters.md"))
 
 addResourcePath("help","./tools/help/")
 
-packages=c("dplyr","dbplyr","RJDBC","pillar","nzsdse","DBI")
-purrr::walk(packages,function(p){
-  print(paste0(p," :",packageVersion(p)))
-})
+# packages=c("dplyr","dbplyr","RJDBC","pillar","nzsdse","DBI")
+# purrr::walk(packages,function(p){
+#   print(paste0(p," :",packageVersion(p)))
+# })
 
 
 
