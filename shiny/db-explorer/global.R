@@ -234,3 +234,17 @@ ansi2html <- function(ansi){
   ))
 }
 
+
+
+
+print_session <- function(){
+  
+  session=sessionInfo()
+  pkg_load=c(session$loadedOnly,session$otherPkgs)
+  
+  list_pkg=purrr::map(pkg_load,function(pkg){
+    df=data.frame(pkg$Package,pkg$Version)
+  })
+  print(bind_rows(list_pkg)|>arrange(pkg.Package),row.names=FALSE)
+  
+}
