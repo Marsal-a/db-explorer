@@ -40,5 +40,6 @@ addResourcePath("help","./tools/help/")
 #   print(paste0(p," :",packageVersion(p)))
 # })
 
-
-
+## Cloture des sessions au maximum aprés 12h d'ouverture
+start_time <- Sys.time()
+max_session_time <- 3600*1 

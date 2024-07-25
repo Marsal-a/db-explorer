@@ -559,15 +559,18 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$trigtest,{
     print_session()
-    # browser()
+    browser()
     # updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
     # updateTextAreaInput(session,inputId = "data_filter",value ="")
     
   })
   
-
+  current_time<-reactiveTimer()
   
-
-  
+  observe({
+    if(current_time()-start_time>max_session_time){
+      stopApp()
+    }
+  })
 
 })
