@@ -42,11 +42,12 @@ library(sodium)
 
 ui <- navbarPage(
   
-  title = "database-explorer",
+  title = "Exploration des bases de données",
   
   # includeCSS("www/dbexplorer-style.css"),
   # includeCSS("www/style.css"),
   tabPanel("Navigation",
+     shinyjs::useShinyjs(),
      tags$head(
        tags$link(rel = "stylesheet", type = "text/css", href = "dbexplorer-style.css")
      ),
@@ -87,7 +88,7 @@ ui <- navbarPage(
       mainPanel(
         htmlOutput("ui_summary"),
         br(),
-        DT::dataTableOutput("dataviewer",height = NULL), # le height = NULL permet de laisse la taille ajusté par CSS 
+        DT::dataTableOutput("dataviewer",height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
         width = 9
       )
     )
@@ -99,14 +100,21 @@ ui <- navbarPage(
                 selectInput("db_sql","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
                 uiOutput("ui_schemas_sql_panel"),
                 uiOutput("ui_tables_sql_panel")
-               )
+               ),
+               width=3
              ),
              mainPanel(
-               fluidRow(aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ...")),
+               # fluidRow(aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ...")),
+               p("Console SQL en construction"),
+               p("Plante si clique trop rapide sur RUN aprés selection de la table: attendre 1 sec"),
+               p("Aprés un premier run, plante lors du changement de schéma"),
+               fluidRow(uiOutput("UI_ace_editor")),
                fluidRow(actionButton("run_sql", "Run")),
                tags$br(),
-               fluidRow(DT::dataTableOutput("sql_dt")) 
-             )
+               fluidRow(DT::dataTableOutput("sql_dt")),
+               width=9
+             ),
+             
            )
     )
 )
