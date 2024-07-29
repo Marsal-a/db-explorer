@@ -7,6 +7,37 @@ shinyServer(function(input, output, session) {
     source(file, encoding = enc, local = TRUE)
   }
   
+  # NAVIG_connecteur_fonctions <- reactiveValues(
+  #   list_schemas=NULL,
+  #   list_tables=NULL
+  # )
+  # 
+  # NAVIG_INIT_CONNECT <- observeEvent(input$db,{
+  #   
+  #   if(input$db=="SQLite"){
+  #     source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
+  #     cona <- con_sqlite
+  #   
+  #     
+  #   }else if(input$db=="Netezza"){
+  #     
+  #     list_schemas <- function(con){
+  #       schemas_df <- nzsdse:::nzSDSEListDb(con)
+  #       schemas <- schemas_df$name
+  #       return(schemas)
+  #     }
+  #     list_tables <- function(con,dbname){
+  #       tables <- all_nz_tables() %>% filter(DBNAME==dbname) %>% pull(OBJNAME)
+  #       return(tables)
+  #     }
+  #     
+  #     NAVIG_connecteur_fonctions[['list_schemas']] <- list_schemas
+  #     NAVIG_connecteur_fonctions[['list_tables']] <- list_tables
+  #     
+  #   }
+  # })
+  
+  
   connexion <- eventReactive(c(input$db),{
     ts_print("connexion_start")
     if(input$db=="SQLite"){
@@ -53,7 +84,6 @@ shinyServer(function(input, output, session) {
   }) 
   
   ### Gestion des fonctions de connexions aux base de données
-  
   ## Fonctions pour la connexion à Netezza :
   
   all_nz_tables <- reactive({
@@ -312,41 +342,39 @@ shinyServer(function(input, output, session) {
     ignoreInit = F,
     ignoreNULL=F,{
       
-      # browser()
       req(input$selected_table)
-      # browser()
-
-      # if(is.null(input$data_filter) | input$data_filter==""){
-      #   ts_print("rowcount_NOquery")
-      #   rowcount <- all_nz_tables() %>% filter(DBNAME==input$selected_schema) %>% filter(OBJNAME==input$selected_table) %>% pull(NROWS)
-      # }else{
-      #   ts_print("rowcount_DOquery")
-      #   con <- connexion()
-      #   current_query <- dbplyr::remote_query(prepared_data_lz())
-      #   rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
-      #   rowcount <- DBI::dbGetQuery(con, rowcount_query)
-      # }
-      # rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
       
-      con <- connexion()
-      # browser()
-      current_query <- dbplyr::remote_query(prepared_data_lz())
-      rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
-      rowcount <- DBI::dbGetQuery(con, rowcount_query)
-      rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
+      preview_information <- function(connexion,prepared_data,raw_data_lz,selected_table){
+        current_query <- dbplyr::remote_query(prepared_data)
+        rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
+        rowcount <- DBI::dbGetQuery(connexion, rowcount_query)
+        rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
+        
+        colcount=dim(raw_data_lz)[2]
+        
+        glue1 <- glue::glue("
+        Prévisualisation de la table {crayon::bold$blue(input$selected_table)} ({min(1000,as.integer(rowcount))} premières lignes)
       
-      # browser()
-      # colcount=dim(displayTable())[2]
-      colcount=dim(raw_data_lz())[2]
-      # browser()
-      glue1 <- glue::glue("
-      Prévisualisation de la table {crayon::bold$blue(input$selected_table)} ({min(1000,as.integer(rowcount))} premières lignes)
+        Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
+        Nombre de colonnes : {crayon::bold$blue(colcount)}
+  
+        ")
+        return(glue1)
+      }
+      
+      safe_preview_information<-purrr::safely(preview_information)
+      
+      safe_results <- safe_preview_information(connexion(),prepared_data_lz(),raw_data_lz(),input$selected_table)
+      
+      if(is.null(safe_results$error)){
+        res <- safe_results$result
+      }else{
+        res <- safe_preview_information(connexion(),raw_data_lz(),raw_data_lz(),input$selected_table)
+      }
+      
+      
     
-      Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
-      Nombre de colonnes : {crayon::bold$blue(colcount)}
-
-      ")
-      return(glue1)
+      return(res)
       
     }
   )  
