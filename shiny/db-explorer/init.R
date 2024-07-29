@@ -42,4 +42,13 @@ addResourcePath("help","./tools/help/")
 
 ## Cloture des sessions au maximum aprés 12h d'ouverture
 start_time <- Sys.time()
-max_session_time <- 3600*1 
+max_session_time <- 3600*1
+
+
+sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT", 
+                  "JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN", 
+                  "ON", "GROUP BY", "HAVING", "ORDER BY", "LIMIT", "OFFSET", 
+                  "DISTINCT", "COUNT", "SUM", "AVG", "MAX", "MIN", "BETWEEN", 
+                  "LIKE", "IN", "EXISTS", "CASE", "WHEN", "THEN", "ELSE", "END", 
+                  "IS", "NULL", "TRUE", "FALSE", "ALL", "ANY", "SOME", "ASC", 
+                  "DESC", "UNION", "INTERSECT", "EXCEPT", "WITH", "RECURSIVE")

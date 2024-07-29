@@ -128,7 +128,7 @@ sql_table <- eventReactive(input$run_sql,{
   ts_print("sql_table") 
   req(input$sql_code)
   
-  print(input$sql_code)
+  # print(input$sql_code)
   rs=dbSendQuery(connexion_sql_panel(),input$sql_code)
   dt=dbFetch(rs,1000)
   ts_print("sql_table-2")
@@ -142,7 +142,7 @@ sql_table <- eventReactive(input$run_sql,{
 output$sql_dt <- DT::renderDataTable({
   
   ts_print("output$sql_dt")
-  
+  # browser()
   dat=sql_table()
   ts_print("output$sql_dt-2")
   
@@ -162,8 +162,10 @@ output$sql_dt <- DT::renderDataTable({
 })
 
 
-observeEvent(input$selected_schema_sql_panel,{
-  
+
+# observeEvent(input$selected_schema_sql_panel,{
+observe({
+  freezeReactiveValue(input,"sql_code")
   newval=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".")
   updateAceEditor(session=session,
                   editorId = "sql_code",
@@ -171,7 +173,37 @@ observeEvent(input$selected_schema_sql_panel,{
                   )
 })
 
-observeEvent(input$selected_table_sql_panel,{
+comps <- reactive({
+  comps <- list()
+  comps[[input$selected_table_sql_panel]] <- colnames(sql_table())
+  comps <- c(comps,sql_keywords)
+})
+
+observe({
+# observeEvent(input$selected_table_sql_panel,{
+  shinyAce::updateAceEditor(session,
+                            "sql_code",
+                            autoCompleters = c("static", "text", "rlang"),
+                            autoCompleteList = comps()
+  )
+})
+
+
+output$UI_ace_editor <- renderUI({
+  ## initially, only show completions in 'comps' (i.e., dplyr and selected dataset)
+  aceEditor("sql_code",
+            mode = "sql",
+            autoComplete = "live",
+            # autoCompleters = comps(),
+            height = "100px",
+            value = "SELECT * FROM ...")
+})
+
+observeEvent(input$selected_table_sql_panel,priority = 10,{
+  
+  freezeReactiveValue(input,"sql_code")
+  shinyjs::disable("run_sql")
+
   
   if(input$db_sql=="Netezza"){
     newval=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".ADMIN.",input$selected_table_sql_panel)  
@@ -179,11 +211,11 @@ observeEvent(input$selected_table_sql_panel,{
     newval=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".",input$selected_table_sql_panel)
   }
   
-  
-  
   updateAceEditor(session=session,
                   editorId = "sql_code",
                   newval
   )
-  
+  Sys.sleep(0.8)
+  shinyjs::enable("run_sql")
+
 })
