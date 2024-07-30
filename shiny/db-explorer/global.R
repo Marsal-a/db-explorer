@@ -236,7 +236,6 @@ ansi2html <- function(ansi){
 
 
 
-
 print_session <- function(){
   
   session=sessionInfo()
@@ -246,5 +245,30 @@ print_session <- function(){
     df=data.frame(pkg$Package,pkg$Version)
   })
   print(bind_rows(list_pkg)|>arrange(pkg.Package),row.names=FALSE)
+  
+}
+
+
+logger <- function(session,path_out){
+  
+  Sys.sleep(1)
+  fname=paste0(path_out,fs::path_sanitize(paste0("log_db-explorer_",Sys.info()['user'],"_",format(Sys.time(), "%Y%m%d_%H%M%S"),".txt")))
+  session=sessionInfo()
+  pkg_load=c(session$loadedOnly,session$otherPkgs)
+  
+  list_pkg=purrr::map(pkg_load,function(pkg){
+    df=data.frame(pkg$Package,pkg$Version)
+  })
+  
+  res=c(
+    Sys.info(),
+    start_Time=format(start_time,"%Y%m%d_%H%M%S"),
+    bind_rows(list_pkg)|>arrange(pkg.Package)
+  )
+  
+  
+  write.csv(res, file = fname, row.names = T, quote = FALSE)
+  writeLines(capture.output(print(res)), con = fname)
+  
   
 }
