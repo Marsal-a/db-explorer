@@ -106,12 +106,12 @@ ui <- navbarPage(
              mainPanel(
                # fluidRow(aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ...")),
                p("Console SQL en construction"),
-               p("Plante si clique trop rapide sur RUN aprés selection de la table: attendre 1 sec"),
-               p("Aprés un premier run, plante lors du changement de schéma"),
-               fluidRow(uiOutput("UI_ace_editor")),
-               fluidRow(actionButton("run_sql", "Run")),
+               # p("Plante si clique trop rapide sur RUN aprés selection de la table: attendre 1 sec"),
+               # p("Aprés un premier run, plante lors du changement de schéma"),
+               uiOutput("UI_ace_editor"),
+               actionButton("run_sql", "Run"),
                tags$br(),
-               fluidRow(DT::dataTableOutput("sql_dt")),
+               DT::dataTableOutput("sql_dt",height = NULL),
                width=9
              ),
              

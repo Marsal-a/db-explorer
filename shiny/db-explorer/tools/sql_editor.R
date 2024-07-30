@@ -1,7 +1,7 @@
 
 ### PANNEAU DE CONNEXION POUR LA CONSOLE SQL. 
 ### CODE EN DOUBLE AVEC LA CONNEXION du tableau principales, 
-### c'est trés mal, essayer de factoriser !
+### c'est bof, à voir si on peut factoriser
 
 
 connexion_sql_panel <- eventReactive(c(input$db_sql),{
@@ -122,18 +122,33 @@ observeEvent(input$db_sql,{
   }
 })
 
-sql_table <- eventReactive(input$run_sql,{
+# sql_table <- reactive({
+sql_table <- eventReactive(c(input$run_sql),{
   
-  # browser()
+
   ts_print("sql_table") 
-  req(input$sql_code)
   
+  # req(input$sql_code)
+  # req(input$run_sql)
+  # browser()
   # print(input$sql_code)
-  rs=dbSendQuery(connexion_sql_panel(),input$sql_code)
-  dt=dbFetch(rs,1000)
-  ts_print("sql_table-2")
   
-  dbClearResult(rs)
+  
+  safe_dbSendQuery <- purrr::safely(dbSendQuery)
+  safe_rs <- safe_dbSendQuery(connexion_sql_panel(),isolate(input$sql_code))
+  
+  if(is.null(safe_rs$error)){
+    dt=dbFetch(safe_rs$result,1000)
+    dbClearResult(safe_rs$result)
+  }else{
+    dt=NULL
+  }
+  
+  # rs=dbSendQuery(connexion_sql_panel(),input$sql_code)
+  # dt=dbFetch(rs,1000)
+  ts_print("sql_table-2")
+  # browser()
+  # dbClearResult(rs)
   ts_print("sql_table-3")
   return(dt)
   
@@ -148,7 +163,7 @@ output$sql_dt <- DT::renderDataTable({
   
   d=withProgress(
     message = "Generating view table", value = 1,
-    DT::datatable(dat,
+    DT::datatable(dat,fillContainer = TRUE,
                   options = list(
                     dom="tpil",
                     pageLength = 15,
@@ -161,19 +176,8 @@ output$sql_dt <- DT::renderDataTable({
   return(d)
 })
 
-
-
-# observeEvent(input$selected_schema_sql_panel,{
-observe({
-  freezeReactiveValue(input,"sql_code")
-  newval=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".")
-  updateAceEditor(session=session,
-                  editorId = "sql_code",
-                  newval
-                  )
-})
-
 comps <- reactive({
+  req(input$selected_table_sql_panel)
   comps <- list()
   comps[[input$selected_table_sql_panel]] <- colnames(sql_table())
   comps <- c(comps,sql_keywords)
@@ -188,7 +192,6 @@ observe({
   )
 })
 
-
 output$UI_ace_editor <- renderUI({
   ## initially, only show completions in 'comps' (i.e., dplyr and selected dataset)
   aceEditor("sql_code",
@@ -199,23 +202,59 @@ output$UI_ace_editor <- renderUI({
             value = "SELECT * FROM ...")
 })
 
-observeEvent(input$selected_table_sql_panel,priority = 10,{
+updateAceEditor_timelapsed <- function(session,id,text,start_char,lapse=0.03){
   
-  freezeReactiveValue(input,"sql_code")
-  shinyjs::disable("run_sql")
+  initial_text=substr(text,1,start_char-1)
+  purrr::walk(seq(nchar(text)-start_char+1),function(i){
+    new_val=substr(text,start_char,i+start_char-1)
+    updateAceEditor(session=session,
+                    editorId = id,
+                    value=paste0(initial_text,new_val)
+    )
+    Sys.sleep(lapse)
+    # print(paste0(initial_text,new_val))
+  })
+  
+}
 
-  
-  if(input$db_sql=="Netezza"){
-    newval=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".ADMIN.",input$selected_table_sql_panel)  
-  }else{
-    newval=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".",input$selected_table_sql_panel)
+observeEvent(input$selected_schema_sql_panel,{
+  if(!is.null(input$selected_schema_sql_panel) & input$selected_schema_sql_panel!=""){
+    freezeReactiveValue(input,"sql_code")
+    freezeReactiveValue(input,"selected_tabel_sql_panel")
+    updatedAceInput=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".")  
+    updateAceEditor_timelapsed(session = session,id = "sql_code",text=updatedAceInput,start_char = 1)
   }
   
-  updateAceEditor(session=session,
-                  editorId = "sql_code",
-                  newval
-  )
+})
+
+observeEvent(input$selected_table_sql_panel,priority = 10,{
+  
+  req(input$selected_table_sql_panel)
+  init_sql_code <- paste0("SELECT * FROM ",input$selected_schema_sql_panel,".")
+  
+  # freezeReactiveValue(input,"sql_code")
+  shinyjs::disable("run_sql")
+  
+  
+  # browser()
+  if(input$db_sql=="Netezza"){
+    updatedAceInput=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".ADMIN.",input$selected_table_sql_panel,"\nLIMIT 100")
+  }else if(input$db_sql=="Oracle - Prod"){
+    updatedAceInput=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".",input$selected_table_sql_panel,"\nWHERE (ROWNUM <= 100)")
+  }else if(input$db_sql=="PostgreSQL - Prod"){
+    updatedAceInput=paste0("SELECT * FROM ",input$selected_schema_sql_panel,".",input$selected_table_sql_panel,"\nLIMIT 100")
+  }
+  
+  # browser()
+  updateAceEditor_timelapsed(session = session,id = "sql_code",text=updatedAceInput,start_char = nchar(init_sql_code))
+  
+  # updateAceEditor(session=session,
+  #                 editorId = "sql_code",
+  #                 newval
+  # )
+  
   Sys.sleep(0.8)
   shinyjs::enable("run_sql")
+  
 
 })

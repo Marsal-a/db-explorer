@@ -42,9 +42,8 @@ addResourcePath("help","./tools/help/")
 
 ## Cloture des sessions au maximum aprés 12h d'ouverture
 start_time <- Sys.time()
-max_session_time <- 3600*1
-
-
+max_session_time <- 3600*12
+path_out_log="~/R_Commun/Adam/logs/db-explorer/"
 sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT", 
                   "JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN", 
                   "ON", "GROUP BY", "HAVING", "ORDER BY", "LIMIT", "OFFSET", 

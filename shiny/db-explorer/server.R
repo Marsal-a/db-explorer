@@ -38,7 +38,10 @@ shinyServer(function(input, output, session) {
   # })
   
   
-  connexion <- eventReactive(c(input$db),{
+  connexion <- eventReactive(c(input$db,input$submit_pg_login),{
+    # browser()
+    # freezeReactiveValue(input,selected_schema)
+    # freezeReactiveValue(input,selected_table)
     ts_print("connexion_start")
     if(input$db=="SQLite"){
       source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
@@ -49,10 +52,12 @@ shinyServer(function(input, output, session) {
     }else if(input$db=="PostgreSQL - Prod"){
       # if(!is.null(pg_password_ok[["ok"]])){
       if(!is.null(pg_password_ok())){
-        
+        # browser()
         cona <- connectPostgreSDSE(user = input$username_pg, password=input$password_pg)
         updateTextInput(session = session,inputId = "password_pg",value = "")
         
+      }else{
+        cona <- NULL
       }
     }else if(input$db=="Oracle - Prod"){
       cona <- connectOraSDSE()
@@ -65,7 +70,7 @@ shinyServer(function(input, output, session) {
     
     req(input$db)
     ts_print("schema_list")
-    
+    # schema<-NULL
     if(input$db=="SQLite"){
       schema <- 'default'
     }else if(input$db=="Netezza"){
@@ -133,6 +138,9 @@ shinyServer(function(input, output, session) {
       tables <- all_nz_tables() %>% filter(DBNAME==input$selected_schema) %>% pull(OBJNAME)
       
     }else if(input$db=="PostgreSQL - Prod"){
+      # req(input$password_pg)
+      req(input$submit_pg_login)
+      # browser()
       tables_table <- pgsdse:::pgsdseListTablesAndViews(connexion(),"prod",input$selected_schema)
       tables <- tables_table$name
     }else if(input$db=="Oracle - Prod"){
@@ -164,7 +172,7 @@ shinyServer(function(input, output, session) {
                 selectize=T)
   })
   
-  raw_data_lz <- eventReactive(input$selected_table,{
+  raw_data_lz <- eventReactive(c(input$selected_table),{
 
     req(input$selected_table)
     ts_print("raw_data_lz")  
@@ -418,7 +426,7 @@ shinyServer(function(input, output, session) {
             dat,
             filter = fbox,
             rownames = FALSE,
-            fillContainer = T,
+            fillContainer = TRUE,
             escape = FALSE,
             style = style,
             options = list(
@@ -527,6 +535,7 @@ shinyServer(function(input, output, session) {
     # browser()
     if(input$db=="PostgreSQL - Prod"){
       showModal(pg_connexion_modal())
+      
     }
     # showModal(modalDialog(
     #   tags$h2('Login for PostgreSQL (Production)'),
@@ -540,6 +549,8 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$db,{
+    # browser()
+    updateSelectizeInput(session=session,inputId = "selected_schema",selected = "")
     updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
     updateTextAreaInput(session,inputId = "data_filter",value ="")
     updateSelectInput(session,inputId = "view_vars",selected ="")
@@ -580,7 +591,14 @@ shinyServer(function(input, output, session) {
     ))
   })
   
+  # onStop(function(){
+  #   logger(session,path_out_log)
+  #   cat("Log onStop")
+  #   stopApp()
+  # })
+  
   session$onSessionEnded(function() {
+    logger(session,path_out_log)
     cat("Log onSessionEnded")
     stopApp()
   })
@@ -594,9 +612,10 @@ shinyServer(function(input, output, session) {
   })
   
   current_time<-reactiveTimer()
-  
+
   observe({
     if(current_time()-start_time>max_session_time){
+      logger(session,path_out_log)
       stopApp()
     }
   })
