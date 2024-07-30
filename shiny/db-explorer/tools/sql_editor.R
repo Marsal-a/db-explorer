@@ -202,7 +202,7 @@ output$UI_ace_editor <- renderUI({
             value = "SELECT * FROM ...")
 })
 
-updateAceEditor_timelapsed <- function(session,id,text,start_char,lapse=0.03){
+updateAceEditor_timelapsed <- function(session,id,text,start_char,lapse=0.02){
   
   initial_text=substr(text,1,start_char-1)
   purrr::walk(seq(nchar(text)-start_char+1),function(i){
