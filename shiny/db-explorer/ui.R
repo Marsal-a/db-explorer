@@ -82,7 +82,7 @@ ui <- navbarPage(
           uiOutput("ui_filter_error")
         ),
         uiOutput("ui_view_vars"),
-        actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+        # actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
         width = 3
       ),
       mainPanel(
