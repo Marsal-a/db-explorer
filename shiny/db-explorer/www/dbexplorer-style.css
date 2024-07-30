@@ -79,7 +79,7 @@
 }
 
 
-#dataviewer{
+#dataviewer,#sql_dt{
   overflow-y:auto;
   min-height:750px;
 }
