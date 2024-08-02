@@ -4,7 +4,7 @@
 ### c'est bof, à voir si on peut factoriser
 
 
-connexion_sql_panel <- eventReactive(c(input$db_sql),{
+connexion_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
   if(input$db_sql=="SQLite"){
     source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
     cona <- con_sqlite
@@ -22,6 +22,7 @@ connexion_sql_panel <- eventReactive(c(input$db_sql),{
   }
   return(cona)
 })
+
 schema_list_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
   
   req(input$db_sql)
@@ -83,6 +84,7 @@ table_list_sql_panel=reactive({
     tables <- all_nz_tables_sql_panel() %>% filter(DBNAME==input$selected_schema_sql_panel) %>% pull(OBJNAME)
     
   }else if(input$db_sql=="PostgreSQL - Prod"){
+    req(input$submit_pg_login)
     tables_table <- pgsdse:::pgsdseListTablesAndViews(connexion_sql_panel(),"prod",input$selected_schema_sql_panel)
     tables <- tables_table$name
   }else if(input$db_sql=="Oracle - Prod"){
@@ -123,21 +125,21 @@ observeEvent(input$db_sql,{
 })
 
 # sql_table <- reactive({
-sql_table <- eventReactive(c(input$run_sql),{
+sql_table <- eventReactive(c(input$run_sql,input$selected_table_sql_panel),{
   
 
   ts_print("sql_table") 
   
   # req(input$sql_code)
   # req(input$run_sql)
-  # browser()
+  # print(input$changed)
   # print(input$sql_code)
-  
+  # 
   
   safe_dbSendQuery <- purrr::safely(dbSendQuery)
   safe_rs <- safe_dbSendQuery(connexion_sql_panel(),isolate(input$sql_code))
   
-  if(is.null(safe_rs$error)){
+  if(is.null(safe_rs$error) & input$changed=="run_sql"){
     dt=dbFetch(safe_rs$result,1000)
     dbClearResult(safe_rs$result)
   }else{
@@ -202,7 +204,7 @@ output$UI_ace_editor <- renderUI({
             value = "SELECT * FROM ...")
 })
 
-updateAceEditor_timelapsed <- function(session,id,text,start_char,lapse=0.02){
+updateAceEditor_timelapsed <- function(session,id,text,start_char,lapse=0.015){
   
   initial_text=substr(text,1,start_char-1)
   purrr::walk(seq(nchar(text)-start_char+1),function(i){
@@ -258,3 +260,18 @@ observeEvent(input$selected_table_sql_panel,priority = 10,{
   
 
 })
+
+observeEvent(input$db_sql,{
+  
+  updateSelectizeInput(session=session,inputId = "selected_schema_sql_panel",selected = "")
+  updateSelectizeInput(session=session,inputId = "selected_table_sql_panel",selected = "")
+
+  
+})
+
+# observeEvent(input$sql_code,{
+#   shinyjs::disable("run_sql")
+#   Sys.sleep(0.8)
+#   shinyjs::enable("run_sql")
+#   
+# })
