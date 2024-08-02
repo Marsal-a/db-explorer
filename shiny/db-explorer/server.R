@@ -39,9 +39,6 @@ shinyServer(function(input, output, session) {
   
   
   connexion <- eventReactive(c(input$db,input$submit_pg_login),{
-    # browser()
-    # freezeReactiveValue(input,selected_schema)
-    # freezeReactiveValue(input,selected_table)
     ts_print("connexion_start")
     if(input$db=="SQLite"){
       source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
@@ -52,10 +49,8 @@ shinyServer(function(input, output, session) {
     }else if(input$db=="PostgreSQL - Prod"){
       # if(!is.null(pg_password_ok[["ok"]])){
       if(!is.null(pg_password_ok())){
-        # browser()
         cona <- connectPostgreSDSE(user = input$username_pg, password=input$password_pg)
         updateTextInput(session = session,inputId = "password_pg",value = "")
-        
       }else{
         cona <- NULL
       }
@@ -274,6 +269,20 @@ shinyServer(function(input, output, session) {
       # }
       
     }
+    
+    
+    # arrange_cmd <- input$data_arrange
+    # if (!is.empty(arrange_cmd)) {
+    #   arrange_cmd <- arrange_cmd %>%
+    #     strsplit(., split = "(&|,|\\s+)") %>%
+    #     unlist() %>%
+    #     .[!. == ""] %>%
+    #     paste0(collapse = ", ") %>%
+    #     (function(x) glue("arrange(x, {x})"))
+    # }
+    
+    
+    
     ts_print("prepared_data_lz7") 
     return(prepared_data)
   })
@@ -396,6 +405,7 @@ shinyServer(function(input, output, session) {
   
   output$dataviewer <- DT::renderDataTable({
     
+    req(input$selected_table)
     ts_print("output$dataviewer")
     dat <- displayTable()
     ts_print("output$dataviewer")
@@ -457,25 +467,6 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  output$ui_filters <- renderUI({
-    req(input$selected_table)
-    wellPanel(
-      checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
-      checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
-      br(),
-      fluidRow(
-        column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
-        column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
-      ),
-      returnTextAreaInput("data_filter",
-                          label = "Data filter:",
-                          value = "",
-                          rows=2,
-                          placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
-      ),
-      uiOutput("ui_filter_error")
-    )
-  })
 
   observeEvent(input$selected_schema,{
 

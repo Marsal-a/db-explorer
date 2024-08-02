@@ -17,6 +17,7 @@ unloadNamespace("RPostgres")
 unloadNamespace("ROracle")
 unloadNamespace("DBI")
 unloadNamespace("stringr")
+unloadNamespace("usethis")
 unloadNamespace("glue")
 
 library(crayon)
@@ -51,11 +52,22 @@ ui <- navbarPage(
      tags$head(
        tags$link(rel = "stylesheet", type = "text/css", href = "dbexplorer-style.css")
      ),
+     # tags$script(HTML("var header = $('.navbar > .container-fluid');
+     # header.append('<div style=\"float:right\"><a href=\"URL\"><img src=\"Logo-SSM_Justice.png\" alt=\"alt\" style=\"float:right;width:90px;height:50px;padding-top:0px;\"> </a></div>');
+     # console.log(header)")
+     # ),
     includeScript("www/js/refocus_cursor.js"),
     includeScript("www/js/returnTextAreaBinding.js"),
     includeScript("www/js/returnTextInputBinding.js"),
     includeScript("www/js/run_return.js"),
     includeScript("www/js/enter_password.js"),
+    tags$script(
+      "$(document).on('shiny:inputchanged', function(event) {
+          if (event.name != 'changed') {
+            Shiny.setInputValue('changed', event.name);
+          }
+        });"
+    ),
     
     sidebarLayout(
       sidebarPanel(
@@ -73,15 +85,22 @@ ui <- navbarPage(
             column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
             column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
           ),
+
           returnTextAreaInput("data_filter",
             label = "Data filter:",
             value = "",
             rows=2,
             placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
           ),
-          uiOutput("ui_filter_error")
+          uiOutput("ui_filter_error"),
+          
         ),
         uiOutput("ui_view_vars"),
+        # returnTextAreaInput("data_arrange",
+        #                     label = "Data arrange (sort):",
+        #                     value = "",
+        #                     placeholder = "Arrange (e.g., color, desc(price)) and press return"
+        # ),
         # actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
         width = 3
       ),

@@ -123,71 +123,71 @@ is_not <- function(x) {
 # }
 
 ## using a custom version of textAreaInput to avoid browser "smartness"
-textAreaInput <- function(inputId, label, value = "", width = NULL,
-                          height = NULL, cols = NULL, rows = NULL,
-                          placeholder = NULL, resize = NULL,
-                          autocomplete = "off", autocorrect = "off",
-                          autocapitalize = "off", spellcheck = "true",
-                          ...) {
-  value <- restoreInput(id = inputId, default = value)
-  if (!is.null(resize)) {
-    resize <- match.arg(
-      resize,
-      c("both", "none", "vertical", "horizontal")
-    )
-  }
-  style <- paste(if (!is.null(width)) {
-    paste0("width: ", validateCssUnit(width), ";")
-  }, if (!is.null(height)) {
-    paste0("height: ", validateCssUnit(height), ";")
-  }, if (!is.null(resize)) {
-    paste0("resize: ", resize, ";")
-  })
-  if (length(style) == 0) {
-    style <- NULL
-  }
-  div(
-    class = "form-group shiny-input-container",
-    label %AND% tags$label(label, `for` = inputId),
-    tags$textarea(
-      id = inputId,
-      class = "form-control",
-      placeholder = placeholder,
-      style = style,
-      rows = rows,
-      cols = cols,
-      autocomplete = autocomplete,
-      autocorrect = autocorrect,
-      autocapitalize = autocapitalize,
-      spellcheck = spellcheck,
-      ...,
-      value
-    )
-  )
-}
+# textAreaInput <- function(inputId, label, value = "", width = NULL,
+#                           height = NULL, cols = NULL, rows = NULL,
+#                           placeholder = NULL, resize = NULL,
+#                           autocomplete = "off", autocorrect = "off",
+#                           autocapitalize = "off", spellcheck = "true",
+#                           ...) {
+#   value <- restoreInput(id = inputId, default = value)
+#   if (!is.null(resize)) {
+#     resize <- match.arg(
+#       resize,
+#       c("both", "none", "vertical", "horizontal")
+#     )
+#   }
+#   style <- paste(if (!is.null(width)) {
+#     paste0("width: ", validateCssUnit(width), ";")
+#   }, if (!is.null(height)) {
+#     paste0("height: ", validateCssUnit(height), ";")
+#   }, if (!is.null(resize)) {
+#     paste0("resize: ", resize, ";")
+#   })
+#   if (length(style) == 0) {
+#     style <- NULL
+#   }
+#   div(
+#     class = "form-group shiny-input-container",
+#     label %AND% tags$label(label, `for` = inputId),
+#     tags$textarea(
+#       id = inputId,
+#       class = "form-control TextAreA",
+#       placeholder = placeholder,
+#       style = style,
+#       rows = rows,
+#       cols = cols,
+#       autocomplete = autocomplete,
+#       autocorrect = autocorrect,
+#       autocapitalize = autocapitalize,
+#       spellcheck = spellcheck,
+#       ...,
+#       value
+#     )
+#   )
+# }
 
 ### ces 2 fonctions "return" permettent d'utiliser les composants js returnTextAreaBinding et returnTextInputBinding
 ### afin de "valider" l'input uniquement au moment ou l'on tappel la touche "Enter" (event.keyCode == 13)
 
 ## avoid all sorts of 'helpful' behavior from your browser
 ## based on https://stackoverflow.com/a/35514029/1974918
-returnTextInput <- function(inputId, label = NULL,
-                            placeholder = NULL, value = "") {
-  tagList(
-    tags$label(label, `for` = inputId),
-    tags$input(
-      id = inputId,
-      type = "text",
-      value = value,
-      placeholder = placeholder,
-      autocomplete = "off",
-      autocorrect = "off",
-      autocapitalize = "off",
-      spellcheck = "false",
-      class = "returnTextInput form-control"
-    )
-  )
-}
+# returnTextInput <- function(inputId, label = NULL,
+#                             placeholder = NULL, value = "") {
+#   tagList(
+#     tags$label(label, `for` = inputId),
+#     tags$input(
+#       id = inputId,
+#       type = "text",
+#       value = value,
+#       placeholder = placeholder,
+#       autocomplete = "off",
+#       autocorrect = "off",
+#       autocapitalize = "off",
+#       spellcheck = "false",
+#       class = "returnTextInput form-control"
+#     )
+#   )
+# }
 
 ## textarea where the return key submits the content
 returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
@@ -263,7 +263,8 @@ logger <- function(session,path_out){
   res=c(
     Sys.info(),
     start_Time=format(start_time,"%Y%m%d_%H%M%S"),
-    bind_rows(list_pkg)|>arrange(pkg.Package)
+    bind_rows(list_pkg)|>arrange(pkg.Package),
+    end_Time=format(Sys.time(),"%Y%m%d_%H%M%S")
   )
   
   
