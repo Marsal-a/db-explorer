@@ -21,7 +21,8 @@ $.extend(returnTextAreaBinding, {
                 event.preventDefault();
                 callback();
             }
-            // print value using console.log(event.target.value);
+            // print value using 
+            console.log(event.target.value);
             if (event.target.value == "") {
                 callback();
             }
