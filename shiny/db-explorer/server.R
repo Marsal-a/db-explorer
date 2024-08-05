@@ -194,6 +194,7 @@ shinyServer(function(input, output, session) {
   })
   
   varnames <- reactive({
+    # browser()
     req(input$selected_table)
     
     var_class = get_class(raw_data_lz() %>% head(10) %>% collect())
@@ -217,15 +218,20 @@ shinyServer(function(input, output, session) {
     
   prepared_data_lz <- eventReactive(
     eventExpr=c(input$view_vars,input$data_filter),
-    ignoreNULL = F,{
-  
+    ignoreNULL = T,{
+    # browser()
     req(input$selected_table)
     ts_print("prepared_data_lz1_init")
     
     prepared_data <- raw_data_lz()
     ts_print("prepared_data_lz2_raw_data_loaded") 
     
-    if(!is.null(input$data_filter) & input$data_filter!=""){
+    
+    if(is.empty(input$data_filter)){
+      isolate(filter_error[["val"]] <- "")
+    } else if (grepl("([^=!<>])=([^=])", input$data_filter)) {
+      isolate(filter_error[["val"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
+    }else{
       filter_cmd <- isolate(input$data_filter) %>%
       gsub("\\n", "", .) %>%
       gsub("'", "\\\\'", .) %>%
@@ -287,12 +293,11 @@ shinyServer(function(input, output, session) {
     return(prepared_data)
   })
     
-    
   filter_error<-reactiveValues()
   
   displayTable <- eventReactive(
-    eventExpr = c( input$view_vars,input$data_filter),
-    ignoreNULL=T,{
+    eventExpr = c(input$view_vars,input$data_filter),
+    ignoreNULL=T,ignoreInit = T,{
     
     # browser()
     req(input$selected_table)
@@ -404,8 +409,8 @@ shinyServer(function(input, output, session) {
   })
   
   output$dataviewer <- DT::renderDataTable({
-    
-    req(input$selected_table)
+    # browser()
+    # req(input$selected_table)
     ts_print("output$dataviewer")
     dat <- displayTable()
     ts_print("output$dataviewer")
@@ -466,7 +471,6 @@ shinyServer(function(input, output, session) {
 
     )
   })
-  
 
   observeEvent(input$selected_schema,{
 
@@ -481,15 +485,15 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$selected_table,{
       updateTextAreaInput(session,inputId = "data_filter",value ="")
-      
-      ### Le reset du select input permet de combler le cas d'un changement de table qui aurait les memes colonnes exactemetn. 
+
+      ### Le reset du select input permet de combler le cas d'un changement de table qui aurait les memes colonnes exactemetn.
       ### En effet dans ce cas l'inputId view_vars ne changerait pas et la table affiché ne serait pas raffraichie
-      updateSelectInput(session,inputId = "view_vars",selected ="")  
+      updateSelectInput(session,inputId = "view_vars",selected ="")
       updateSelectInput(session,inputId = "view_vars",selected =varnames())
 
-      ## Reset du message d'erreur de filtre : 
+      ## Reset du message d'erreur de filtre :
       isolate(filter_error[["val"]] <- "")
-      
+
   })
   
   observeEvent(input$clearFilters, {
@@ -498,10 +502,10 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$dataviewer_cells_selected,{
-    
+
     req(input$dataviewer_cells_selected)
     req(input$filterByClick)
-    
+
     string_filter <- c()
     for (row in seq_len(nrow(input$dataviewer_cells_selected))){
       col_name <- names(displayTable())[input$dataviewer_cells_selected[row,2]+1]
@@ -509,24 +513,24 @@ shinyServer(function(input, output, session) {
       string <- paste0(col_name,"==\"",value,"\"")
       string_filter[row]<-string
     }
-    
+
     current_filter=strsplit(input$data_filter," &\n")[[1]]
     if(input$cumulateFilters){
       string_filter=unique(c(current_filter,string_filter))
     }
-    
+
     str <- paste0(string_filter,collapse = " &\n")
     updateTextAreaInput(session,inputId = "data_filter",value =str)
-    
+
     session$sendCustomMessage(type="refocus",message=list("data_filter"))
-    
+
   })
   
   observeEvent(input$db,{
     # browser()
     if(input$db=="PostgreSQL - Prod"){
       showModal(pg_connexion_modal())
-      
+
     }
     # showModal(modalDialog(
     #   tags$h2('Login for PostgreSQL (Production)'),
@@ -564,12 +568,12 @@ shinyServer(function(input, output, session) {
     }
   })
   
-  observeEvent(input$cancel,{
-    # browser()
-  })
-  observeEvent(input$search,{
-    # browser()
-  })
+  # observeEvent(input$cancel,{
+  #   # browser()
+  # })
+  # observeEvent(input$search,{
+  #   # browser()
+  # })
   
 
   observeEvent(input$help_filter,{
@@ -582,11 +586,11 @@ shinyServer(function(input, output, session) {
     ))
   })
   
-  # onStop(function(){
-  #   logger(session,path_out_log)
-  #   cat("Log onStop")
-  #   stopApp()
-  # })
+  onStop(function(){
+    logger(session,path_out_log)
+    cat("Log onStop")
+    stopApp()
+  })
   
   session$onSessionEnded(function() {
     logger(session,path_out_log)
@@ -599,16 +603,16 @@ shinyServer(function(input, output, session) {
     browser()
     # updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
     # updateTextAreaInput(session,inputId = "data_filter",value ="")
-    
+
   })
   
   current_time<-reactiveTimer()
 
-  observe({
-    if(current_time()-start_time>max_session_time){
-      logger(session,path_out_log)
-      stopApp()
-    }
-  })
+  # observe({
+  #   if(current_time()-start_time>max_session_time){
+  #     logger(session,path_out_log)
+  #     stopApp()
+  #   }
+  # })
 
 })
