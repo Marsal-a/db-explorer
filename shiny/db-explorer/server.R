@@ -227,67 +227,37 @@ shinyServer(function(input, output, session) {
     ts_print("prepared_data_lz2_raw_data_loaded") 
     
     
-    if(is.empty(input$data_filter)){
+    if(is.empty(input$data_filter) & is.empty(input$data_arrange)){
       isolate(filter_error[["val"]] <- "")
-    } else if (grepl("([^=!<>])=([^=])", input$data_filter)) {
-      isolate(filter_error[["val"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
     }else{
-      filter_cmd <- isolate(input$data_filter) %>%
-      gsub("\\n", "", .) %>%
-      gsub("'", "\\\\'", .) %>%
-      gsub("\"", "\'", .) %>%
-      fix_smart()
-      
-      ts_print("prepared_data_lz3_filter_parsed") 
-
-      ### Capture des erreurs de syntaxe renvoyé par R/rlang/dbplyr avant meme l'envoie dans la base de données : 
-      ### Ex : XXX==1 avec XXX colonne inconnue dans le tibble
-      
-      ### La capture des erreurs prend un temps anormalement long pour certaines erreurs sur la condition de filtre
-      ### Capture des erreurs tentative 1 avec purrr::safely : 
-      safefilter=purrr::safely(function(tbl,filter){
-        tbl %>%
-        (function(x) if (!is.empty(filter)) x %>% filter(!!rlang::parse_expr(filter)) else x)
-      })
-      filtered_data <- safefilter(prepared_data,filter_cmd)
-
-      if(is.null(filtered_data$error)){
-        isolate(filter_error[["val"]] <- "")
-        return(filtered_data$result)
-      }else{
-        isolate(filter_error[["val"]] <- paste0("E1 ","Erreur dans la commande de filtre :\n\n",filtered_data$error$message,"\n",filtered_data$error$parent$message))
+      if(!is.empty(input$data_filter)){
+        if (grepl("([^=!<>])=([^=])", input$data_filter)){
+          isolate(filter_error[["val"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
+        }else{
+          filter_cmd <- isolate(input$data_filter) %>%
+            gsub("\\n", "", .) %>%
+            gsub("'", "\\\\'", .) %>%
+            gsub("\"", "\'", .) %>%
+            fix_smart()
+          
+          safefilter=purrr::safely(function(tbl,filter){
+            tbl %>%
+              (function(x) if (!is.empty(filter)) x %>% filter(!!rlang::parse_expr(filter)) else x)
+          })
+          filtered_data <- safefilter(prepared_data,filter_cmd)
+          
+          if(is.null(filtered_data$error)){
+            isolate(filter_error[["val"]] <- "")
+            prepared_data <- filtered_data$result
+          }else{
+            isolate(filter_error[["val"]] <- paste0("E1 ","Erreur dans la commande de filtre :\n\n",filtered_data$error$message,"\n",filtered_data$error$parent$message))
+          }
+          
+        }
       }
-      
-
-      ### Capture des erreurs tentative 2 avec try : 
-      # filtered_data <- try(
-      #   prepared_data %>%
-      #   (function(x) if (!is.empty(filter_cmd)) x %>% filter(!!rlang::parse_expr(filter_cmd)) else x),
-      #   silent = T
-      # )
-      # 
-      # if (inherits(filtered_data, "try-error")) {
-      #   isolate(filter_error[["val"]] <- paste0("E1 ","Erreur dans la commande de filtre :\n",attr(filtered_data,"condition")$message,"\n",attr(filtered_data,"condition")$parent$message))
-      #   return(prepared_data)
-      # } else {
-      #   isolate(filter_error[["val"]] <- "")
-      #   return(filtered_data)
-      # }
-      
     }
-    
-    
-    # arrange_cmd <- input$data_arrange
-    # if (!is.empty(arrange_cmd)) {
-    #   arrange_cmd <- arrange_cmd %>%
-    #     strsplit(., split = "(&|,|\\s+)") %>%
-    #     unlist() %>%
-    #     .[!. == ""] %>%
-    #     paste0(collapse = ", ") %>%
-    #     (function(x) glue("arrange(x, {x})"))
-    # }
-    
-    
+  
+
     
     ts_print("prepared_data_lz7") 
     return(prepared_data)
