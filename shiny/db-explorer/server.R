@@ -287,7 +287,7 @@ shinyServer(function(input, output, session) {
       ### La capture des erreurs prend un temps anormalement long pour certaines erreurs sur la condition de filtre
       ### Capture des erreurs tentative 1 avec purrr::safely : 
       safe_collect <- purrr::safely(collect_tb)
-      collected_tb <- safe_collect(prepared_data,1000)
+      collected_tb <- safe_collect(prepared_data,n_rows_collected)
 
       if(is.null(collected_tb$error)){
         # isolate(filter_error[["val"]] <- "")
@@ -295,23 +295,23 @@ shinyServer(function(input, output, session) {
       }else{
         # browser()
         isolate(filter_error[["val"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
-        tb <- raw_data_lz() %>% head(1000) %>% collect()
+        tb <- raw_data_lz() %>% head(n_rows_collected) %>% collect()
       }
       
       ### Capture des erreurs tentative 2 avec try :
       # tb_try <- try({
-      #   collect_tb(prepared_data,1000)
+      #   collect_tb(prepared_data,n_rows_collected)
       # },silent=T)
       # 
       # if (inherits(tb_try, "try-error")) {
       #   isolate(filter_error[["val"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n",attr(tb_try,"condition")$parent$message))
-      #   tb <- raw_data_lz() %>% head(1000) %>% collect()
+      #   tb <- raw_data_lz() %>% head(v) %>% collect()
       # } else {
       #   tb <- tb_try
       # }
       
     }else{
-      tb <- prepared_data %>% head(1000) %>% collect()
+      tb <- prepared_data %>% head(n_rows_collected) %>% collect()
     }
     
     if(!is.null(input$view_vars)){
@@ -345,7 +345,7 @@ shinyServer(function(input, output, session) {
         colcount=dim(raw_data_lz)[2]
         
         glue1 <- glue::glue("
-        Prévisualisation de la table {crayon::bold$blue(input$selected_table)} ({min(1000,as.integer(rowcount))} premières lignes)
+        Prévisualisation de la table {crayon::bold$blue(input$selected_table)} ({min(n_rows_collected,as.integer(rowcount))} premières lignes)
       
         Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
         Nombre de colonnes : {crayon::bold$blue(colcount)}
@@ -429,13 +429,30 @@ shinyServer(function(input, output, session) {
                 lengthMenu = list(c(15, 25, 50, 100, -1), c("15", "25", "50", "100", "All"))
             ),
             caption = caption,
-            ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155
-            # callback = DT::JS('$(window).on("unload", function() { table.state.clear(); }); '),
-            callback = DT::JS(c(
-              "table.on( 'search.dt', function () {",
-              "Shiny.setInputValue( 'search', table.search() );",
-              "} );",'$(window).on("unload", function() { table.state.clear(); }); ')
-            ),
+            ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155,
+            callback=DT::JS(c(
+              # "table.on( 'search.dt', function () {
+              # Shiny.setInputValue( 'search', table.search() );
+              # });",
+              # "$(window).on('unload', function() { table.state.clear();});",
+              "table.on('dblclick', 'td', 
+                  function() {
+                            var row = table.cell(this).index().row;
+                            var col = table.cell(this).index().column;
+                            Shiny.setInputValue('dt_dblclick', {dt_row: row, dt_col: col});
+                }
+              );",
+              "table.on('init.dt', function() {
+                table.table().header().addEventListener('click', function(event) {
+                  var target = event.target;
+                  if (target.tagName === 'TH') {
+                    var colIdx = $(target).index();
+                    var colName = table.column(colIdx).header().innerHTML;
+                    Shiny.setInputValue('columnClicked', colName);
+                  }
+                });
+              });"
+            )),
             selection = list(target = 'cell')
         )
 
