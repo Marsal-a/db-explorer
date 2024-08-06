@@ -54,3 +54,5 @@ sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT",
                   "LIKE", "IN", "EXISTS", "CASE", "WHEN", "THEN", "ELSE", "END", 
                   "IS", "NULL", "TRUE", "FALSE", "ALL", "ANY", "SOME", "ASC", 
                   "DESC", "UNION", "INTERSECT", "EXCEPT", "WITH", "RECURSIVE")
+
+n_rows_collected <- 1000
