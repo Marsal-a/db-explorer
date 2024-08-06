@@ -44,8 +44,6 @@ library(stringi)
 library(stringr)
 library(sodium)
 
-
-
 ui <- navbarPage(
   
   title = "Exploration des bases de données",
@@ -62,6 +60,7 @@ ui <- navbarPage(
      # console.log(header)")
      # ),
     includeScript("www/js/refocus_cursor.js"),
+    includeScript("www/js/reset_colOrder.js"),
     includeScript("www/js/returnTextAreaBinding.js"),
     includeScript("www/js/returnTextInputBinding.js"),
     includeScript("www/js/run_return.js"),
@@ -92,7 +91,7 @@ ui <- navbarPage(
           ),
 
           returnTextAreaInput("data_filter",
-            label = "Data filter:",
+            label = "Filtrer la table:",
             value = "",
             rows=2,
             placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
@@ -100,13 +99,16 @@ ui <- navbarPage(
           uiOutput("ui_filter_error"),
           
         ),
+        wellPanel(
+          returnTextAreaInput("data_arrange",
+                              label = "Trier la table :",
+                              rows=2,
+                              value = "",
+                              placeholder = "Ex : I_ELST, desc(DATE),... et appuyer sur Entrée"
+          )
+        ),
         uiOutput("ui_view_vars"),
-        # returnTextAreaInput("data_arrange",
-        #                     label = "Data arrange (sort):",
-        #                     value = "",
-        #                     placeholder = "Arrange (e.g., color, desc(price)) and press return"
-        # ),
-        # actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+        actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
         width = 3
       ),
       mainPanel(
