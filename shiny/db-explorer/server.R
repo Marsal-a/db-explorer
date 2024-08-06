@@ -513,25 +513,57 @@ shinyServer(function(input, output, session) {
 
   })
   
-  observeEvent(input$db,{
-    # browser()
-    if(input$db=="PostgreSQL - Prod"){
-      showModal(pg_connexion_modal())
-
+  current_order_clicked <- reactiveVal("init_reserved_string")
+  
+  observeEvent(input$columnClicked,{
+    #### Cet observeur écoute les cliques sur les entetes de colonnes du tableau principal.
+    #### A chaque clique, on met à jour l'input data_arrange en récupérant le nom de la colonne cliquée. 
+    
+    #### Fonctionement : 
+    # au premier clique, on assigne la valeur de la colonne dans l'input
+    # si on reclique, alors la condition passe en desc() afin d'avoir un tri décroissant
+    
+    ### Stockage :
+    # l'input qui stock la colonne cliqué s'apelle 'columnClicked' est issue d'une commande JS : Shiny.setInputValue
+    # l'assignation est faite dans le callback du tableau principal.
+    
+    # Une fois la colonne cliqué, l'input prend la valeur de la colonne, et un second clique ne déclenche plus l'observeur.
+    # On procède donc au stockage de l'input dans la reactive value current_order_clicked() et on ré-initialize l'input pour 
+    # qu'il soit re-triggerable au prochain clique.
+    # un shiny::updateInput ne fonctionne pas alors on réinitialiser avec un session$sendCustomMessage et le script reset_colOrder.js
+    
+    string_order <- input$columnClicked
+    
+    reverse_order <- function(current_order){
+      if(stringr::str_detect(current_order,"desc")){
+        return(stringr::str_extract(current_order,pattern = "desc\\((.*?)\\)",group=1))
+      }else{
+        return(paste0("desc(",current_order,")"))
+      }
     }
-    # showModal(modalDialog(
-    #   tags$h2('Login for PostgreSQL (Production)'),
-    #   textInput('username_pg', 'Username',value = system("whoami", intern = TRUE)),
-    #   passwordInput('password_pg', 'Password'),
-    #   footer=tagList(
-    #     actionButton('submit_pg_login', 'Submit'),
-    #     modalButton('cancel')
-    #   )
-    # ))
+    
+    if(string_order == current_order_clicked()){
+      order_cmd <- reverse_order(string_order)
+    }else{
+      order_cmd <- string_order
+    }
+    
+    if(string_order != "init_reserved_string"){
+      current_order_clicked(order_cmd)
+      session$sendCustomMessage(type="reset_colorder", string_order)
+      updateTextAreaInput(session = session,inputId = "data_arrange",value =order_cmd )
+    }
+    
   })
   
   observeEvent(input$db,{
-    # browser()
+    if(input$db=="PostgreSQL - Prod"){
+      showModal(pg_connexion_modal())
+    }
+  })
+  
+  observeEvent(input$db,{
+
     updateSelectizeInput(session=session,inputId = "selected_schema",selected = "")
     updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
     updateTextAreaInput(session,inputId = "data_filter",value ="")
@@ -539,7 +571,6 @@ shinyServer(function(input, output, session) {
     isolate(filter_error[["val"]] <- "")
   })
   
-  # pg_password_ok <- reactiveValues()
   pg_password_ok <- reactiveVal(NULL)
   
   observeEvent(input$submit_pg_login,{
