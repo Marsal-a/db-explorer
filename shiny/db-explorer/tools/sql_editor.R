@@ -117,6 +117,14 @@ output$ui_tables_sql_panel  <- renderUI({
               size = min(40, length(tables))+1)
 })
 
+output$ui_dl_sql_tab <- renderUI({
+  if(!is.null(sql_table())){
+    downloadButton("dl_sql_tab",label="Ctrl + S",ic = "download",class = "alignright")
+  }else{
+    NULL
+  }
+})
+
 observeEvent(input$db_sql,{
   # browser()
   if(input$db_sql=="PostgreSQL - Prod"){
@@ -269,9 +277,3 @@ observeEvent(input$db_sql,{
   
 })
 
-# observeEvent(input$sql_code,{
-#   shinyjs::disable("run_sql")
-#   Sys.sleep(0.8)
-#   shinyjs::enable("run_sql")
-#   
-# })

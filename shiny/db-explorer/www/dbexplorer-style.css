@@ -10,9 +10,18 @@
 /*
 ### PARAMETRAGE DU NAVBAR 
 */
+
+/*
+form.well[role="complementary"] {
+  background-color: transparent;
+  border-color: transparent;
+}
+*/
+
+
 .well {
   padding: 7px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 /* Espacement entre checkbox */
@@ -100,7 +109,9 @@ table {
 }
 
 
-
+.alignright {
+  float: right;
+}
 
 /*
 ### PARAMETRAGE DES ERREURS 
@@ -109,3 +120,6 @@ table {
 .shiny-output-error {
   color: red;
 }
+
+
+

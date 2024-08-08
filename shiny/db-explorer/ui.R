@@ -9,10 +9,15 @@ unloadNamespace("tidyr")
 unloadNamespace("dplyr")
 unloadNamespace("readr")
 unloadNamespace("shinyFiles")
+unloadNamespace("car")
+unloadNamespace("rio")
 unloadNamespace("haven")
 unloadNamespace("rio")
+unloadNamespace("patchwork")
+unloadNamespace("ggplot2")
 unloadNamespace("tibble")
 unloadNamespace("pillar")
+# unloadNamespace("arrow")
 unloadNamespace("tidyselect")
 unloadNamespace("pgsdse")
 unloadNamespace("orasdse")
@@ -23,6 +28,9 @@ unloadNamespace("ROracle")
 unloadNamespace("DBI")
 unloadNamespace("stringr")
 unloadNamespace("usethis")
+unloadNamespace("forcats")
+unloadNamespace("scales")
+unloadNamespace("gtable")
 unloadNamespace("glue")
 
 library(crayon)
@@ -54,6 +62,7 @@ ui <- navbarPage(
      shinyjs::useShinyjs(),
      tags$head(
        tags$link(rel = "stylesheet", type = "text/css", href = "dbexplorer-style.css")
+       # tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
      ),
      # tags$script(HTML("var header = $('.navbar > .container-fluid');
      # header.append('<div style=\"float:right\"><a href=\"URL\"><img src=\"Logo-SSM_Justice.png\" alt=\"alt\" style=\"float:right;width:90px;height:50px;padding-top:0px;\"> </a></div>');
@@ -80,40 +89,16 @@ ui <- navbarPage(
           uiOutput("ui_schemas"),
           uiOutput("ui_tables")
         ),
-        # uiOutput("ui_filters"),
-        wellPanel(
-          checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
-          checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
-          br(),
-          fluidRow(
-            column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
-            column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
-          ),
-
-          returnTextAreaInput("data_filter",
-            label = "Filtrer la table:",
-            value = "",
-            rows=2,
-            placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
-          ),
-          uiOutput("ui_filter_error"),
-          
-        ),
-        wellPanel(
-          returnTextAreaInput("data_arrange",
-                              label = "Trier la table :",
-                              rows=2,
-                              value = "",
-                              placeholder = "Ex : I_ELST, desc(DATE),... et appuyer sur Entrée"
-          )
-        ),
+        uiOutput("ui_filters"),
+        uiOutput("ui_arrange"),
+        uiOutput("ui_filter_error"),
         uiOutput("ui_view_vars"),
         actionButton("trigtest", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
         width = 3
       ),
       mainPanel(
         htmlOutput("ui_summary"),
-        br(),
+        uiOutput("ui_dl_view_tab"),
         DT::dataTableOutput("dataviewer",height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
         width = 9
       )
@@ -130,12 +115,10 @@ ui <- navbarPage(
                width=3
              ),
              mainPanel(
-               # fluidRow(aceEditor("sql_code", mode = "sql", height = "100px", value = "SELECT * FROM ...")),
                p("Console SQL en construction"),
-               # p("Plante si clique trop rapide sur RUN aprés selection de la table: attendre 1 sec"),
-               # p("Aprés un premier run, plante lors du changement de schéma"),
                uiOutput("UI_ace_editor"),
                actionButton("run_sql", "Run"),
+               uiOutput("ui_dl_sql_tab"),
                tags$br(),
                DT::dataTableOutput("sql_dt",height = NULL),
                width=9

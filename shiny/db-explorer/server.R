@@ -208,7 +208,7 @@ shinyServer(function(input, output, session) {
     vars <- varnames()
     # browser()
     wellPanel(selectInput(
-      "view_vars", "Select variables to show:",
+      "view_vars", "Sélectionner les colonnes :",
       choices = vars,
       selected=vars,
       multiple = TRUE,
@@ -217,7 +217,7 @@ shinyServer(function(input, output, session) {
   })
     
   prepared_data_lz <- eventReactive(
-    eventExpr=c(input$view_vars,input$data_filter),
+    eventExpr=c(input$view_vars,input$data_filter,input$data_arrange),
     ignoreNULL = T,{
     # browser()
     req(input$selected_table)
@@ -228,11 +228,15 @@ shinyServer(function(input, output, session) {
     
     
     if(is.empty(input$data_filter) & is.empty(input$data_arrange)){
-      isolate(filter_error[["val"]] <- "")
+      
+      isolate(filter_error[["value_filter_error"]] <- "")
+      
     }else{
+      
       if(!is.empty(input$data_filter)){
+        # browser()
         if (grepl("([^=!<>])=([^=])", input$data_filter)){
-          isolate(filter_error[["val"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
+          isolate(filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
         }else{
           filter_cmd <- isolate(input$data_filter) %>%
             gsub("\\n", "", .) %>%
@@ -247,18 +251,42 @@ shinyServer(function(input, output, session) {
           filtered_data <- safefilter(prepared_data,filter_cmd)
           
           if(is.null(filtered_data$error)){
-            isolate(filter_error[["val"]] <- "")
+            isolate(filter_error[["value_filter_error"]] <- "")
             prepared_data <- filtered_data$result
           }else{
-            isolate(filter_error[["val"]] <- paste0("E1 ","Erreur dans la commande de filtre :\n\n",filtered_data$error$message,"\n",filtered_data$error$parent$message))
+            isolate(filter_error[["value_filter_error"]] <- paste0("Erreur dans la commande de filtre :\n",filtered_data$error$message,"\n",filtered_data$error$parent$message))
           }
-          
         }
+      }
+      
+      if(!is.empty(input$data_arrange)){
+        
+        arrange_cmd <- input$data_arrange
+        if (!is.empty(arrange_cmd)) {
+          arrange_cmd <- arrange_cmd %>%
+            strsplit(., split = "(&|,|\\s+)") %>%
+            unlist() %>%
+            .[!. == ""] %>%
+            paste0(collapse = ", ") %>%
+            (function(x) glue("arrange(x, {x})"))
+        }
+        
+        safearrange=purrr::safely(function(tbl,arrange){
+          tbl %>%
+            (function(x) if (!is.empty(arrange)) eval(parse(text = arrange)) else x)
+        })
+        arranged_data <- safearrange(prepared_data,arrange_cmd)
+        # browser()
+        if(is.null(arranged_data$error)){
+          isolate(filter_error[["value_arrange_error"]] <- "")
+          prepared_data <- arranged_data$result
+        }else{
+          isolate(filter_error[["value_arrange_error"]] <- paste0("Erreur dans la commande de tri :\n",arranged_data$error$message,"\n",arranged_data$error$parent$message))
+        }
+        
       }
     }
   
-
-    
     ts_print("prepared_data_lz7") 
     return(prepared_data)
   })
@@ -266,7 +294,7 @@ shinyServer(function(input, output, session) {
   filter_error<-reactiveValues()
   
   displayTable <- eventReactive(
-    eventExpr = c(input$view_vars,input$data_filter),
+    eventExpr = c(input$view_vars,input$data_filter,input$data_arrange),
     ignoreNULL=T,ignoreInit = T,{
     
     # browser()
@@ -290,11 +318,11 @@ shinyServer(function(input, output, session) {
       collected_tb <- safe_collect(prepared_data,n_rows_collected)
 
       if(is.null(collected_tb$error)){
-        # isolate(filter_error[["val"]] <- "")
+        # isolate(filter_error[["value_filter_error"]] <- "")
         tb <- collected_tb$result
       }else{
         # browser()
-        isolate(filter_error[["val"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
+        isolate(filter_error[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
         tb <- raw_data_lz() %>% head(n_rows_collected) %>% collect()
       }
       
@@ -304,7 +332,7 @@ shinyServer(function(input, output, session) {
       # },silent=T)
       # 
       # if (inherits(tb_try, "try-error")) {
-      #   isolate(filter_error[["val"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n",attr(tb_try,"condition")$parent$message))
+      #   isolate(filter_error[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n",attr(tb_try,"condition")$parent$message))
       #   tb <- raw_data_lz() %>% head(v) %>% collect()
       # } else {
       #   tb <- tb_try
@@ -327,6 +355,47 @@ shinyServer(function(input, output, session) {
     ansi2html(tableSummary())
   })
   
+  output$ui_filters <- renderUI({
+    req(input$selected_table)
+    wellPanel(
+      # checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
+      # checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
+      # br(),
+     
+      returnTextAreaInput("data_filter",
+                          label = "Filtrer la table :",
+                          value = "",
+                          rows=2,
+                          placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
+      ),
+      fluidRow(
+        column(width = 10,actionLink("clearFilters", "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
+        column(width = 2,actionLink("help_filter", "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
+      ),
+      checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
+      checkboxInput("cumulateFilters", "Accumuler filtres?", value = F)
+    )
+  })
+  
+  output$ui_arrange <- renderUI({
+    req(input$selected_table)
+    wellPanel(
+      returnTextAreaInput("data_arrange",
+                          label = "Trier la table :",
+                          rows=2,
+                          value = "",
+                          placeholder = "Ex : I_ELST, desc(DATE),... et appuyer sur Entrée"
+      )
+    )
+  })
+  
+  output$ui_dl_view_tab <- renderUI({
+    if(!is.null(displayTable())){
+      downloadButton("dl_view_tab",label="CTRL + S",ic = "download",class = "alignright")
+    }else{
+      NULL
+    }
+  })
   
   tableSummary <- eventReactive(
     eventExpr = c(input$selected_table,input$data_filter,prepared_data_lz()),
@@ -372,10 +441,15 @@ shinyServer(function(input, output, session) {
   )  
   
   output$ui_filter_error <- renderUI({
-    if (is.empty(filter_error[["val"]])) {
+    # browser()
+    if (is.empty(filter_error[["value_filter_error"]]) & is.empty(filter_error[["value_arrange_error"]])) {
       return()
     }
-    helpText(filter_error[["val"]],class = "shiny-output-error")
+    # browser()
+    concat_error=paste(filter_error[["value_filter_error"]],filter_error[["value_arrange_error"]],sep = "\n")
+    helpText(concat_error,class = "shiny-output-error")
+    # helpText(filter_error[["value_filter_error"]],class = "shiny-output-error")
+    
   })
   
   output$dataviewer <- DT::renderDataTable({
@@ -417,6 +491,7 @@ shinyServer(function(input, output, session) {
             options = list(
                 dom="tpil",
                 # dom="Bfrtip",
+                ordering=T,
                 stateSave = TRUE, ## maintains state
                 search = list(search = search, regex = TRUE),
                 columnDefs = list(
@@ -465,13 +540,16 @@ shinyServer(function(input, output, session) {
 
       updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
       updateTextAreaInput(session,inputId = "data_filter",value ="")
+      updateTextAreaInput(session,inputId = "data_arrange",value ="")
       updateSelectInput(session,inputId = "view_vars",selected ="")
-      isolate(filter_error[["val"]] <- "")
+      
+      isolate(filter_error[["value_filter_error"]] <- "")
 
   })
   
   observeEvent(input$selected_table,{
       updateTextAreaInput(session,inputId = "data_filter",value ="")
+      updateTextAreaInput(session,inputId = "data_arrange",value ="")
 
       ### Le reset du select input permet de combler le cas d'un changement de table qui aurait les memes colonnes exactemetn.
       ### En effet dans ce cas l'inputId view_vars ne changerait pas et la table affiché ne serait pas raffraichie
@@ -479,13 +557,13 @@ shinyServer(function(input, output, session) {
       updateSelectInput(session,inputId = "view_vars",selected =varnames())
 
       ## Reset du message d'erreur de filtre :
-      isolate(filter_error[["val"]] <- "")
+      isolate(filter_error[["value_filter_error"]] <- "")
 
   })
   
   observeEvent(input$clearFilters, {
     updateTextAreaInput(session,inputId = "data_filter",value ="")
-    isolate(filter_error[["val"]] <- "")
+    isolate(filter_error[["value_filter_error"]] <- "")
   })
   
   observeEvent(input$dataviewer_cells_selected,{
@@ -554,6 +632,8 @@ shinyServer(function(input, output, session) {
       updateTextAreaInput(session = session,inputId = "data_arrange",value =order_cmd )
     }
     
+    session$sendCustomMessage(type="refocus",message=list("data_arrange"))
+    
   })
   
   observeEvent(input$db,{
@@ -563,24 +643,22 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$db,{
-
     updateSelectizeInput(session=session,inputId = "selected_schema",selected = "")
-    updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
+    updateSelectizeInput(session=session,inputId = "selected_table",selected = NULL)
     updateTextAreaInput(session,inputId = "data_filter",value ="")
+    updateTextAreaInput(session,inputId = "data_arrange",value ="")
     updateSelectInput(session,inputId = "view_vars",selected ="")
-    isolate(filter_error[["val"]] <- "")
+    isolate(filter_error[["value_filter_error"]] <- "")
   })
   
   pg_password_ok <- reactiveVal(NULL)
   
   observeEvent(input$submit_pg_login,{
-    # browser()
     cona <- try(connectPostgreSDSE(user = input$username_pg, password=input$password_pg),silent=TRUE)
     if(inherits(cona, "try-error")){
       showModal(pg_connexion_modal(failed=T))
       updateTextInput(session,inputId = "password_pg",value =NULL)
     }else{
-      # pg_password_ok[["ok"]]<-TRUE
       pg_password_ok(TRUE)
       removeModal()
     }
@@ -595,8 +673,6 @@ shinyServer(function(input, output, session) {
   
 
   observeEvent(input$help_filter,{
-  # observeEvent(input$`shinyhelper-modal_params`,{
-  # observeEvent(c(input$help_filter,input$`shinyhelper-modal_params`),{
     showModal(modalDialog(
       tags$iframe(src="help/help_filters.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
       # includeHTML("tools/help/help_filters.html"),
@@ -619,18 +695,19 @@ shinyServer(function(input, output, session) {
   observeEvent(input$trigtest,{
     print_session()
     browser()
-    # updateSelectizeInput(session=session,inputId = "selected_table",selected = "")
-    # updateTextAreaInput(session,inputId = "data_filter",value ="")
+
 
   })
   
   current_time<-reactiveTimer()
+  
+  observe({
+    if(current_time()-start_time>max_session_time){
+      logger(session,path_out_log)
+      stopApp()
+    }
+  })
+  
 
-  # observe({
-  #   if(current_time()-start_time>max_session_time){
-  #     logger(session,path_out_log)
-  #     stopApp()
-  #   }
-  # })
 
 })
