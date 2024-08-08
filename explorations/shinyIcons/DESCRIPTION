@@ -1,0 +1,16 @@
+Package: shinyIcons
+Type: Package
+Title: Icons for Shiny apps
+Version: 0.0.1
+Authors@R: c(
+    person("Harvey", "Lieberman", email = "harvey.lieberman@gmail.com", role = c("aut", "cre")),
+    person("Dave", "Gandy", role = c("ctb", "cph"), comment = "Font-Awesome font"),
+    person(family = "google", role = c("ctb", "cph"), comment = "Material icons"))
+Description: Fontawesome 5 and Material Design Icons for Shiny apps.
+Imports:
+    shiny,
+    htmltools
+License: GPL-3 | file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.0

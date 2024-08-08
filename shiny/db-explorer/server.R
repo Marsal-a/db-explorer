@@ -433,8 +433,6 @@ shinyServer(function(input, output, session) {
         res <- safe_preview_information(connexion(),raw_data_lz(),raw_data_lz(),input$selected_table)
       }
       
-      
-    
       return(res)
       
     }

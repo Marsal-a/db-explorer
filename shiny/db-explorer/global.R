@@ -217,7 +217,6 @@ returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
   )
 }
 
-
 ### Fonction de débogage, à insérer dans les fonctions réactives pour suivre l'éxecution des déclenchements
 ts_print <- function(x,...){
   
@@ -226,15 +225,12 @@ ts_print <- function(x,...){
   
 }
 
-
 ansi2html <- function(ansi){
   HTML(sprintf(
     "<pre>%s</pre>",
     gsub("\n", "<br/>", as.character(fansi::sgr_to_html(ansi)))
   ))
 }
-
-
 
 print_session <- function(){
   
@@ -247,7 +243,6 @@ print_session <- function(){
   print(bind_rows(list_pkg)|>arrange(pkg.Package),row.names=FALSE)
   
 }
-
 
 logger <- function(session,path_out){
   
