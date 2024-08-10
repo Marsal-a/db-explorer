@@ -17,10 +17,12 @@ options(
 options(shiny.reactlog = TRUE)
 
 
-# print(getwd())
-# print(usethis::proj_get())
-# print(paste0(getOption("path_db_explorer"),"init.R"))
+
 source(paste0(getOption("path_db_explorer"),"init.R"))
+source(paste0(getOption("path_db_explorer"),"dev_connector.R"))
+source(paste0(getOption("path_db_explorer"),"view_tab_function.R"))
+
+
 
 ### Issu du package radiant
 ### > Permet d'ajouter le type de variable à la liste des variables 
@@ -96,98 +98,6 @@ is_not <- function(x) {
 ################################################################
 ## functions used to create Shiny in and outputs
 ################################################################
-
-## using a custom version of textInput to avoid browser "smartness"
-# textInput <- function(inputId, label, value = "", width = NULL,
-#                       placeholder = NULL, autocomplete = "off",
-#                       autocorrect = "off", autocapitalize = "off",
-#                       spellcheck = "false", ...) {
-#   value <- restoreInput(id = inputId, default = value)
-#   div(
-#     class = "form-group shiny-input-container",
-#     style = if (!is.null(width)) paste0("width: ", validateCssUnit(width), ";"),
-#     label %AND% tags$label(label, `for` = inputId),
-#     tags$input(
-#       id = inputId,
-#       type = "text",
-#       class = "form-control",
-#       value = value,
-#       placeholder = placeholder,
-#       autocomplete = autocomplete,
-#       autocorrect = autocorrect,
-#       autocapitalize = autocapitalize,
-#       spellcheck = spellcheck,
-#       ...
-#     )
-#   )
-# }
-
-## using a custom version of textAreaInput to avoid browser "smartness"
-# textAreaInput <- function(inputId, label, value = "", width = NULL,
-#                           height = NULL, cols = NULL, rows = NULL,
-#                           placeholder = NULL, resize = NULL,
-#                           autocomplete = "off", autocorrect = "off",
-#                           autocapitalize = "off", spellcheck = "true",
-#                           ...) {
-#   value <- restoreInput(id = inputId, default = value)
-#   if (!is.null(resize)) {
-#     resize <- match.arg(
-#       resize,
-#       c("both", "none", "vertical", "horizontal")
-#     )
-#   }
-#   style <- paste(if (!is.null(width)) {
-#     paste0("width: ", validateCssUnit(width), ";")
-#   }, if (!is.null(height)) {
-#     paste0("height: ", validateCssUnit(height), ";")
-#   }, if (!is.null(resize)) {
-#     paste0("resize: ", resize, ";")
-#   })
-#   if (length(style) == 0) {
-#     style <- NULL
-#   }
-#   div(
-#     class = "form-group shiny-input-container",
-#     label %AND% tags$label(label, `for` = inputId),
-#     tags$textarea(
-#       id = inputId,
-#       class = "form-control TextAreA",
-#       placeholder = placeholder,
-#       style = style,
-#       rows = rows,
-#       cols = cols,
-#       autocomplete = autocomplete,
-#       autocorrect = autocorrect,
-#       autocapitalize = autocapitalize,
-#       spellcheck = spellcheck,
-#       ...,
-#       value
-#     )
-#   )
-# }
-
-### ces 2 fonctions "return" permettent d'utiliser les composants js returnTextAreaBinding et returnTextInputBinding
-### afin de "valider" l'input uniquement au moment ou l'on tappel la touche "Enter" (event.keyCode == 13)
-
-## avoid all sorts of 'helpful' behavior from your browser
-## based on https://stackoverflow.com/a/35514029/1974918
-# returnTextInput <- function(inputId, label = NULL,
-#                             placeholder = NULL, value = "") {
-#   tagList(
-#     tags$label(label, `for` = inputId),
-#     tags$input(
-#       id = inputId,
-#       type = "text",
-#       value = value,
-#       placeholder = placeholder,
-#       autocomplete = "off",
-#       autocorrect = "off",
-#       autocapitalize = "off",
-#       spellcheck = "false",
-#       class = "returnTextInput form-control"
-#     )
-#   )
-# }
 
 ## textarea where the return key submits the content
 returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
@@ -268,3 +178,5 @@ logger <- function(session,path_out){
   
   
 }
+
+
