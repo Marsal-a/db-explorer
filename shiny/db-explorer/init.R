@@ -1,17 +1,3 @@
-# library(shinyAce)
-# library(shiny)
-# library(shinyhelper)
-# library(glue)
-# library(bslib)
-# library(dplyr)
-# library(DBI)
-# library(dbplyr)
-# library(purrr)
-# library(rlang)
-# library(orasdse)
-# library(pgsdse)
-# library(nzsdse)
-# library(fontawesome)
 
 db_choices=c("SQLite","Netezza","PostgreSQL - Prod","Oracle - Prod")
 db_choices=c("Netezza","PostgreSQL - Prod","Oracle - Prod")
@@ -56,3 +42,5 @@ sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT",
                   "DESC", "UNION", "INTERSECT", "EXCEPT", "WITH", "RECURSIVE")
 
 n_rows_collected <- 1000
+
+
