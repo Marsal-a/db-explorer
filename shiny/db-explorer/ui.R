@@ -81,7 +81,7 @@ ui <- navbarPage(
           }
         });"
     ),
-    
+
     sidebarLayout(
       sidebarPanel(
         wellPanel(
@@ -97,33 +97,75 @@ ui <- navbarPage(
         width = 3
       ),
       mainPanel(
-        htmlOutput("ui_summary"),
-        uiOutput("ui_dl_view_tab"),
+        fluidRow(htmlOutput("ui_summary")),
+        fluidRow(uiOutput("ui_dl_view_tab")),
         DT::dataTableOutput("dataviewer",height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
         width = 9
       )
     )
   ),
   tabPanel("Console SQL",
-           sidebarLayout(
-             sidebarPanel(
-               wellPanel(
-                selectInput("db_sql","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
-                uiOutput("ui_schemas_sql_panel"),
-                uiOutput("ui_tables_sql_panel")
-               ),
-               width=3
-             ),
-             mainPanel(
-               p("Console SQL en construction"),
-               uiOutput("UI_ace_editor"),
-               actionButton("run_sql", "Run"),
-               uiOutput("ui_dl_sql_tab"),
-               tags$br(),
-               DT::dataTableOutput("sql_dt",height = NULL),
-               width=9
-             ),
-             
-           )
+    sidebarLayout(
+     sidebarPanel(
+       wellPanel(
+        selectInput("db_sql","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+        uiOutput("ui_schemas_sql_panel"),
+        uiOutput("ui_tables_sql_panel")
+       ),
+       width=3
+     ),
+     mainPanel(
+       p("Console SQL en construction"),
+       fluidRow(uiOutput("UI_ace_editor")),
+       fluidRow(column(actionButton("run_sql", "Run"),width = 6),column(uiOutput("ui_dl_sql_tab"),width = 6)),
+       tags$br(),
+       DT::dataTableOutput("sql_dt",height = NULL),
+       width=9
+     )
     )
+  ),
+  tabPanel("DEV_",
+    sidebarLayout(
+    
+      sidebarPanel(
+        wellPanel(
+          selectInput("navig_db","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+          uiOutput("ui_navig_schemas"),
+          uiOutput("ui_navig_tables")
+        ),
+        uiOutput("ui_navig_filters"),
+        uiOutput("ui_navig_arrange"),
+        uiOutput("ui_navig_filter_error"),
+        uiOutput("ui_navig_view_vars"),
+        actionButton("trigtest_DEV", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+        width = 3
+      ),
+      mainPanel(
+        fluidRow(htmlOutput("ui_navig_summary")),
+        fluidRow(uiOutput("ui_navig_dl_view_tab")),
+        DT::dataTableOutput("ui_navig_dataviewer",height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
+        width = 9
+      )
+    
+    )
+  )
+  # tabPanel("DEV_DYNAMIC_1",
+  #          sidebarLayout(
+  #            sidebarPanel(
+  #              wellPanel(
+  #                uiOutput(paste0("ui_navig_db","_","tab1")),
+  #                uiOutput(paste0("ui_navig_schemas","_","tab1")),
+  #                uiOutput(paste0("ui_navig_tables","_","tab1")),
+  #                actionButton("trigtest_dynamic_1", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+  #              ),
+  #              width = 3
+  #            ),
+  #            mainPanel(
+  #              DT::dataTableOutput(paste0("navig_dataviewer","_","tab1"),height = NULL)
+  #            )
+  #          )
+  # ),
+  # tabPanel("DEV_DYNAMIC_2",
+  #   viewTabUi("tab1")
+  # )
 )
