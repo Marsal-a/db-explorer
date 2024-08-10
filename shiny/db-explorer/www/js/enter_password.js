@@ -3,3 +3,9 @@ $(document).keyup(function(event) {
         $("#submit_pg_login").click();
     }
 });
+
+$(document).keyup(function(event) {
+    if ($("#modal_password").is(":focus") && (event.key == "Enter")) {
+        $("#modal_submit_login").click();
+    }
+});
