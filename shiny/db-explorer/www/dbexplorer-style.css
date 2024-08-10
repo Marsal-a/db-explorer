@@ -88,6 +88,12 @@ form.well[role="complementary"] {
 }
 
 
+.datatables{
+  overflow-y:auto;
+  min-height:750px;
+}
+
+
 #dataviewer,#sql_dt{
   overflow-y:auto;
   min-height:750px;
