@@ -13,12 +13,14 @@ download_handler <- function(id, label = "", fun = id, fn, type = "csv", caption
 
 dl_sql_tab <- function(file) {
   sql_table()  %>%
-    write.csv2(file, row.names = FALSE)
+    data.table::fwrite(file=file,row.names = FALSE,bom=TRUE,sep=";")
+    # write.csv2(file, row.names = FALSE,fileEncoding = "Latin-1")
 }
 
 dl_view_tab <- function(file) {
   displayTable()  %>%
-    write.csv2(file, row.names = FALSE,fileEncoding = "utf-8")
+    data.table::fwrite(file=file,row.names = FALSE,bom=TRUE,sep=";")
+    # write.csv2(file, row.names = FALSE,fileEncoding = "Latin-1")
 }
 
 

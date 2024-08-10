@@ -133,9 +133,9 @@ observeEvent(input$db_sql,{
 })
 
 # sql_table <- reactive({
-sql_table <- eventReactive(c(input$run_sql,input$selected_table_sql_panel),{
+sql_table <- eventReactive(c(input$run_sql,input$selected_table_sql_panel),ignoreInit = F,{
   
-
+  # browser()
   ts_print("sql_table") 
   
   # req(input$sql_code)
@@ -147,7 +147,7 @@ sql_table <- eventReactive(c(input$run_sql,input$selected_table_sql_panel),{
   safe_dbSendQuery <- purrr::safely(dbSendQuery)
   safe_rs <- safe_dbSendQuery(connexion_sql_panel(),isolate(input$sql_code))
   
-  if(is.null(safe_rs$error) & input$changed=="run_sql"){
+  if(is.null(safe_rs$error) & isTruthy(input$changed=="run_sql")){
     dt=dbFetch(safe_rs$result,1000)
     dbClearResult(safe_rs$result)
   }else{
