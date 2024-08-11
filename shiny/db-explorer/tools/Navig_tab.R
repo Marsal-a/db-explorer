@@ -512,7 +512,7 @@ observeEvent(input$columnClicked,{
     }
   }
   
-  if(string_order == current_order_clicked()){
+  if(string_order == NAVIG_current_order_clicked()){
     order_cmd <- reverse_order(string_order)
   }else{
     order_cmd <- string_order
