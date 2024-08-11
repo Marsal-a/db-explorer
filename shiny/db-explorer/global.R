@@ -19,8 +19,9 @@ options(shiny.reactlog = TRUE)
 
 
 source(paste0(getOption("path_db_explorer"),"init.R"))
-source(paste0(getOption("path_db_explorer"),"dev_connector.R"))
+source(paste0(getOption("path_db_explorer"),"connector.R"))
 source(paste0(getOption("path_db_explorer"),"view_tab_function.R"))
+source(paste0(getOption("path_db_explorer"),"module_navig.R"))
 
 
 
