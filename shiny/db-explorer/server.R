@@ -673,7 +673,8 @@ shinyServer(function(input, output, session) {
     }
   })
   
-  # viewTabServer("tab1")
+  viewTabServer("tab1")
+  viewTabServer("tab2")
 
 
 })
