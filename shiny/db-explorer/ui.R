@@ -68,6 +68,12 @@ ui <- navbarPage(
      # header.append('<div style=\"float:right\"><a href=\"URL\"><img src=\"Logo-SSM_Justice.png\" alt=\"alt\" style=\"float:right;width:90px;height:50px;padding-top:0px;\"> </a></div>');
      # console.log(header)")
      # ),
+     tags$script(
+       "$(function() {
+      console.log(Shiny);
+    });
+    "
+    ),
     includeScript("www/js/refocus_cursor.js"),
     includeScript("www/js/reset_colOrder.js"),
     includeScript("www/js/returnTextAreaBinding.js"),
@@ -148,7 +154,7 @@ ui <- navbarPage(
       )
     
     )
-  )
+  ),
   # tabPanel("DEV_DYNAMIC_1",
   #          sidebarLayout(
   #            sidebarPanel(
@@ -165,7 +171,10 @@ ui <- navbarPage(
   #            )
   #          )
   # ),
-  # tabPanel("DEV_DYNAMIC_2",
-  #   viewTabUi("tab1")
-  # )
+  tabPanel("DEV_DYNAMIC_1",
+    viewTabUi("tab1")
+  ),
+  tabPanel("DEV_DYNAMIC_2",
+    viewTabUi("tab2")
+  )
 )
