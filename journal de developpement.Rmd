@@ -1,0 +1,8 @@
+---
+title: "journal de developpement"
+author: "Adam Marsal, SSER"
+date: "11/08/2024"
+output: html_document
+---
+
+Ce document retrace les évolutions et problèmes rencontrés lors du développement de l'application shiny 'db-explorer'
