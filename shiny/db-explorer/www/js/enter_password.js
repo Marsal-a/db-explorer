@@ -5,7 +5,7 @@ $(document).keyup(function(event) {
 });
 
 $(document).keyup(function(event) {
-    if ($("#modal_password").is(":focus") && (event.key == "Enter")) {
+    if ($("#modal_pw").is(":focus") && (event.key == "Enter")) {
         $("#modal_submit_login").click();
     }
 });
