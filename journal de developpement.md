@@ -81,3 +81,8 @@ shinyjs::runjs(sprintf("
 
 
 
+
+
+## 13/08/2024
+
+problème résolu avec le passage d'Id dans le custom message
