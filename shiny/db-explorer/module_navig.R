@@ -14,7 +14,10 @@ viewTabUi <- function(id,label="Tab"){
       width = 3
     ),
     mainPanel(
-      fluidRow(htmlOutput(NS(id,"ui_navig_summary"))),
+      fluidRow(
+        column(8,htmlOutput(NS(id,"ui_navig_summary"))),
+        # column(4,htmlOutput(NS(id,"ui_current_query")))
+        ),
       fluidRow(uiOutput(NS(id,"ui_navig_dl_view_tab"))),
       DT::dataTableOutput(NS(id,"ui_navig_dataviewer"),height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
       width = 9
@@ -26,25 +29,6 @@ viewTabServer <- function(id){
   moduleServer(
     id = id,
     module = function(input,output,session){
-      
-      
-      shinyjs::runjs(sprintf("
-        Shiny.addCustomMessageHandler('reset_colorder_navig', function(string_order) {
-            Shiny.setInputValue('%s', 'init_reserved_string');
-        });
-    ", "columnClicked"))
-      
-      shinyjs::runjs(
-        "$(function() {
-          $(document).on('click', '.my-button', function() {
-                          $me = $(this);
-                          var bttn_id = $me.attr('id');
-                          var id = Math.random();
-                          Shiny.setInputValue(bttn_id, id);
-                       });
-        })"
-      )
-      
       
       ### WORKS : 
       shinyjs::runjs(sprintf("
@@ -73,17 +57,18 @@ viewTabServer <- function(id){
     
       observeEvent(input$navig_db,{
         if(isTruthy(connectors[[input$navig_db]]$req_login)){
-          showModal(connexion_modal())
+          showModal(connexion_modal(title = input$navig_db ))
         }
       })
       
       password_ok <- reactiveVal(FALSE)
       
       observeEvent(input$modal_submit_login,{
+        # browser()
         cona <- try(connectPostgreSDSE(user = input$modal_username, password=input$modal_pw),silent=TRUE)
         if(inherits(cona, "try-error")){
           showModal(connexion_modal(failed=T))
-          updateTextInput(session,inputId = "modal_pw",value =NULL)
+          updateTextInput(session,inputId = NS(id,"modal_pw"),value =NULL)
         }else{
           password_ok(TRUE)
           removeModal()
@@ -97,12 +82,13 @@ viewTabServer <- function(id){
         }else{
           con <- connectors[[input$navig_db]]$connect_function()
         }
+    
         return(con)
         
       })
       
-      NAVIG_schemas <- eventReactive(c(input$navig_db,input$modal_submit_login),{
-        
+      NAVIG_schemas <- eventReactive(c(input$navig_db,input$modal_submit_login,password_ok()),{
+        # browser()
         req(input$navig_db)
         
         if(connectors[[input$navig_db]]$req_login){
@@ -152,6 +138,18 @@ viewTabServer <- function(id){
                     choices = c('Select the table to explore'="",tables),selected = default_table,
                     selectize=T)
       })
+      
+      # output$ui_tabset_name <- renderText(
+      #   NAVIG_TABSET_name()
+      # )
+      # 
+      # NAVIG_TABSET_name <- eventReactive(input$navig_table,{
+      #   if(is.null(input$navig_table) || input$navig_table==""){
+      #     id
+      #   }else{
+      #     input$navig_table
+      #   }
+      # },ignoreInit = TRUE)
       
       NAVIG_raw_data_lz <- eventReactive(c(input$navig_table),{
         
@@ -390,6 +388,23 @@ viewTabServer <- function(id){
         ansi2html(NAVIG_tableSummary())
       })
       
+      NAVIG_current_query <- eventReactive(
+        eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
+        ignoreNULL=T,ignoreInit = T,{
+          
+          lazy_tbl <- NAVIG_prepared_data_lz()
+          
+          withr::local_options(list(dbplyr_use_colour = TRUE))
+          query <- lazy_tbl %>% dbplyr::remote_query()
+          
+          return(query)
+      })
+          
+      output$ui_current_query <- renderUI({
+        ansi2html(NAVIG_current_query())
+      })
+      
+          
       output$navig_dl_data <- downloadHandler(
         filename = function() {
           paste0("Extract_",n_rows_collected,"_rows_",input$navig_db,"_",input$navig_schema,"_",input$navig_table,"_",format(Sys.time(),"%Y%m%d_%H%M%S"),".csv")
@@ -482,6 +497,8 @@ viewTabServer <- function(id){
                   var target = event.target;
                   console.log($(this));
                   if (target.tagName === 'TH') {{
+                    console.log('p1');
+                    console.log('{columnclik}')
                     var colIdx = $(target).index();
                     var colName = table.column(colIdx).header().innerHTML;
                     Shiny.setInputValue('{columnclik}', colName);
@@ -553,7 +570,7 @@ viewTabServer <- function(id){
         str <- paste0(string_filter,collapse = " &\n")
         updateTextAreaInput(session,inputId = "navig_data_filter",value =str)
         
-        session$sendCustomMessage(type="refocus",message=list("navig_data_filter"))
+        session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
         
       })
       
@@ -594,16 +611,25 @@ viewTabServer <- function(id){
         
         if(string_order != "init_reserved_string"){
           NAVIG_current_order_clicked(order_cmd)
-          session$sendCustomMessage(type="reset_colorder_navig", string_order)
+          session$sendCustomMessage(type="reset_colorder_navig", NS(id,"columnClicked"))
           updateTextAreaInput(session = session,inputId = "navig_data_arrange",value =order_cmd )
         }
         
-        session$sendCustomMessage(type="refocus",message=list("navig_data_arrange"))
+        session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_arrange")))
         
       })
       
+      observeEvent(input$navig_table,{
+        if(!is.null(input$navig_table) & input$navig_table!=""){
+          
+          # shinyjs::runjs(glue::glue("changeActiveTabTitle('{input$navig_table}');"))
+          new_title <- input$navig_table
+          shinyjs::runjs(glue::glue("addCloseButtonToActiveTab('{new_title}', 'data');"))
+          # shinyjs::runjs(glue::glue("changeActiveTabTitle('{tab_title_removable(input$navig_table)}');"))
+        }
+      })
+      
       observeEvent(input$trigtest_DEV,{
-        # print_session()
         browser()
       })
       
