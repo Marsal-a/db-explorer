@@ -15,7 +15,7 @@ viewTabUi <- function(id,label="Tab"){
     ),
     mainPanel(
       fluidRow(
-        column(8,htmlOutput(NS(id,"ui_navig_summary"))),
+        column(12,htmlOutput(NS(id,"ui_navig_summary"))),
         # column(4,htmlOutput(NS(id,"ui_current_query")))
         ),
       fluidRow(uiOutput(NS(id,"ui_navig_dl_view_tab"))),
