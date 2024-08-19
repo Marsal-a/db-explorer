@@ -99,7 +99,9 @@ form.well[role="complementary"] {
   min-height:750px;
 }
 
-
+.nav-pills {
+  margin-bottom: 8px;
+}
 
 
 /*
