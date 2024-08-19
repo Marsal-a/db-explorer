@@ -17,10 +17,8 @@ options(
 options(shiny.reactlog = TRUE)
 
 
-
-source(paste0(getOption("path_db_explorer"),"init.R"))
 source(paste0(getOption("path_db_explorer"),"connector.R"))
-source(paste0(getOption("path_db_explorer"),"view_tab_function.R"))
+source(paste0(getOption("path_db_explorer"),"init.R"))
 source(paste0(getOption("path_db_explorer"),"module_navig.R"))
 
 
@@ -155,8 +153,9 @@ print_session <- function(){
   
 }
 
-logger <- function(session,path_out){
+logger <- function(path_out){
   
+  # browser()
   Sys.sleep(1)
   fname=paste0(path_out,fs::path_sanitize(paste0("log_db-explorer_",Sys.info()['user'],"_",format(Sys.time(), "%Y%m%d_%H%M%S"),".txt")))
   session=sessionInfo()
@@ -171,12 +170,26 @@ logger <- function(session,path_out){
     start_Time=format(start_time,"%Y%m%d_%H%M%S"),
     bind_rows(list_pkg)|>arrange(pkg.Package),
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S")
+    # full_l=data.frame(logg_full)
   )
   
   
-  write.csv(res, file = fname, row.names = T, quote = FALSE)
+  # write.csv(res, file = fname, row.names = T, quote = FALSE)
   writeLines(capture.output(print(res)), con = fname)
   
+  
+}
+
+
+
+
+tab_title_removable <- function(name, type = "data") {
+  tags$span(
+    name,
+    tags$span(icon("remove"),
+              style = "margin-left: 5px;",
+              onclick = paste0("Shiny.setInputValue(\"", paste0("remove_", type, "_tab"), "\", \"", name, "\", {priority: \"event\"})"))
+  )
   
 }
 

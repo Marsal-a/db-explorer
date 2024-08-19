@@ -1,6 +1,7 @@
 
 db_choices=c("SQLite","Netezza","PostgreSQL - Prod","Oracle - Prod")
 db_choices=c("Netezza","PostgreSQL - Prod","Oracle - Prod")
+db_choices <- names(connectors)
 
 default_db     <- ifelse(exists("dbexplorer_dbhost"), dbexplorer_dbhost, "")
 default_schema <- ifelse(exists("dbexplorer_schema"), dbexplorer_schema, "")
@@ -42,5 +43,5 @@ sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT",
                   "DESC", "UNION", "INTERSECT", "EXCEPT", "WITH", "RECURSIVE")
 
 n_rows_collected <- 1000
-
+logg_full <- c()
 
