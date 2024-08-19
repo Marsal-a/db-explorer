@@ -4,7 +4,7 @@
 ### c'est bof, à voir si on peut factoriser
 
 
-connexion_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
+connexion_sql_panel <- eventReactive(c(input$db_sql,input$modal_submit_login),{
   if(input$db_sql=="SQLite"){
     source(paste0(getOption("path_db_explorer"),"/R/create_sqlite_db.R"))
     cona <- con_sqlite
@@ -13,9 +13,9 @@ connexion_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
     print("connec nz")
   }else if(input$db_sql=="PostgreSQL - Prod"){
     # if(!is.null(pg_password_ok[["ok"]])){
-    if(!is.null(pg_password_ok())){
-      cona <- connectPostgreSDSE(user = input$username_pg, password=input$password_pg)
-      updateTextInput(session = session,inputId = "password_pg",value = "")
+    if(!is.null(password_ok())){
+      cona <- connectPostgreSDSE(user = input$modal_username, password=input$modal_pw)
+      updateTextInput(session = session,inputId = "modal_pw",value = "")
     }
   }else if(input$db_sql=="Oracle - Prod"){
     cona <- connectOraSDSE()
@@ -23,7 +23,7 @@ connexion_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
   return(cona)
 })
 
-schema_list_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
+schema_list_sql_panel <- eventReactive(c(input$db_sql,input$modal_submit_login),{
   
   req(input$db_sql)
   ts_print("schema_list")
@@ -35,8 +35,8 @@ schema_list_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
     schema <- schema_table$name
   }else if(input$db_sql=="PostgreSQL - Prod"){
     # browser()
-    req(input$password_pg)
-    req(input$submit_pg_login)
+    req(input$modal_pw)
+    req(input$modal_submit_login)
     schema_table <- pgsdse:::pgsdseListSchemas(connexion_sql_panel(),"prod")
     schema <- schema_table$name
   }else if(input$db_sql=="Oracle - Prod"){
@@ -44,6 +44,19 @@ schema_list_sql_panel <- eventReactive(c(input$db_sql,input$submit_pg_login),{
   }
   schema
 }) 
+
+password_ok <- reactiveVal(FALSE)
+
+observeEvent(input$modal_submit_login,{
+  cona <- try(connectPostgreSDSE(user = input$modal_username, password=input$modal_pw),silent=TRUE)
+  if(inherits(cona, "try-error")){
+    showModal(connexion_modal(failed=T))
+    updateTextInput(session,inputId = "modal_pw",value =NULL)
+  }else{
+    password_ok(TRUE)
+    removeModal()
+  }
+})
 
 all_nz_tables_sql_panel <- reactive({
   
@@ -84,7 +97,7 @@ table_list_sql_panel=reactive({
     tables <- all_nz_tables_sql_panel() %>% filter(DBNAME==input$selected_schema_sql_panel) %>% pull(OBJNAME)
     
   }else if(input$db_sql=="PostgreSQL - Prod"){
-    req(input$submit_pg_login)
+    req(input$modal_submit_login)
     tables_table <- pgsdse:::pgsdseListTablesAndViews(connexion_sql_panel(),"prod",input$selected_schema_sql_panel)
     tables <- tables_table$name
   }else if(input$db_sql=="Oracle - Prod"){
@@ -128,7 +141,7 @@ output$ui_dl_sql_tab <- renderUI({
 observeEvent(input$db_sql,{
   # browser()
   if(input$db_sql=="PostgreSQL - Prod"){
-    showModal(pg_connexion_modal())
+    showModal(connexion_modal())
   }
 })
 
@@ -277,3 +290,6 @@ observeEvent(input$db_sql,{
   
 })
 
+observeEvent(input$trigtest_SQL,{
+  browser()
+})
