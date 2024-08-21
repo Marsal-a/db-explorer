@@ -42,6 +42,6 @@ sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT",
                   "IS", "NULL", "TRUE", "FALSE", "ALL", "ANY", "SOME", "ASC", 
                   "DESC", "UNION", "INTERSECT", "EXCEPT", "WITH", "RECURSIVE")
 
-n_rows_collected <- 1000
+n_rows_collected <- 10000
 logg_full <- c()
 
