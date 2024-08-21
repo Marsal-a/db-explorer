@@ -25,7 +25,7 @@ viewTabUi <- function(id,label="Tab"){
   )
 }
 
-viewTabServer <- function(id,parent_session){
+viewTabServer <- function(id){
   moduleServer(
     id = id,
     module = function(input,output,session){
@@ -40,6 +40,21 @@ viewTabServer <- function(id,parent_session){
     ", NS(id,'modal_pw'), NS(id,'modal_submit_login')))
       
       
+      
+      connexion_modal <- function(failed = FALSE,title='Login for PostgreSQL (Production)') {
+        modalDialog(
+          tags$h2(title),
+          textInput(NS(id,'modal_username'), 'Username',value = system("whoami", intern = TRUE)),
+          passwordInput(NS(id,'modal_pw'), 'Password'),
+          if (failed)
+            div(tags$b("Login incorrect", style = "color: red;")),
+          footer=tagList(
+            actionButton(NS(id,'modal_submit_login'), 'Submit'),
+            modalButton('cancel')
+          )
+        )
+      }
+    
       observeEvent(input$navig_db,{
         if(isTruthy(connectors[[input$navig_db]]$req_login)){
           showModal(connexion_modal(title = input$navig_db ))
@@ -48,23 +63,22 @@ viewTabServer <- function(id,parent_session){
       
       password_ok <- reactiveVal(FALSE)
       
-      observeEvent(parent_session$input$modal_submit_login,{
+      observeEvent(input$modal_submit_login,{
         # browser()
-        cona <- try(connectPostgreSDSE(user = parent_session$input$modal_username, password=parent_session$input$modal_pw),silent=TRUE)
+        cona <- try(connectPostgreSDSE(user = input$modal_username, password=input$modal_pw),silent=TRUE)
         if(inherits(cona, "try-error")){
           showModal(connexion_modal(failed=T))
-          # updateTextInput(session,inputId = NS(id,"modal_pw"),value =NULL)
-          updateTextInput(parent_session,inputId = "modal_pw",value =NULL)
+          updateTextInput(session,inputId = NS(id,"modal_pw"),value =NULL)
         }else{
           password_ok(TRUE)
           removeModal()
         }
       })
       
-      NAVIG_connector <- eventReactive(c(input$navig_db,parent_session$input$modal_submit_login),{ 
+      NAVIG_connector <- eventReactive(c(input$navig_db,input$modal_submit_login),{ 
         
         if(connectors[[input$navig_db]]$req_login){
-          con <- connectors[[input$navig_db]]$connect_function(user=parent_session$input$modal_username,pw=parent_session$input$modal_pw)
+          con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
         }else{
           con <- connectors[[input$navig_db]]$connect_function()
         }
@@ -73,14 +87,14 @@ viewTabServer <- function(id,parent_session){
         
       })
       
-      NAVIG_schemas <- eventReactive(c(input$navig_db,parent_session$input$modal_submit_login,password_ok()),{
+      NAVIG_schemas <- eventReactive(c(input$navig_db,input$modal_submit_login,password_ok()),{
         # browser()
         req(input$navig_db)
         
         if(connectors[[input$navig_db]]$req_login){
-          req(parent_session$input$modal_username)
-          req(parent_session$input$modal_pw)
-          req(parent_session$input$modal_submit_login)
+          req(input$modal_username)
+          req(input$modal_pw)
+          req(input$modal_submit_login)
           req(password_ok())
           #   if(password_ok()){
           #     schemas <- connectors[[input$navig_db]]$list_schemas_function(NAVIG_connector())
@@ -98,9 +112,9 @@ viewTabServer <- function(id,parent_session){
       NAVIG_tables <- reactive({
         req(input$navig_schema)
         if(connectors[[input$navig_db]]$req_login){
-          req(parent_session$input$modal_username)
-          req(parent_session$input$modal_pw)
-          req(parent_session$input$modal_submit_login)
+          req(input$modal_username)
+          req(input$modal_pw)
+          req(input$modal_submit_login)
           req(password_ok())
         }
         tables <- connectors[[input$navig_db]]$list_tables_function(NAVIG_connector(),input$navig_schema)
