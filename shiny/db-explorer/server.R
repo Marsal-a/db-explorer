@@ -39,15 +39,17 @@ shinyServer(function(input, output, session) {
     logg_full = c()
   )
   
-  viewTabServer("Onglet_1")
- 
+  logins <- reactiveValues()
+  
+  viewTabServer("Onglet_1",parent_session=session,logins=logins)
+  
   observeEvent(input$TABSETPANEL,{
     
     if(input$TABSETPANEL=="+"){
       
       rv$tab_count <- rv$tab_count+1
       tab_title=paste0("Table_",rv$tab_count)
-      viewTabServer(paste0("Onglet_",rv$tab_count))
+      viewTabServer(paste0("Onglet_",rv$tab_count),parent_session=session,logins=logins)
       insertTab("TABSETPANEL",
                 target="+",
                 tab=tabPanel(value=tab_title,title = tab_title_removable(tab_title),viewTabUi(paste0("Onglet_",rv$tab_count))),

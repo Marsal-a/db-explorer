@@ -25,7 +25,7 @@ viewTabUi <- function(id,label="Tab"){
   )
 }
 
-viewTabServer <- function(id){
+viewTabServer <- function(id,parent_session,logins){
   moduleServer(
     id = id,
     module = function(input,output,session){
@@ -57,7 +57,9 @@ viewTabServer <- function(id){
     
       observeEvent(input$navig_db,{
         if(isTruthy(connectors[[input$navig_db]]$req_login)){
-          showModal(connexion_modal(title = input$navig_db ))
+          if(is.null(logins[[input$navig_db]])){
+            showModal(connexion_modal(title = input$navig_db ))  
+          }
         }
       })
       
@@ -78,7 +80,15 @@ viewTabServer <- function(id){
       NAVIG_connector <- eventReactive(c(input$navig_db,input$modal_submit_login),{ 
         
         if(connectors[[input$navig_db]]$req_login){
-          con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
+          if(is.null(logins[[input$navig_db]])){
+            con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
+            logins[[input$navig_db]] <- con
+          }else{
+            # browser()
+            con <-  logins[[input$navig_db]]
+          }
+          # con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
+          # logins[[input$navig_db]] <- con
         }else{
           con <- connectors[[input$navig_db]]$connect_function()
         }
@@ -91,7 +101,7 @@ viewTabServer <- function(id){
         # browser()
         req(input$navig_db)
         
-        if(connectors[[input$navig_db]]$req_login){
+        if(connectors[[input$navig_db]]$req_login & is.null(logins[[input$navig_db]])){
           req(input$modal_username)
           req(input$modal_pw)
           req(input$modal_submit_login)
@@ -111,7 +121,7 @@ viewTabServer <- function(id){
       
       NAVIG_tables <- reactive({
         req(input$navig_schema)
-        if(connectors[[input$navig_db]]$req_login){
+        if(connectors[[input$navig_db]]$req_login & is.null(logins[[input$navig_db]])){
           req(input$modal_username)
           req(input$modal_pw)
           req(input$modal_submit_login)
