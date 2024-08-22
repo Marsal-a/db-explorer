@@ -397,7 +397,19 @@ viewTabServer <- function(id,parent_session,logins){
         ansi2html(NAVIG_tableSummary())
       })
       
-      NAVIG_current_query <- eventReactive(
+      NAVIG_dplyr_query <- eventReactive(
+        eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
+        ignoreNULL=T,ignoreInit = T,{
+          
+           connexion_string <- glue::glue("con <- {trimws(deparse(body(connectors[[input$navig_db]]$connect_function))[2])}")
+           tbl_string <- glue::glue()
+           # str<- glue::glue("tbl <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),".", tablename))")
+          
+          
+        }
+      )
+      
+      NAVIG_sql_query <- eventReactive(
         eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
         ignoreNULL=T,ignoreInit = T,{
           
@@ -410,7 +422,7 @@ viewTabServer <- function(id,parent_session,logins){
       })
           
       output$ui_current_query <- renderUI({
-        ansi2html(NAVIG_current_query())
+        ansi2html(NAVIG_sql_query())
       })
       
           
