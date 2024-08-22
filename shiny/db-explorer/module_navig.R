@@ -67,8 +67,8 @@ viewTabServer <- function(id,parent_session,logins){
       
       observeEvent(input$modal_submit_login,{
         # browser()
-        cona <- try(connectPostgreSDSE(user = input$modal_username, password=input$modal_pw),silent=TRUE)
-        if(inherits(cona, "try-error")){
+        test_con <- try(connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw),silent=TRUE)
+        if(inherits(test_con, "try-error")){
           showModal(connexion_modal(failed=T))
           updateTextInput(session,inputId = NS(id,"modal_pw"),value =NULL)
         }else{
@@ -79,19 +79,30 @@ viewTabServer <- function(id,parent_session,logins){
       
       NAVIG_connector <- eventReactive(c(input$navig_db,input$modal_submit_login),{ 
         
-        if(connectors[[input$navig_db]]$req_login){
-          if(is.null(logins[[input$navig_db]])){
+        if(is.null(logins[[input$navig_db]])){
+          if(connectors[[input$navig_db]]$req_login){
             con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
-            logins[[input$navig_db]] <- con
           }else{
-            # browser()
-            con <-  logins[[input$navig_db]]
+            con <- connectors[[input$navig_db]]$connect_function()
           }
-          # con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
-          # logins[[input$navig_db]] <- con
+          logins[[input$navig_db]] <- con
+          
         }else{
-          con <- connectors[[input$navig_db]]$connect_function()
+          con <-  logins[[input$navig_db]]
+          
         }
+        
+        
+        # if(connectors[[input$navig_db]]$req_login){
+        #   if(is.null(logins[[input$navig_db]])){
+        #     con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
+        #     logins[[input$navig_db]] <- con
+        #   }else{
+        #     con <-  logins[[input$navig_db]]
+        #   }
+        # }else{
+        #   con <- connectors[[input$navig_db]]$connect_function()
+        # }
     
         return(con)
         
