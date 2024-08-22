@@ -338,7 +338,7 @@ viewTabServer <- function(id,parent_session,logins){
             }else{
               # browser()
               isolate(NAVIG_filter_error[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
-              tb <- raw_data_lz() %>% head(n_rows_collected) %>% collect()
+              tb <- NAVIG_raw_data_lz() %>% head(n_rows_collected) %>% collect()
             }
             
             
