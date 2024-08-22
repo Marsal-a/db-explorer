@@ -55,7 +55,9 @@ oracle_objects_prod <- list(
   },
   req_login = FALSE,
   list_schemas_function = function(con){
-    orasdse:::listSchemas(conn = con)
+    query <- "SELECT distinct TABLE_SCHEMA FROM ALL_TAB_PRIVS"
+    DBI::dbGetQuery(con,query) %>% arrange(TABLE_SCHEMA) %>% pull(TABLE_SCHEMA)
+    # orasdse:::listSchemas(conn = con)
   },
   list_tables_function = function(con,dbname){
     tables_table <- orasdse:::oraSDSEListObjects(con,dbname)
@@ -73,7 +75,9 @@ oracle_objects_test <- list(
   },
   req_login = FALSE,
   list_schemas_function = function(con){
-    orasdse:::listSchemas(conn = con)
+    query <- "SELECT distinct TABLE_SCHEMA FROM ALL_TAB_PRIVS"
+    DBI::dbGetQuery(con,query) %>% arrange(TABLE_SCHEMA) %>% pull(TABLE_SCHEMA)
+    # orasdse:::listSchemas(conn = con)
   },
   list_tables_function = function(con,dbname){
     tables_table <- orasdse:::oraSDSEListObjects(con,dbname)
