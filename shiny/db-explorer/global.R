@@ -188,7 +188,7 @@ tab_title_removable <- function(name, type = "data") {
     name,
     tags$span(icon("remove"),
               style = "margin-left: 5px;",
-              onclick = paste0("Shiny.setInputValue(\"", paste0("remove_", type, "_tab"), "\", \"", name, "\", {priority: \"event\"})"))
+              onclick = paste0("Shiny.setInputValue(\"", "remove_tab", "\", \"", name, "\", {priority: \"event\"})"))
   )
   
 }

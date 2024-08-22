@@ -53,6 +53,7 @@ library(stringr)
 library(sodium)
 
 ui <- navbarPage(
+  id="id_navbarpage",
   
   title = "Exploration des bases de données",
   
@@ -62,6 +63,7 @@ ui <- navbarPage(
              tags$link(rel = "stylesheet", type = "text/css", href = "dbexplorer-style.css")
              # tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
            ),
+           includeScript("www/js/CreateTabButton.js"),
            includeScript("www/js/changeActiveTabTitle.js"),
            includeScript("www/js/enter_password.js"),
            includeScript("www/js/event_log.js"),
@@ -70,21 +72,9 @@ ui <- navbarPage(
            includeScript("www/js/returnTextAreaBinding.js"),
            includeScript("www/js/run_return.js"),
            
-           # tags$script(
-           #   "$(document).on('shiny:inputchanged', function(event) {
-           #      if (event.name != 'changed') {
-           #      var inputValue = event.value;
-           #      
-           #      var combinedValue = event.name + ':' + inputValue;
-           # 
-           #      //Shiny.setInputValue('changed', combinedValue);
-           #      Shiny.setInputValue('changed', event.name);
-           #      }
-           #    });"
-           # ),
+
            tabsetPanel(id="TABSETPANEL",type = "pills",
-                       tabPanel(title = "Table_1",viewTabUi("Onglet_1")),
-                       tabPanel(title = "+")
+                       tabPanel(title = "Table_1",viewTabUi("Onglet_1"))
            )
   ),
   tabPanel("Console SQL",
@@ -94,7 +84,7 @@ ui <- navbarPage(
         selectInput("db_sql","Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
         uiOutput("ui_schemas_sql_panel"),
         uiOutput("ui_tables_sql_panel"),
-        # actionButton("trigtest_SQL", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+        actionButton("trigtest_SQL", "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
        ),
        width=3
      ),

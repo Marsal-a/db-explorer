@@ -16,7 +16,7 @@ function addCloseButtonToActiveTab(new_title, type) {
   
   var closeButton = $('<span>').addClass('close-button').html('<span class="fa fa-remove" style="margin-left: 5px;"></span>');
   closeButton.on('click', function() {
-    Shiny.setInputValue('remove_' + type + '_tab', dataValue, {priority: 'event'});
+    Shiny.setInputValue('remove_tab', dataValue, {priority: 'event'});
   });
   
   activeTab.append(closeButton);

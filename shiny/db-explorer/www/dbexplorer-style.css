@@ -130,4 +130,11 @@ table {
 }
 
 
+.list_button {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-top: 2.2px;
+  padding-left: 10px;
+  transform: scale(1.15);
+}
 
