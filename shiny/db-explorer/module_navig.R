@@ -149,17 +149,6 @@ viewTabServer <- function(id,parent_session,logins){
                     selectize=T)
       })
       
-      # output$ui_tabset_name <- renderText(
-      #   NAVIG_TABSET_name()
-      # )
-      # 
-      # NAVIG_TABSET_name <- eventReactive(input$navig_table,{
-      #   if(is.null(input$navig_table) || input$navig_table==""){
-      #     id
-      #   }else{
-      #     input$navig_table
-      #   }
-      # },ignoreInit = TRUE)
       
       NAVIG_raw_data_lz <- eventReactive(c(input$navig_table),{
         
@@ -169,7 +158,6 @@ viewTabServer <- function(id,parent_session,logins){
       })
       
       NAVIG_varnames <- reactive({
-        # browser()
         req(input$navig_table)
         
         var_class = get_class(NAVIG_raw_data_lz() %>% head(10) %>% collect())
@@ -631,11 +619,8 @@ viewTabServer <- function(id,parent_session,logins){
       
       observeEvent(input$navig_table,{
         if(!is.null(input$navig_table) & input$navig_table!=""){
-          
-          # shinyjs::runjs(glue::glue("changeActiveTabTitle('{input$navig_table}');"))
           new_title <- input$navig_table
           shinyjs::runjs(glue::glue("addCloseButtonToActiveTab('{new_title}', 'data');"))
-          # shinyjs::runjs(glue::glue("changeActiveTabTitle('{tab_title_removable(input$navig_table)}');"))
         }
       })
       
