@@ -3,7 +3,7 @@ shinyServer(function(input, output, session) {
   enc <- getOption("db-explorer.encoding", "UTF-8")
   # source("init.R", encoding = enc, local = TRUE)
   
-  for (file in list.files(c("tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
+  for (file in list.files(c("server_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
     source(file, encoding = enc, local = TRUE)
   }
   
@@ -41,6 +41,7 @@ shinyServer(function(input, output, session) {
   
   viewTabServer("Onglet_1",parent_session=session,logins=logins)
   
+  viewSqlServer("Onglet_1",parent_session=session,logins=logins)
   
   ### Input trigger depuis le script js CreateTabButton.
   observeEvent(input$create_tab,{

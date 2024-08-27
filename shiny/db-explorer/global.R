@@ -1,3 +1,4 @@
+
 ### Fonction utilitaires pour l'application : 
 ### La plupart des fonctions sont issues ou inspirées du package Radiant : 
 ### https://github.com/radiant-rstats
@@ -15,11 +16,16 @@ options(
 )
 
 options(shiny.reactlog = TRUE)
+enc <- getOption("db-explorer.encoding", "UTF-8")
 
+for (file in list.files(c("global_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
+  source(file, encoding = enc, local = TRUE)
+}
 
-source(paste0(getOption("path_db_explorer"),"connector.R"))
-source(paste0(getOption("path_db_explorer"),"init.R"))
-source(paste0(getOption("path_db_explorer"),"module_navig.R"))
+# source(paste0(getOption("path_db_explorer"),"connector.R"))
+# source(paste0(getOption("path_db_explorer"),"init.R"))
+# source(paste0(getOption("path_db_explorer"),"module_navig.R"))
+# source(paste0(getOption("path_db_explorer"),"module_consoleSql.R"))
 
 
 
