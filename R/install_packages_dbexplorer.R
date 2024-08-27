@@ -11,6 +11,7 @@ install.packages("fontawesome",lib=lib_to_install)
 install.packages("shinyAce",lib=lib_to_install)
 install.packages("shinyhelper",lib=lib_to_install)
 install.packages("shinyjs",lib=lib_to_install)
+install.packages("rclipboard",lib=lib_to_install)
 
 run_vanilla(glue::glue('install.packages("crayon",lib="{lib_to_install}",repos="https://cloud.r-project.org/")'))
 run_vanilla(glue::glue('remotes::install_version("DBI","1.1-3",upgrade = "never",lib="{lib_to_install}",repos="https://cloud.r-project.org/")'))
