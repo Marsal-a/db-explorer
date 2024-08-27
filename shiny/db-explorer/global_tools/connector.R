@@ -158,5 +158,4 @@ connectors <- list("Netezza"=netezza_objects,
                    "Oracle - Prod"=oracle_objects_prod,
                    "Oracle - Test"=oracle_objects_test,
                    "PostgreSQL - Prod" = postgre_objects_prod,
-                   "PostgreSQL - Test" = postgre_objects_test,
-                   "sqlite"=sqlLite_objects)
+                   "PostgreSQL - Test" = postgre_objects_test)
