@@ -1,4 +1,4 @@
-
+# remotes::install_github("stla/findInFiles")
 ## Copie FIF app
 
 out="./explorations/FiF/"
@@ -9,4 +9,4 @@ file.copy(from = list.files(system.file("shinyApp", package = "findInFiles"), fu
           recursive = TRUE)
 
 
-rstudioapi::jobAdd("j1")
+a<-rstudioapi::jobAdd("j1")
