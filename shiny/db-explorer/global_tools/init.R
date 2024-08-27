@@ -1,6 +1,4 @@
 
-db_choices=c("SQLite","Netezza","PostgreSQL - Prod","Oracle - Prod")
-db_choices=c("Netezza","PostgreSQL - Prod","Oracle - Prod")
 db_choices <- names(connectors)
 
 default_db     <- ifelse(exists("dbexplorer_dbhost"), dbexplorer_dbhost, "")
@@ -20,18 +18,13 @@ list_table_SQLite <- function(con){
 ### Render des .md
 # rmarkdown::render(paste0(getOption("path_db_explorer"),"tools/help/help_filters.md"))
 
-addResourcePath("help","./tools/help/")
-
-# packages=c("dplyr","dbplyr","RJDBC","pillar","nzsdse","DBI")
-# purrr::walk(packages,function(p){
-#   print(paste0(p," :",packageVersion(p)))
-# })
+addResourcePath("help","./global_tools/help/")
 
 ## Cloture des sessions au maximum aprés 12h d'ouverture
 start_time <- Sys.time()
-
 max_session_time <- 3600*12
 
+logg_full <- c()
 path_out_log <- "~/R_Commun/Adam/logs/db-explorer/"
 
 sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT", 
@@ -43,5 +36,5 @@ sql_keywords <- c("SELECT", "FROM", "WHERE", "AND", "OR", "NOT",
                   "DESC", "UNION", "INTERSECT", "EXCEPT", "WITH", "RECURSIVE")
 
 n_rows_collected <- 1000
-logg_full <- c()
+
 

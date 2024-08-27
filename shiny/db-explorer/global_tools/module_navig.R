@@ -18,7 +18,13 @@ viewTabUi <- function(id,label="Tab"){
         column(12,htmlOutput(NS(id,"ui_navig_summary"))),
         # column(4,htmlOutput(NS(id,"ui_current_query")))
         ),
-      fluidRow(uiOutput(NS(id,"ui_navig_dl_view_tab"))),
+      fluidRow(
+        column(10),
+        column(1,uiOutput(NS(id,"ui_clip_current_query_button"))),
+        column(1,uiOutput(NS(id,"ui_navig_dl_view_tab")))
+      ),
+      # uiOutput(NS(id,"ui_button_sql_query")),
+      
       DT::dataTableOutput(NS(id,"ui_navig_dataviewer"),height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
       width = 9
     )
@@ -159,7 +165,6 @@ viewTabServer <- function(id,parent_session,logins){
                     choices = c('Select the table to explore'="",tables),selected = default_table,
                     selectize=T)
       })
-      
       
       NAVIG_raw_data_lz <- eventReactive(c(input$navig_table),{
         
@@ -401,30 +406,69 @@ viewTabServer <- function(id,parent_session,logins){
         eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
         ignoreNULL=T,ignoreInit = T,{
           
-           connexion_string <- glue::glue("con <- {trimws(deparse(body(connectors[[input$navig_db]]$connect_function))[2])}")
-           tbl_string <- glue::glue()
+           # connexion_string <- glue::glue("con <- {trimws(deparse(body(connectors[[input$navig_db]]$connect_function))[2])}")
+           # tbl_string <- glue::glue()
            # str<- glue::glue("tbl <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),".", tablename))")
-          
           
         }
       )
       
-      NAVIG_sql_query <- eventReactive(
-        eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
-        ignoreNULL=T,ignoreInit = T,{
+      # NAVIG_sql_query <- eventReactive(
+      #   eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
+      #   ignoreNULL=T,ignoreInit = T,{
+      NAVIG_sql_query <- reactive({
+          # browser()
           
           lazy_tbl <- NAVIG_prepared_data_lz()
           
+          uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
           withr::local_options(list(dbplyr_use_colour = TRUE))
-          query <- lazy_tbl %>% dbplyr::remote_query()
+          colored_query <- lazy_tbl %>% dbplyr::remote_query()
           
-          return(query)
+          return(list(uncolored=uncolored_query,colored=colored_query))
       })
-          
+      
+      output$ui_clip_current_query_button <- renderUI({
+        req(input$navig_table)
+        req(NAVIG_displayTable())
+        # browser()
+        query <- NAVIG_sql_query()$uncolored
+        rclipButton(
+          inputId = "clipbtn", 
+          label = "Copy query", 
+          clipText = query, 
+          icon = icon("clipboard"),
+          tooltip = "Click me to copy the content of the text field to the clipboard!",
+          options = list(delay = list(show = 800, hide = 100), trigger = "hover")
+        )
+      })
+      
+      # output$ui_button_sql_query <- renderUI({
+      #   req(input$navig_table)
+      #   req(NAVIG_displayTable())
+      #   actionButton(NS(id,"sql_query_button"),"la")
+      # })
+      
+      # observeEvent(input$sql_query_button, {
+      #   query <- NAVIG_sql_query()
+      #   
+      #   showModal(modalDialog(
+      #     title = "Requête SQL générée",
+      #     rclipButton(
+      #       inputId = "clipbtn", 
+      #       label = "rclipButton Copy", 
+      #       clipText = NAVIG_sql_query()$uncolored, 
+      #       icon = icon("clipboard"),
+      #       tooltip = "Click me to copy the content of the text field to the clipboard!",
+      #       options = list(delay = list(show = 800, hide = 100), trigger = "hover")
+      #     )
+      #   ))
+      # })
+      
+      
       output$ui_current_query <- renderUI({
         ansi2html(NAVIG_sql_query())
       })
-      
           
       output$navig_dl_data <- downloadHandler(
         filename = function() {

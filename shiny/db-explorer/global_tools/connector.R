@@ -1,3 +1,22 @@
+sqlLite_objects <- list(
+  connect_function = function(user,pw){
+    con_sqlite <- dbConnect(RSQLite::SQLite(), ":memory:")
+    dbWriteTable(con_sqlite, "mtcars", mtcars)
+    dbWriteTable(con_sqlite, "CO2", data.frame(CO2))
+    dbWriteTable(con_sqlite, "billboard", data.frame(tidyr::billboard))
+    con_sqlite
+  },
+  req_login = FALSE,
+  list_schemas_function = function(con){
+    'default'
+  },
+  list_tables_function = function(con,dbname){
+    dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='table'")
+  },
+  remote_table_function = function(con,dbname,tablename){
+    lz <- dplyr::tbl(con, tablename)
+  }
+)
 
 netezza_objects <- list(
   connect_function = function(user,pw){
@@ -139,4 +158,5 @@ connectors <- list("Netezza"=netezza_objects,
                    "Oracle - Prod"=oracle_objects_prod,
                    "Oracle - Test"=oracle_objects_test,
                    "PostgreSQL - Prod" = postgre_objects_prod,
-                   "PostgreSQL - Test" = postgre_objects_test)
+                   "PostgreSQL - Test" = postgre_objects_test,
+                   "sqlite"=sqlLite_objects)
