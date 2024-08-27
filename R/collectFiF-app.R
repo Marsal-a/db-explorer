@@ -10,3 +10,4 @@ file.copy(from = list.files(system.file("shinyApp", package = "findInFiles"), fu
 
 
 a<-rstudioapi::jobAdd("j1")
+rstudioapi::jobRemove("D74791AF")
