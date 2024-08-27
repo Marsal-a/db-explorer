@@ -2,7 +2,7 @@ viewSqlUi <-  function(id,label="TabSQL"){
   sidebarLayout(
     sidebarPanel(
       wellPanel(
-        selectInput(NS(id,"sql_db"),"Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+        selectInput(NS(id,"sql_db"),"Sélection de la base :", choices = c("Select database to explore"="",db_choices)),
         uiOutput(NS(id,"ui_sql_schemas")),
         uiOutput(NS(id,"ui_sql_tables")),
         # actionButton(NS(id,"sql_trigtest_SQL"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),

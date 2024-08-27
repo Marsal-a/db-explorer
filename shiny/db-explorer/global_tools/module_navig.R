@@ -2,7 +2,7 @@ viewTabUi <- function(id,label="Tab"){
   sidebarLayout(
     sidebarPanel(
       wellPanel(
-        selectInput(NS(id,"navig_db"),"Sélection de la base :", choices = c("Select database to explore"="",db_choices),selected=default_db),
+        selectInput(NS(id,"navig_db"),"Sélection de la base :", choices = c("Select database to explore"="",db_choices)),
         uiOutput(NS(id,"ui_navig_schemas")),
         uiOutput(NS(id,"ui_navig_tables")),
       ),

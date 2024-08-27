@@ -18,14 +18,18 @@ options(
 options(shiny.reactlog = TRUE)
 enc <- getOption("db-explorer.encoding", "UTF-8")
 
-for (file in list.files(c("global_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
-  source(file, encoding = enc, local = TRUE)
-}
+here::here()
+source(paste0(getOption("path_db_explorer"),"global_tools/","libraries.R"))
+source(paste0(getOption("path_db_explorer"),"global_tools/","connector.R"))
+source(paste0(getOption("path_db_explorer"),"global_tools/","init.R"))
+source(paste0(getOption("path_db_explorer"),"global_tools/","module_navig.R"))
+source(paste0(getOption("path_db_explorer"),"global_tools/","module_consoleSql.R"))
 
-# source(paste0(getOption("path_db_explorer"),"connector.R"))
-# source(paste0(getOption("path_db_explorer"),"init.R"))
-# source(paste0(getOption("path_db_explorer"),"module_navig.R"))
-# source(paste0(getOption("path_db_explorer"),"module_consoleSql.R"))
+# for (file in list.files(c("global_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
+#   source(file, encoding = enc, local = TRUE)
+# }
+
+
 
 
 
