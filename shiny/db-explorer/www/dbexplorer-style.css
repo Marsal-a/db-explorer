@@ -116,6 +116,9 @@ table {
   white-space: nowrap;
 }
 
+table.dataTable{
+  margin-left: 0px !important;
+}
 
 .alignright {
   float: right;
