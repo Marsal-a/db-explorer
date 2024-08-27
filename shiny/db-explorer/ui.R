@@ -5,7 +5,7 @@ ui <- navbarPage(
   
   tabPanel("Navigation",
            shinyjs::useShinyjs(),
-           rclipboardSetup(),
+           # rclipboardSetup(),
            tags$head(
              tags$link(rel = "stylesheet", type = "text/css", href = "dbexplorer-style.css")
              # tags$link(rel = "stylesheet", type = "text/css", href = "style.css")

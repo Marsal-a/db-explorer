@@ -98,24 +98,13 @@ viewTabServer <- function(id,parent_session,logins){
           
         }
         
-        
-        # if(connectors[[input$navig_db]]$req_login){
-        #   if(is.null(logins[[input$navig_db]])){
-        #     con <- connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
-        #     logins[[input$navig_db]] <- con
-        #   }else{
-        #     con <-  logins[[input$navig_db]]
-        #   }
-        # }else{
-        #   con <- connectors[[input$navig_db]]$connect_function()
-        # }
     
         return(con)
         
       })
       
       NAVIG_schemas <- eventReactive(c(input$navig_db,input$modal_submit_login,password_ok()),{
-        # browser()
+
         req(input$navig_db)
         
         if(connectors[[input$navig_db]]$req_login & is.null(logins[[input$navig_db]])){
@@ -123,13 +112,6 @@ viewTabServer <- function(id,parent_session,logins){
           req(input$modal_pw)
           req(input$modal_submit_login)
           req(password_ok())
-          #   if(password_ok()){
-          #     schemas <- connectors[[input$navig_db]]$list_schemas_function(NAVIG_connector())
-          #   }else{
-          #     schemas <- NULL
-          #   }
-          # }else{
-          #   schemas <- connectors[[input$navig_db]]$list_schemas_function(NAVIG_connector())  
         }
         schemas <- connectors[[input$navig_db]]$list_schemas_function(NAVIG_connector())  
         
@@ -184,9 +166,6 @@ viewTabServer <- function(id,parent_session,logins){
       output$ui_navig_filters <- renderUI({
         req(input$navig_table)
         wellPanel(
-          # checkboxInput("filterByClick", "Cliquer pour filtrer?", value = F),
-          # checkboxInput("cumulateFilters", "Accumuler filtres?", value = F),
-          # br(),
           
           returnTextAreaInput(NS(id,"navig_data_filter"),
                               label = "Filtrer la table :",
@@ -402,46 +381,46 @@ viewTabServer <- function(id,parent_session,logins){
         ansi2html(NAVIG_tableSummary())
       })
       
-      NAVIG_dplyr_query <- eventReactive(
-        eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
-        ignoreNULL=T,ignoreInit = T,{
-          
-           # connexion_string <- glue::glue("con <- {trimws(deparse(body(connectors[[input$navig_db]]$connect_function))[2])}")
-           # tbl_string <- glue::glue()
-           # str<- glue::glue("tbl <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),".", tablename))")
-          
-        }
-      )
+      # NAVIG_dplyr_query <- eventReactive(
+      #   eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
+      #   ignoreNULL=T,ignoreInit = T,{
+      #     
+      #      # connexion_string <- glue::glue("con <- {trimws(deparse(body(connectors[[input$navig_db]]$connect_function))[2])}")
+      #      # tbl_string <- glue::glue()
+      #      # str<- glue::glue("tbl <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),".", tablename))")
+      #     
+      #   }
+      # )
       
       # NAVIG_sql_query <- eventReactive(
       #   eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
       #   ignoreNULL=T,ignoreInit = T,{
-      NAVIG_sql_query <- reactive({
-          # browser()
-          
-          lazy_tbl <- NAVIG_prepared_data_lz()
-          
-          uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
-          withr::local_options(list(dbplyr_use_colour = TRUE))
-          colored_query <- lazy_tbl %>% dbplyr::remote_query()
-          
-          return(list(uncolored=uncolored_query,colored=colored_query))
-      })
-      
-      output$ui_clip_current_query_button <- renderUI({
-        req(input$navig_table)
-        req(NAVIG_displayTable())
-        # browser()
-        query <- NAVIG_sql_query()$uncolored
-        rclipButton(
-          inputId = "clipbtn", 
-          label = "Copy query", 
-          clipText = query, 
-          icon = icon("clipboard"),
-          tooltip = "Click me to copy the content of the text field to the clipboard!",
-          options = list(delay = list(show = 800, hide = 100), trigger = "hover")
-        )
-      })
+      # NAVIG_sql_query <- reactive({
+      #     # browser()
+      #     
+      #     lazy_tbl <- NAVIG_prepared_data_lz()
+      #     
+      #     uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
+      #     withr::local_options(list(dbplyr_use_colour = TRUE))
+      #     colored_query <- lazy_tbl %>% dbplyr::remote_query()
+      #     
+      #     return(list(uncolored=uncolored_query,colored=colored_query))
+      # })
+      # 
+      # output$ui_clip_current_query_button <- renderUI({
+      #   req(input$navig_table)
+      #   req(NAVIG_displayTable())
+      #   # browser()
+      #   query <- NAVIG_sql_query()$uncolored
+      #   rclipButton(
+      #     inputId = "clipbtn", 
+      #     label = "Copy query", 
+      #     clipText = query, 
+      #     icon = icon("clipboard"),
+      #     tooltip = "Click me to copy the content of the text field to the clipboard!",
+      #     options = list(delay = list(show = 800, hide = 100), trigger = "hover")
+      #   )
+      # })
       
       # output$ui_button_sql_query <- renderUI({
       #   req(input$navig_table)
@@ -466,9 +445,9 @@ viewTabServer <- function(id,parent_session,logins){
       # })
       
       
-      output$ui_current_query <- renderUI({
-        ansi2html(NAVIG_sql_query())
-      })
+      # output$ui_current_query <- renderUI({
+      #   ansi2html(NAVIG_sql_query())
+      # })
           
       output$navig_dl_data <- downloadHandler(
         filename = function() {
