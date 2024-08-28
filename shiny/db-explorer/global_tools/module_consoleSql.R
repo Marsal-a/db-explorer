@@ -29,12 +29,12 @@ viewSqlServer <- function(id,parent_session,logins){
       connexion_modal <- function(failed = FALSE,title='') {
         modalDialog(
           tags$h2(title),
-          textInput(NS(id,'modal_username'), 'Username',value = system("whoami", intern = TRUE)),
-          passwordInput(NS(id,'modal_pw'), 'Password'),
+          textInput(NS(id,'sql_modal_username'), 'Username',value = system("whoami", intern = TRUE)),
+          passwordInput(NS(id,'sql_modal_pw'), 'Password'),
           if (failed)
             div(tags$b("Login incorrect", style = "color: red;")),
           footer=tagList(
-            actionButton(NS(id,'modal_submit_login'), 'Submit'),
+            actionButton(NS(id,'sql_modal_submit_login'), 'Submit'),
             modalButton('cancel')
           )
         )
@@ -50,23 +50,24 @@ viewSqlServer <- function(id,parent_session,logins){
       
       password_ok <- reactiveVal(FALSE)
       
-      observeEvent(input$modal_submit_login,{
+      observeEvent(input$sql_modal_submit_login,{
         # browser()
-        test_con <- try(connectors[[input$sql_db]]$connect_function(user=input$modal_username,pw=input$modal_pw),silent=TRUE)
+        test_con <- try(connectors[[input$sql_db]]$connect_function(user=input$sql_modal_username,pw=input$sql_modal_pw),silent=TRUE)
         if(inherits(test_con, "try-error")){
+          # browser()
           showModal(connexion_modal(failed=T))
-          updateTextInput(session,inputId = NS(id,"modal_pw"),value =NULL)
+          updateTextInput(session,inputId = NS(id,"sql_modal_pw"),value =NULL)
         }else{
           password_ok(TRUE)
           removeModal()
         }
       })
       
-      SQL_connector <- eventReactive(c(input$sql_db,input$modal_submit_login),{ 
+      SQL_connector <- eventReactive(c(input$sql_db,input$sql_modal_submit_login),{ 
         
         if(is.null(logins[[input$sql_db]])){
           if(connectors[[input$sql_db]]$req_login){
-            con <- connectors[[input$sql_db]]$connect_function(user=input$modal_username,pw=input$modal_pw)
+            con <- connectors[[input$sql_db]]$connect_function(user=input$sql_modal_username,pw=input$sql_modal_pw)
           }else{
             con <- connectors[[input$sql_db]]$connect_function()
           }
@@ -80,14 +81,14 @@ viewSqlServer <- function(id,parent_session,logins){
         
       })
       
-      SQL_schemas <- eventReactive(c(input$sql_db,input$modal_submit_login,password_ok()),{
+      SQL_schemas <- eventReactive(c(input$sql_db,input$v,password_ok()),{
         # browser()
         req(input$sql_db)
         
         if(connectors[[input$sql_db]]$req_login & is.null(logins[[input$sql_db]])){
-          req(input$modal_username)
-          req(input$modal_pw)
-          req(input$modal_submit_login)
+          req(input$sql_modal_username)
+          req(input$sql_modal_pw)
+          req(input$sql_modal_submit_login)
           req(password_ok())
         }
         schemas <- connectors[[input$sql_db]]$list_schemas_function(SQL_connector())  
@@ -98,9 +99,9 @@ viewSqlServer <- function(id,parent_session,logins){
       SQL_tables <- reactive({
         req(input$sql_schema)
         if(connectors[[input$sql_db]]$req_login & is.null(logins[[input$sql_db]])){
-          req(input$modal_username)
-          req(input$modal_pw)
-          req(input$modal_submit_login)
+          req(input$sql_modal_username)
+          req(input$sql_modal_pw)
+          req(input$sql_modal_submit_login)
           req(password_ok())
         }
         tables <- connectors[[input$sql_db]]$list_tables_function(SQL_connector(),input$sql_schema)
