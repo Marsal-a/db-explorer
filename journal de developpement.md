@@ -80,9 +80,31 @@ shinyjs::runjs(sprintf("
 - faire un update de l'input de tri  par JS (+ peut être une reactiveVAL ? ) et gérer le switch asc / desc en JS directement   
 
 
-
-
-
 ## 13/08/2024
 
 problème résolu avec le passage d'Id dans le custom message
+
+## 27/08/2024
+
+modularisation de la page SQL ok. 
+Premier test utilisateur et déja qq demandes d'évolution. [board](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues)   
+- 2 bug fix : 
+  [#15](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/15)
+  [#16](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/16)
+- Quelques évolution simple d'amélioration UX (menu d'aide supplémentaire à créer) : 
+  [#14](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/14)
+  [#3](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/3)
+  [#5](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/5)
+  [#9](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/9)
+  [#6](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/6)
+- Quelques évol complexes :
+  [#7](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/7)
+  [#4](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/4)
+  [#8](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/8)
+  
+- Quelques demandes à clarifier : 
+  [#10](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/10)
+  [#12](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/12)
+  [#13](https://gitlab.codeo.intranet.justice.gouv.fr/sser/bis/outillage_data/exploratoire/db-explorer/issues/13)
+  
+  
