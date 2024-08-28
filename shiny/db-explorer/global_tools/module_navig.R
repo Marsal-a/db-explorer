@@ -488,15 +488,15 @@ viewTabServer <- function(id,parent_session,logins){
         
         ## for rounding
 
-        IsDateWithoutTime <- sapply(dat, function(col){
+        IsDateWithoutTime <- function(col){
           if (inherits(col, "POSIXct")) {
             all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
           } else {
             FALSE
           }
-        })
+        }
         
-        dat <- dat %>% mutate(across(where(~ is_date_without_time(.)), as.Date))
+        dat <- dat %>% mutate(across(where(~ IsDateWithoutTime(.)), as.Date))
         
         dec <- input$view_dec %>%
           (function(x) ifelse(is.empty(x) || x < 0, 3, round(x, 0)))
