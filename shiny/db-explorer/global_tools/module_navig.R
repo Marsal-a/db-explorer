@@ -485,7 +485,7 @@ viewTabServer <- function(id,parent_session,logins){
         
         search <- ""
         fbox <- if (nrow(dat) > 5e6) "none" else list(position = "top")
-        
+        fbox <- "none"
         ## for rounding
 
         IsDateWithoutTime <- function(col){
