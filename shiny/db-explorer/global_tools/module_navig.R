@@ -605,7 +605,17 @@ viewTabServer <- function(id,parent_session,logins){
         for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
           col_name <- names(NAVIG_displayTable())[input$ui_navig_dataviewer_cells_selected[row,2]+1]
           value <- NAVIG_displayTable()[input$ui_navig_dataviewer_cells_selected[row,1],input$ui_navig_dataviewer_cells_selected[row,2]+1] %>% pull(col_name)
-          string <- paste0(col_name,"==\"",value,"\"")
+          
+          
+          ## Specific Oracle et filtre de date : 
+          if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
+            value=paste0("sql(\"TO_DATE('",value,"', 'YYYY-MM-DD')","\")")
+            # sql("TO_DATE('2022-01-01','YYYY-MM-DD')")
+          }else{
+            value <- paste0("\"",value,"\"")
+          }
+          
+          string <- paste0(col_name,"==",value)
           string_filter[row]<-string
         }
         
@@ -617,11 +627,10 @@ viewTabServer <- function(id,parent_session,logins){
         str <- paste0(string_filter,collapse = " &\n")
         updateTextAreaInput(session,inputId = "navig_data_filter",value =str)
         
+        ## On position le curseur sur le filtre de données
         session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
         
-      })
-      
-      NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
+      })      NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
       
       observeEvent(input$columnClicked,{
         #### Cet observeur écoute les cliques sur les entetes de colonnes du tableau principal.
