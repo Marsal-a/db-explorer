@@ -486,15 +486,18 @@ viewTabServer <- function(id,parent_session,logins){
         search <- ""
         fbox <- if (nrow(dat) > 5e6) "none" else list(position = "top")
         fbox <- "none"
-        
-        isBigFct <- sapply(dat, function(x) is.factor(x) && length(levels(x)) > 1000)
-        if (sum(isBigFct) > 0) {
-          dat[, isBigFct] <- select(dat, which(isBigFct)) %>% mutate_all(as.character)
+        ## for rounding
+
+        IsDateWithoutTime <- function(col){
+          if (inherits(col, "POSIXct")) {
+            all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
+          } else {
+            FALSE
+          }
         }
         
-        ## for rounding
-        isInt <- sapply(dat, function(x) is.integer(x))
-        isDbl <- sapply(dat, is_double)
+        dat <- dat %>% mutate(across(where(~ IsDateWithoutTime(.)), as.Date))
+        
         dec <- input$view_dec %>%
           (function(x) ifelse(is.empty(x) || x < 0, 3, round(x, 0)))
         
