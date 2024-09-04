@@ -3,6 +3,11 @@ ui <- navbarPage(
   
   title = "Exploration des bases de données",
   
+  ## icone favicon
+  # tags$head(
+  #   tags$link(rel = "shortcut icon", href = "11bb5ddc-170b-45fb-9526-91922a980df2.webp")
+  # ),
+            
   tabPanel("Navigation",
            shinyjs::useShinyjs(),
            # rclipboardSetup(),
