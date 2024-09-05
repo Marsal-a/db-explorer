@@ -10,7 +10,7 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_filter_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
@@ -35,6 +35,12 @@ viewTabServer <- function(id,parent_session,logins){
   moduleServer(
     id = id,
     module = function(input,output,session){
+      
+      
+      for (file in list.files(c("server_tools/navig_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
+        source(file, encoding = enc, local = TRUE)
+      }
+      
       
       ### WORKS : 
       shinyjs::runjs(sprintf("
@@ -238,17 +244,48 @@ viewTabServer <- function(id,parent_session,logins){
               if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
                 isolate(NAVIG_filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
               }else{
+                
+                # browser()
+                
                 filter_cmd <- isolate(input$navig_data_filter) %>%
                   gsub("\\n", "", .) %>%
                   gsub("'", "\\\\'", .) %>%
                   gsub("\"", "\'", .) %>%
-                  fix_smart()
+                  fix_smart() %>% 
+                  stringr::str_trim("both") %>% 
+                  stringr::str_squish()
+                
+                
+                if(inherits(NAVIG_connector(),"OraConnection")){
+                  
+                  
+                  decomp_filter=decompose_filter(filter_cmd)
+                  
+                  recomposed_filter=list()
+                  
+                  recomposed_filter=purrr::map(decomp_filter, function(filter_components){
+                    
+                    # browser()
+                    if(get_class(prepared_data %>% head(10) %>% collect())[filter_components$column]=="date"){
+                      recomposed_filter=paste0(filter_components$column,
+                                               filter_components$operator,
+                                               "sql(\"TO_DATE('",filter_components$value,"', 'YYYY-MM-DD')","\")")
+                    }else{
+                      recomposed_filter=paste0(filter_components$column,
+                                               filter_components$operator,
+                                               paste0("'",filter_components$value,"'"))
+                    }
+                    
+                  })
+                }
+                recomposed_filter=paste(unlist(recomposed_filter),collapse = " & ")
+                # browser()
                 
                 safefilter=purrr::safely(function(tbl,filter){
                   tbl %>%
                     (function(x) if (!is.empty(filter)) x %>% filter(!!rlang::parse_expr(filter)) else x)
                 })
-                filtered_data <- safefilter(prepared_data,filter_cmd)
+                filtered_data <- safefilter(prepared_data,recomposed_filter)
                 
                 if(is.null(filtered_data$error)){
                   isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
@@ -495,6 +532,10 @@ viewTabServer <- function(id,parent_session,logins){
             FALSE
           }
         }
+        browser()
+        ## format(datetime, "%Y-%m-%d")
+        ## format(datetime, "%Y-%m-%d")
+        
         
         dat <- dat %>% mutate(across(where(~ IsDateWithoutTime(.)), as.Date))
         
@@ -600,7 +641,7 @@ viewTabServer <- function(id,parent_session,logins){
         
         req(input$ui_navig_dataviewer_cells_selected)
         req(input$navig_filterByClick)
-        
+        # browser()
         string_filter <- c()
         for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
           col_name <- names(NAVIG_displayTable())[input$ui_navig_dataviewer_cells_selected[row,2]+1]
@@ -608,13 +649,13 @@ viewTabServer <- function(id,parent_session,logins){
           
           
           ## Specific Oracle et filtre de date : 
-          if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
-            value=paste0("sql(\"TO_DATE('",value,"', 'YYYY-MM-DD')","\")")
-            # sql("TO_DATE('2022-01-01','YYYY-MM-DD')")
-          }else{
-            value <- paste0("\"",value,"\"")
-          }
-          
+          # if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
+          #   value=paste0("sql(\"TO_DATE('",value,"', 'YYYY-MM-DD')","\")")
+          #   # sql("TO_DATE('2022-01-01','YYYY-MM-DD')")
+          # }else{
+          #   value <- paste0("\"",value,"\"")
+          # }
+          value <- paste0("\"",value,"\"")
           string <- paste0(col_name,"==",value)
           string_filter[row]<-string
         }
@@ -630,7 +671,9 @@ viewTabServer <- function(id,parent_session,logins){
         ## On position le curseur sur le filtre de données
         session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
         
-      })      NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
+      })      
+      
+      NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
       
       observeEvent(input$columnClicked,{
         #### Cet observeur écoute les cliques sur les entetes de colonnes du tableau principal.
