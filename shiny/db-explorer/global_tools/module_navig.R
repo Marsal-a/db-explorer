@@ -532,10 +532,6 @@ viewTabServer <- function(id,parent_session,logins){
             FALSE
           }
         }
-        browser()
-        ## format(datetime, "%Y-%m-%d")
-        ## format(datetime, "%Y-%m-%d")
-        
         
         dat <- dat %>% mutate(across(where(~IsDateWithoutTime(.)),~as.Date(format(., "%Y-%m-%d"))))
         
