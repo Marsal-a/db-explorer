@@ -537,7 +537,7 @@ viewTabServer <- function(id,parent_session,logins){
         ## format(datetime, "%Y-%m-%d")
         
         
-        dat <- dat %>% mutate(across(where(~ IsDateWithoutTime(.)), as.Date))
+        dat <- dat %>% mutate(across(where(~IsDateWithoutTime(.)),~as.Date(format(., "%Y-%m-%d"))))
         
         dec <- input$view_dec %>%
           (function(x) ifelse(is.empty(x) || x < 0, 3, round(x, 0)))
