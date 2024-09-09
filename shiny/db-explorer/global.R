@@ -192,12 +192,14 @@ logger <- function(path_out){
 
 
 
-tab_title_removable <- function(name, type = "data") {
+tab_title_removable <- function(name, type = "data", removeInputName) {
   tags$span(
     name,
     tags$span(icon("remove"),
               style = "margin-left: 5px;",
-              onclick = paste0("Shiny.setInputValue(\"", "remove_tab", "\", \"", name, "\", {priority: \"event\"})"))
+              onclick = paste0("
+              Shiny.setInputValue(\"", removeInputName , "\", \"", name, "\", {priority: \"event\"});
+              "))
   )
   
 }
