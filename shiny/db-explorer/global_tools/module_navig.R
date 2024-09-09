@@ -92,15 +92,10 @@ viewTabServer <- function(id,parent_session,logins){
             con <- connectors[[input$navig_db]]$connect_function()
           }
           logins[[input$navig_db]] <- con
-          
         }else{
           con <-  logins[[input$navig_db]]
-          
         }
-        
-    
         return(con)
-        
       })
       
       NAVIG_schemas <- eventReactive(c(input$navig_db,input$modal_submit_login,password_ok()),{
@@ -295,7 +290,6 @@ viewTabServer <- function(id,parent_session,logins){
         eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
         ignoreNULL=T,ignoreInit = T,{
           
-          # browser()
           req(input$navig_table)
           prepared_data <- NAVIG_prepared_data_lz()
           
@@ -669,7 +663,7 @@ viewTabServer <- function(id,parent_session,logins){
       observeEvent(input$navig_table,{
         if(!is.null(input$navig_table) & input$navig_table!=""){
           new_title <- input$navig_table
-          shinyjs::runjs(glue::glue("addCloseButtonToActiveTab('{new_title}', 'data');"))
+          shinyjs::runjs(glue::glue("addCloseButtonToActiveTab('{new_title}', 'remove_navig_tab');"))
         }
       })
       
