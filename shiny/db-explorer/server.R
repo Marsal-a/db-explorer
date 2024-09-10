@@ -19,7 +19,7 @@ shinyServer(function(input, output, session) {
   })
   
   current_time<-reactiveTimer()
-  
+
   observeEvent(input$changed_value,{
     logg_full <<- c(logg_full,input$changed_value)
   })
