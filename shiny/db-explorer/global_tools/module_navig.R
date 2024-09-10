@@ -78,7 +78,6 @@ viewTabServer <- function(id,parent_session,logins){
       password_ok <- reactiveVal(FALSE)
       
       observeEvent(input$modal_submit_login,{
-        # browser()
         test_con <- try(connectors[[input$navig_db]]$connect_function(user=input$modal_username,pw=input$modal_pw),silent=TRUE)
         if(inherits(test_con, "try-error")){
           showModal(connexion_modal(failed=T))
@@ -98,15 +97,10 @@ viewTabServer <- function(id,parent_session,logins){
             con <- connectors[[input$navig_db]]$connect_function()
           }
           logins[[input$navig_db]] <- con
-          
         }else{
           con <-  logins[[input$navig_db]]
-          
         }
-        
-    
         return(con)
-        
       })
       
       NAVIG_schemas <- eventReactive(c(input$navig_db,input$modal_submit_login,password_ok()),{
@@ -154,19 +148,24 @@ viewTabServer <- function(id,parent_session,logins){
                     selectize=T)
       })
       
-      NAVIG_raw_data_lz <- eventReactive(c(input$navig_table),{
+      NAVIG_raw_tbl_lazy <- eventReactive(c(input$navig_table),{
         
         req(input$navig_table)
-        connectors[[input$navig_db]]$remote_table_function(NAVIG_connector(),input$navig_schema,input$navig_table)
-        
-      })
+        raw_tbl_lazy <- connectors[[input$navig_db]]$remote_table_function(NAVIG_connector(),input$navig_schema,input$navig_table)
       
-      NAVIG_varnames <- reactive({
+        return(raw_tbl_lazy)
+      })
+
+      NAVIG_varnames <- eventReactive(
+        eventExpr = c(NAVIG_raw_tbl_lazy()),{
+        
         req(input$navig_table)
         
-        var_class = get_class(NAVIG_raw_data_lz() %>% head(10) %>% collect())
-        names(var_class) %>%
+        var_class = get_class(NAVIG_raw_tbl_lazy() %>% head(10) %>% collect())
+        res <-names(var_class) %>%
           set_names(., paste0(., " {", var_class, "}"))
+        
+        return(res)
       })
       
       output$ui_navig_filters <- renderUI({
@@ -211,27 +210,29 @@ viewTabServer <- function(id,parent_session,logins){
       output$ui_navig_view_vars <- renderUI({
         
         req(input$navig_table)
+        
         vars <- NAVIG_varnames()
-        # browser()
         wellPanel(
           selectInput(
-            NS(id,"navig_view_vars"), "Sélectionner les colonnes :",
-            choices = vars,
-            selected=vars,
-            multiple = TRUE,
-            selectize = FALSE, size = min(20, length(vars))+1
+            inputId   = NS(id,"navig_view_vars"), "Sélectionner les colonnes :",
+            choices   = vars,
+            selected  = vars,
+            multiple  = TRUE,
+            selectize = FALSE, 
+            size = min(20, length(vars))+1
         ))
       })
       
       NAVIG_filter_error<-reactiveValues()
       
-      NAVIG_prepared_data_lz <- eventReactive(
-        eventExpr=c(input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
+      NAVIG_prepared_tbl_lazy <- eventReactive(
+        eventExpr=c(NAVIG_raw_tbl_lazy(),input$navig_data_filter,input$navig_data_arrange),
+        ignoreInit = T,
         ignoreNULL = T,{
           
           req(input$navig_table)
           
-          prepared_data <- NAVIG_raw_data_lz()
+          prepared_data <- NAVIG_raw_tbl_lazy()
           
           if(is.empty(input$navig_data_filter) & is.empty(input$navig_data_arrange)){
             
@@ -297,7 +298,6 @@ viewTabServer <- function(id,parent_session,logins){
             }
             
             if(!is.empty(input$navig_data_arrange)){
-              
               arrange_cmd <- input$navig_data_arrange
               if (!is.empty(arrange_cmd)) {
                 arrange_cmd <- arrange_cmd %>%
@@ -323,63 +323,60 @@ viewTabServer <- function(id,parent_session,logins){
               
             }
           }
-          
           return(prepared_data)
         }
       )
       
-      NAVIG_displayTable <- eventReactive(
-        eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
-        ignoreNULL=T,ignoreInit = T,{
+      NAVIG_collected_data <- eventReactive(
+        eventExpr = c(NAVIG_prepared_tbl_lazy()),{
           
-          # browser()
-          req(input$navig_table)
-          prepared_data <- NAVIG_prepared_data_lz()
-          
-          # browser()
-          ### Capture des erreurs renvoyées par la base de données
-          ### Ex : XXX=1 au lieu de ==
-          
-          if(!is.null(input$navig_data_filter) & input$navig_data_filter!=""){
-            
-            collect_tb <- function(lazy_tb,n){
-              collected_tb <- lazy_tb %>% head(n) %>% collect()
-              return(collected_tb)
-            }
-            
-            ### La capture des erreurs prend un temps anormalement long pour certaines erreurs sur la condition de filtre
-            ### Capture des erreurs tentative 1 avec purrr::safely : 
-            safe_collect <- purrr::safely(collect_tb)
-            collected_tb <- safe_collect(prepared_data,n_rows_collected)
-            
-            if(is.null(collected_tb$error)){
-              # isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
-              tb <- collected_tb$result
-            }else{
-              # browser()
-              isolate(NAVIG_filter_error[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
-              tb <- NAVIG_raw_data_lz() %>% head(n_rows_collected) %>% collect()
-            }
-            
-            
-          }else{
-            tb <- prepared_data %>% head(n_rows_collected) %>% collect()
+          prepared_tbl_lazy <- NAVIG_prepared_tbl_lazy()
+          collect_tb <- function(lazy_tb,n){
+            collected_tb <- lazy_tb %>% head(n) %>% collect()
+            return(collected_tb)
           }
+          
+          ### La capture des erreurs prend un temps anormalement long pour certaines erreurs sur la condition de filtre
+          ### Capture des erreurs tentative 1 avec purrr::safely : 
+          safe_collect <- purrr::safely(collect_tb)
+          collected_tb <- safe_collect(prepared_tbl_lazy,n_rows_collected)
+          
+          if(is.null(collected_tb$error)){
+            collected_data <- collected_tb$result
+          }else{
+            
+            isolate(NAVIG_filter_error[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
+            collected_data <- NAVIG_raw_tbl_lazy() %>% head(n_rows_collected) %>% collect()
+          }
+          
+          return(collected_data)
+          
+        }
+      )
+      
+      NAVIG_displayTable <- eventReactive(
+        eventExpr = c(NAVIG_collected_data(),input$navig_view_vars),
+        ignoreNULL=T,ignoreInit = F,{
+          
+          req(input$navig_view_vars)
+          req(all(input$navig_view_vars %in% NAVIG_varnames()))
+          display_data <- NAVIG_collected_data()
           
           if(!is.null(input$navig_view_vars)){
-            tb <- select_at(tb, .vars = input$navig_view_vars)
+            display_data <- select_at(display_data, .vars = input$navig_view_vars)
           }
           
-          return(tb)
+          return(display_data)
           
         })
       
       NAVIG_tableSummary <- eventReactive(
-        eventExpr = c(input$navig_table,input$navig_data_filter,NAVIG_prepared_data_lz()),
-        ignoreInit = F,
+        eventExpr = c(input$navig_table,input$navig_data_filter),
+        ignoreInit = T,
         ignoreNULL=F,{
           
           req(input$navig_table)
+          req(NAVIG_prepared_tbl_lazy())
           
           preview_information <- function(connexion,prepared_data,raw_data_lz,selected_table){
             current_query <- dbplyr::remote_query(prepared_data)
@@ -388,25 +385,29 @@ viewTabServer <- function(id,parent_session,logins){
             rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
             
             colcount=dim(raw_data_lz)[2]
+            # length(C_FAIT$lazy_query$vars)
             
             glue1 <- glue::glue("
-        Prévisualisation de la table {crayon::bold$blue(input$navig_table)} ({min(n_rows_collected,as.integer(rowcount))} premières lignes)
-      
-        Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
-        Nombre de colonnes : {crayon::bold$blue(colcount)}
-  
-        ")
+            Prévisualisation de la table {crayon::bold$blue(input$navig_table)} ({min(n_rows_collected,as.integer(rowcount))} premières lignes)
+          
+            Nombre de lignes   : {crayon::bold$blue(rowcountPretty)}
+            Nombre de colonnes : {crayon::bold$blue(colcount)}
+            ")
             return(glue1)
           }
           
           safe_preview_information<-purrr::safely(preview_information)
           
-          safe_results <- safe_preview_information(NAVIG_connector(),NAVIG_prepared_data_lz(),NAVIG_raw_data_lz(),input$navig_table)
+          safe_results <- safe_preview_information(
+            connexion      = NAVIG_connector(),
+            prepared_data  = NAVIG_prepared_tbl_lazy(),
+            raw_data_lz    = NAVIG_raw_tbl_lazy(),
+            selected_table = input$navig_table)
           
           if(is.null(safe_results$error)){
             res <- safe_results$result
           }else{
-            res <- safe_preview_information(NAVIG_connector(),NAVIG_raw_data_lz(),NAVIG_raw_data_lz(),input$navig_table)
+            res <- safe_preview_information(NAVIG_connector(),NAVIG_raw_tbl_lazy(),NAVIG_raw_tbl_lazy(),input$navig_table)
           }
           
           return(res)
@@ -430,20 +431,18 @@ viewTabServer <- function(id,parent_session,logins){
       # )
       
       # NAVIG_sql_query <- eventReactive(
-      #   eventExpr = c(input$navig_table,input$navig_view_vars,input$navig_data_filter,input$navig_data_arrange),
-      #   ignoreNULL=T,ignoreInit = T,{
-      # NAVIG_sql_query <- reactive({
+      #   eventExpr = c(NAVIG_prepared_tbl_lazy()),
+      #   ignoreNULL=T,ignoreInit = F,{
       #     # browser()
-      #     
-      #     lazy_tbl <- NAVIG_prepared_data_lz()
-      #     
+      #     lazy_tbl <- NAVIG_prepared_tbl_lazy()
+      # 
       #     uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
       #     withr::local_options(list(dbplyr_use_colour = TRUE))
       #     colored_query <- lazy_tbl %>% dbplyr::remote_query()
-      #     
+      # 
       #     return(list(uncolored=uncolored_query,colored=colored_query))
       # })
-      # 
+      
       # output$ui_clip_current_query_button <- renderUI({
       #   req(input$navig_table)
       #   req(NAVIG_displayTable())
@@ -482,9 +481,9 @@ viewTabServer <- function(id,parent_session,logins){
       # })
       
       
-      # output$ui_current_query <- renderUI({
-      #   ansi2html(NAVIG_sql_query())
-      # })
+      output$ui_current_query <- renderUI({
+        ansi2html(NAVIG_sql_query()$colored)
+      })
           
       output$navig_dl_data <- downloadHandler(
         filename = function() {
@@ -603,6 +602,7 @@ viewTabServer <- function(id,parent_session,logins){
         updateTextAreaInput(session,inputId = "navig_data_arrange",value ="")
         updateSelectInput(session,inputId = "navig_view_vars",selected ="")
         isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
+        isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
       })
       
       observeEvent(input$navig_schema,{
@@ -611,6 +611,7 @@ viewTabServer <- function(id,parent_session,logins){
         updateTextAreaInput(session,inputId = "navig_data_arrange",value ="")
         updateSelectInput(session,inputId = "navig_view_vars",selected ="")
         isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
+        isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
         
       })
       
@@ -624,7 +625,8 @@ viewTabServer <- function(id,parent_session,logins){
         updateSelectInput(session,inputId = "navig_view_vars",selected =NAVIG_varnames())
         
         ## Reset du message d'erreur de filtre :
-        isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
+        isolate(NAVIG_filter_error[["value_filter_error"]]  <- "")
+        isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
         
       })
       
@@ -717,7 +719,7 @@ viewTabServer <- function(id,parent_session,logins){
       observeEvent(input$navig_table,{
         if(!is.null(input$navig_table) & input$navig_table!=""){
           new_title <- input$navig_table
-          shinyjs::runjs(glue::glue("addCloseButtonToActiveTab('{new_title}', 'data');"))
+          shinyjs::runjs(glue::glue("addCloseButtonToActiveTab('{new_title}', 'remove_navig_tab');"))
         }
       })
       

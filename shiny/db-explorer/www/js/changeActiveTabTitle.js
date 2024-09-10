@@ -6,7 +6,7 @@ function changeActiveTabTitle(new_title) {
   
 }
 
-function addCloseButtonToActiveTab(new_title, type) {
+function addCloseButtonToActiveTab(new_title, removeInput) {
   
   var tabsetId = $('.nav-pills').attr('id');
   var activeTab = $('#' + tabsetId + ' li.active a');
@@ -16,7 +16,7 @@ function addCloseButtonToActiveTab(new_title, type) {
   
   var closeButton = $('<span>').addClass('close-button').html('<span class="fa fa-remove" style="margin-left: 5px;"></span>');
   closeButton.on('click', function() {
-    Shiny.setInputValue('remove_tab', dataValue, {priority: 'event'});
+    Shiny.setInputValue(removeInput, dataValue, {priority: 'event'});
   });
   
   activeTab.append(closeButton);

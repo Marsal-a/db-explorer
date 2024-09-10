@@ -29,11 +29,15 @@ ui <- navbarPage(
            includeScript("www/js/run_return.js"),
            
 
-           tabsetPanel(id="TABSETPANEL",type = "pills",
+           tabsetPanel(id="Navig_tabset_panel",
+                       type = "pills",
                        tabPanel(title = "Table_1",viewTabUi("Onglet_1"))
            )
   ),
   tabPanel("Console SQL",
-           viewSqlUi("Onglet_1")
+           tabsetPanel(id="ConsoleSQL_tabset_panel",
+                       type = "pills",
+                       tabPanel(title="SQL_1",viewSqlUi("Onglet_1"))
            )
+  )
 )

@@ -174,15 +174,14 @@ logger <- function(path_out){
     df=data.frame(pkg$Package,pkg$Version)
   })
   
-  res=c(
-    Sys.info(),
+  res=list(
+    sysinfo=data.frame(Sys.info()),
     start_Time=format(start_time,"%Y%m%d_%H%M%S"),
-    bind_rows(list_pkg)|>arrange(pkg.Package),
+    package=bind_rows(list_pkg)|>arrange(pkg.Package),
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S"),
-    full_l=data.frame(logg_full)
+    full_l=tibble(logg_full)
   )
-  
-  
+
   # write.csv(res, file = fname, row.names = T, quote = FALSE)
   writeLines(capture.output(print(res)), con = fname)
   
@@ -192,12 +191,14 @@ logger <- function(path_out){
 
 
 
-tab_title_removable <- function(name, type = "data") {
+tab_title_removable <- function(name, type = "data", removeInputName) {
   tags$span(
     name,
     tags$span(icon("remove"),
               style = "margin-left: 5px;",
-              onclick = paste0("Shiny.setInputValue(\"", "remove_tab", "\", \"", name, "\", {priority: \"event\"})"))
+              onclick = paste0("
+              Shiny.setInputValue(\"", removeInputName , "\", \"", name, "\", {priority: \"event\"});
+              "))
   )
   
 }
