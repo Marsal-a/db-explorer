@@ -99,10 +99,28 @@ form.well[role="complementary"] {
   min-height:750px;
 }
 
+
+
 .nav-pills {
   margin-bottom: 8px;
 }
 
+.nav-pills>li+li{
+  margin-left: 8px;
+}
+
+.nav-pills > .list_button {
+  padding: 0px 0px;
+  transform: scale(1);
+}
+.nav-pills > .list_button > button {
+  padding: 9px 15px;
+}
+
+.nav-pills > li:not(.active) > a {
+  background-color: #337ab712 ;
+  background-color: #bed4e759 ;
+}
 
 /*
 ### PARAMETRAGE DU DATATABLE 
