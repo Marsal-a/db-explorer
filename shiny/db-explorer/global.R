@@ -191,7 +191,7 @@ logger <- function(path_out){
 
 
 
-tab_title_removable <- function(name, type = "data", removeInputName) {
+tab_title_removable <- function(name, removeInputName) {
   tags$span(
     name,
     tags$span(icon("remove"),
@@ -203,4 +203,13 @@ tab_title_removable <- function(name, type = "data", removeInputName) {
   
 }
 
-
+inputLabelWithHelper <- function(name){
+  tags$span(
+    name,
+    tags$span(icon("question-circle"),style = "margin-left: 5px;")
+  )
+}
+#   
+# selectInput("A","Sélection de la base :", choices = c("Select database to explore"="",db_choices))
+# 
+# selectInput("A",inputLabelWithHelper("Sélection de la base :"), choices = c("Select database to explore"="",db_choices))

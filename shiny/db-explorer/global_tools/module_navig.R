@@ -167,7 +167,7 @@ viewTabServer <- function(id,parent_session,logins){
         wellPanel(
           
           returnTextAreaInput(NS(id,"navig_data_filter"),
-                              label = "Filtrer la table :",
+                              label = inputLabelWithHelper("Filtrer la table :"),
                               value = "",
                               rows=2,
                               placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
@@ -176,9 +176,22 @@ viewTabServer <- function(id,parent_session,logins){
             column(width = 10,actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
             column(width = 2,actionLink(NS(id,"navig_help_filter"), "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
           ),
-          checkboxInput(NS(id,"navig_filterByClick"), "Cliquer pour filtrer?", value = F),
+          fluidRow(
+            column(width = 10,checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer?", value = F)),
+            column(width = 2,actionLink(NS(id,"navig_help_cliquerFiltrer"),"",icon = icon("question-circle", verify_fa = FALSE)))
+          ),
+          # checkboxInput(NS(id,"navig_filterByClick"), "Cliquer pour filtrer?", value = F),
           checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres?", value = F)
         )
+      })
+      
+      observeEvent(input$navig_help_cliquerFiltrer,{
+        showModal(modalDialog(
+          tags$iframe(src="help/cliquerPourFiltrer.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+          # includeHTML("tools/help/help_filters.html"),
+          size="l",
+          easyClose = TRUE
+        ))
       })
       
       observeEvent(input$navig_help_filter,{
