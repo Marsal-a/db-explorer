@@ -52,7 +52,7 @@ netezza_objects <- list(
         
         return(all_tables)
         
-      }) %>% bindCache(con)
+      }) %>% bindCache(con,cache = "session")
       return(React)
     }
     tables <- NAVIG_all_nz_tables_function(con)() %>% filter(DBNAME==dbname) %>% pull(OBJNAME)
