@@ -10,7 +10,7 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_filter_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
@@ -167,7 +167,8 @@ viewTabServer <- function(id,parent_session,logins){
         wellPanel(
           
           returnTextAreaInput(NS(id,"navig_data_filter"),
-                              label = inputLabelWithHelper("Filtrer la table :"),
+                              # label = inputLabelWithHelper("Filtrer la table :","helper"),
+                              label = "Filtrer la table :",
                               value = "",
                               rows=2,
                               placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
@@ -178,7 +179,7 @@ viewTabServer <- function(id,parent_session,logins){
           ),
           fluidRow(
             column(width = 10,checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer?", value = F)),
-            column(width = 2,actionLink(NS(id,"navig_help_cliquerFiltrer"),"",icon = icon("question-circle", verify_fa = FALSE)))
+            # column(width = 2,actionLink(NS(id,"navig_help_cliquerFiltrer"),"",icon = icon("question-circle", verify_fa = FALSE)))
           ),
           # checkboxInput(NS(id,"navig_filterByClick"), "Cliquer pour filtrer?", value = F),
           checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres?", value = F)
@@ -195,6 +196,7 @@ viewTabServer <- function(id,parent_session,logins){
       })
       
       observeEvent(input$navig_help_filter,{
+        browser()
         showModal(modalDialog(
           tags$iframe(src="help/help_filters.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
           # includeHTML("tools/help/help_filters.html"),

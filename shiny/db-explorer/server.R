@@ -18,6 +18,11 @@ shinyServer(function(input, output, session) {
     stopApp()
   })
   
+  observeEvent(c(input$changed,input$changed_value),{
+    print(input$changed)
+    print(input$changed_value)
+  })
+  
   current_time<-reactiveTimer()
 
   observeEvent(input$changed_value,{
