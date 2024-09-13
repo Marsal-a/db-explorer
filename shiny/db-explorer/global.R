@@ -181,10 +181,9 @@ logger <- function(path_out){
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S"),
     full_l=tibble(logg_full)
   )
-
-  # write.csv(res, file = fname, row.names = T, quote = FALSE)
+  options(tibble.print_max = Inf)
   writeLines(capture.output(print(res)), con = fname)
-  
+  options(tibble.print_max = NULL)
   
 }
 
