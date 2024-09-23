@@ -165,27 +165,29 @@ viewTabServer <- function(id,parent_session,logins){
       output$ui_navig_filters <- renderUI({
         req(input$navig_table)
         wellPanel(
-          
           returnTextAreaInput(NS(id,"navig_data_filter"),
                               label = "Filtrer la table :",
+                              label_icon="question-circle",
                               value = "",
                               rows=2,
                               placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
           ),
-          fluidRow(
-            column(width = 10,actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
-            column(width = 2,actionLink(NS(id,"navig_help_filter"), "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
-          ),
-          checkboxInput(NS(id,"navig_filterByClick"), "Cliquer pour filtrer?", value = F),
-          checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres?", value = F)
+          actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+          checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer", value = F),
+          conditionalPanel(
+            condition="input.navig_filterByClick== true",
+            checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres", value = F),
+            ns=NS(id)
+          )
+          
         )
       })
       
-      observeEvent(input$navig_help_filter,{
+      observeEvent(input$navig_data_filter_icon_clicked,{
         showModal(modalDialog(
-          tags$iframe(src="help/help_filters.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
-          # includeHTML("tools/help/help_filters.html"),
-          size="l"
+          tags$iframe(src="help/helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+          size="l",
+          easyClose = TRUE
         ))
       })
       
@@ -208,7 +210,9 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           selectInput(
-            inputId   = NS(id,"navig_view_vars"), "Sélectionner les colonnes :",
+            inputId   = NS(id,"navig_view_vars"), 
+            label="Sélectionner les colonnes :",
+            # label=inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
             choices   = vars,
             selected  = vars,
             multiple  = TRUE,
