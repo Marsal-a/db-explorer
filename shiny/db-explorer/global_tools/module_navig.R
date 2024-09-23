@@ -10,7 +10,7 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_filter_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
