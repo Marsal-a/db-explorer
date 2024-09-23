@@ -213,9 +213,17 @@ tab_title_removable <- function(name, removeInputName) {
 #               "))
 #   )
 # }
-#   
-# selectInput("A","Sélection de la base :", choices = c("Select database to explore"="",db_choices))
-# 
-# selectInput("A",inputLabelWithHelper("Sélection de la base :","aze"), choices = c("Select database to explore"="",db_choices))
-# tab_title_removable("a","a")
-# inputLabelWithHelper("a","a")
+
+# inputLabelWithHelper <- function(inputId,label,icon="question-circle"){
+#   tags$div(
+#     style = "display: flex; justify-content: space-between; align-items: center",
+#     tags$label(label, `for` = inputId),
+#     tags$div(
+#       style = "text-align: right;",
+#       icon(icon, "Help Icon"),
+#       onclick = paste0("
+#               Shiny.setInputValue(\"", paste0(inputId,'_icon_clicked') , "\", \"",  "Math.random()", "\", {priority: \"event\"});
+#               "),
+#       class="help_btn"
+#     )
+#   )
