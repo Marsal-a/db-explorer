@@ -174,7 +174,12 @@ viewTabServer <- function(id,parent_session,logins){
           ),
           actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
           checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer", value = F),
-          checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres?", value = F)
+          conditionalPanel(
+            condition="input.navig_filterByClick== true",
+            checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres", value = F),
+            ns=NS(id)
+          )
+          
         )
       })
       
