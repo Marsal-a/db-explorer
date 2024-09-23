@@ -36,6 +36,15 @@
   width: calc(100% - 330px);
 }
 
+/* Couleur des boutons : */
+.help_btn  {
+  color: #5cb85c;
+  
+}
+.btn {
+  color: white;
+  background-color: #5cb85c;
+}
 
 
 
@@ -85,6 +94,7 @@
 
 
 
+/* disposition des onglets et du bouton pour ajouter des onglets */
 .nav-pills {
   margin-bottom: 8px;
 }
