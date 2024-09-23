@@ -102,9 +102,10 @@
 }
 
 .nav-pills > li:not(.active) > a {
-  background-color: #337ab712 ;
   background-color: #bed4e759 ;
 }
+
+
 
 /*
 ### PARAMETRAGE DU DATATABLE 
