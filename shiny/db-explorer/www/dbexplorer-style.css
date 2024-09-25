@@ -7,16 +7,6 @@
   height: 10px;
 }
 
-/*
-### PARAMETRAGE DU NAVBAR 
-*/
-
-/*
-form.well[role="complementary"] {
-  background-color: transparent;
-  border-color: transparent;
-}
-*/
 
 
 .well {
@@ -29,7 +19,6 @@ form.well[role="complementary"] {
   margin-top: 0;
   margin-bottom: 0;
 }
-
 
 /* Espacement les boites */
 .form-group {
@@ -47,8 +36,26 @@ form.well[role="complementary"] {
   width: calc(100% - 330px);
 }
 
+/* Couleur des boutons : */
+.help_btn  {
+  color: #5cb85c;
+  
+}
+.btn {
+  color: white;
+  background-color: #5cb85c;
+}
 
-
+/* allow all textareas and multiple-select inputs to resize vertically */
+/* have to set overflow to make resize work on Safari                   */
+/* based on https://css-tricks.com/almanac/properties/r/resize/         */
+textarea,
+select {
+  resize: vertical;
+  overflow: auto;
+  max-width: 100%;
+  font-size:13px !important;
+}
 
 
 /*
@@ -70,11 +77,6 @@ form.well[role="complementary"] {
   color: white;
 }
 
-
-.navbar-default .navbar-nav>li>a:hover, {
-    color: red !important;
-    background-color: red !important;
-}
 
 .navbar-nav > .active > a {
   color: #000091 !important;
@@ -101,6 +103,7 @@ form.well[role="complementary"] {
 
 
 
+/* disposition des onglets et du bouton pour ajouter des onglets */
 .nav-pills {
   margin-bottom: 8px;
 }
@@ -118,9 +121,10 @@ form.well[role="complementary"] {
 }
 
 .nav-pills > li:not(.active) > a {
-  background-color: #337ab712 ;
   background-color: #bed4e759 ;
 }
+
+
 
 /*
 ### PARAMETRAGE DU DATATABLE 
