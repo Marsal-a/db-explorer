@@ -260,7 +260,8 @@ viewTabServer <- function(id,parent_session,logins){
                 isolate(NAVIG_filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
               }else{
                 
-                filter_cmd <- isolate(input$navig_data_filter) %>%
+                filter_cmd <- isolate(input$navig_data_filter) %>% 
+                  fixSmartFilter() %>% 
                   preProcessFilter()
                 
                 safefilter=purrr::safely(function(tbl,filter){
