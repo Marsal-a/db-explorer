@@ -643,23 +643,27 @@ viewTabServer <- function(id,parent_session,logins){
         isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
       })
       
-      observeEvent(c(input$cellClicked,input$cellDoubleClicked),{
+      observeEvent(c(input$cellClicked),{
         
         req(input$navig_filterByClick)
         req(input$cellClicked)
-        
         
         string_filter <- c()
 
         col_name <-  names(NAVIG_displayTable())[input$ui_navig_dataviewer_cell_clicked$col+1]
         value_raw <- input$ui_navig_dataviewer_cell_clicked$value
 
-        if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
+        ### SPECIFIC SSER : with ORACLE 10, (probably same with more recent version) it is impossible to filter date
+        ### using DATE_COLUMN == 'YYYY-MM-DD', and need to use specific TO_DATE function
+        req(col_name)
+        
+        if(inherits(NAVIG_connector(),"OraConnection") & isTRUE(IsDateWithoutTime(NAVIG_displayTable()[[col_name]]))){
+          
           value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
         }else{
           value_parsed <- paste0("\"",value_raw,"\"")
         }
-
+        
         if(is.null(value_raw)){
           if(input$cellClickType=="simple"){
             string <- paste0("is.na(",col_name,")")
