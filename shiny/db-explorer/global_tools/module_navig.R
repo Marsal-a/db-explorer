@@ -170,6 +170,7 @@ viewTabServer <- function(id,parent_session,logins){
       
       output$ui_navig_filters <- renderUI({
         req(input$navig_table)
+        
         wellPanel(
           returnTextAreaInput(NS(id,"navig_data_filter"),
                               label = "Filtrer la table :",
@@ -180,14 +181,21 @@ viewTabServer <- function(id,parent_session,logins){
                               placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
           ),
           actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
-          checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer", value = F),
+          checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer", value = parent_session$options$FilterClick),
           conditionalPanel(
             condition="input.navig_filterByClick== true",
-            checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres", value = F),
+            checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres", value = parent_session$options$CumulateFilter),
             ns=NS(id)
           )
-          
         )
+      })
+      
+      observeEvent(input$navig_filterByClick,{
+        parent_session$options$FilterClick <- input$navig_filterByClick
+      })
+      
+      observeEvent(input$navig_cumulateFilters,{
+        parent_session$options$CumulateFilter <- input$navig_cumulateFilters
       })
       
       observeEvent(input$navig_data_filter_icon_clicked,{
