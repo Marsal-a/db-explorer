@@ -11,7 +11,10 @@ output:
 <br>
 Lorsque l'option `Cliquer pour filtrer` est activé, un clique sur le tableau de données déclenche le filtre :
 
-![](cliquerPourFiltrer.gif)
+- **Un clique** = Conservation valeur selectionné (== ou is.na())
+- **Un double-clique** = Exclusion de la valeur selection (!= ou !is.na())
+
+![](cliquerPourFiltrer3.gif)
 
 ## **Filtrer avec une commande manuelle**
 <br>

@@ -37,7 +37,9 @@ ui <- navbarPage(
   tabPanel("Console SQL",
            tabsetPanel(id="ConsoleSQL_tabset_panel",
                        type = "pills",
+
                        tabPanel(title="SQL_1",viewSqlUi("SQL_TAB_1"))
+
            )
   )
 )

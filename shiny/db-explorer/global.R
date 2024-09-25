@@ -196,13 +196,16 @@ logger <- function(path_out){
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S"),
     full_l=tibble(logg_full)
   )
+
   options(tibble.print_max = Inf)
   writeLines(capture.output(print(res)), con = fname)
   options(tibble.print_max = NULL)
   
 }
 
+
 tab_title_removable <- function(name, removeInputName) {
+
   tags$span(
     name,
     tags$span(icon("remove"),
@@ -239,3 +242,12 @@ tab_title_removable <- function(name, removeInputName) {
 #     )
 #   )
 # }
+
+
+IsDateWithoutTime <- function(col){
+  if (inherits(col, "POSIXct")) {
+    all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
+  } else {
+    FALSE
+  }
+}
