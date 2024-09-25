@@ -505,14 +505,6 @@ viewTabServer <- function(id,parent_session,logins){
         fbox <- "none"
         ## for rounding
 
-        IsDateWithoutTime <- function(col){
-          if (inherits(col, "POSIXct")) {
-            all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
-          } else {
-            FALSE
-          }
-        }
-        
         dat <- dat %>% mutate(across(where(~IsDateWithoutTime(.)),~as.Date(format(., "%Y-%m-%d"))))
         
         dec <- input$view_dec %>%
@@ -523,7 +515,6 @@ viewTabServer <- function(id,parent_session,logins){
         columnCliked = NS(id,"columnClicked")
         
         cellClicked = NS(id,"cellClicked")
-        cellDoubleClicked = NS(id,"cellDoubleClicked")
         cellClickType = NS(id,"cellClickType")
         
         withProgress(
@@ -679,44 +670,19 @@ viewTabServer <- function(id,parent_session,logins){
           }
 
         }
-
         string_filter[1] <- string
-        
-        # for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
-          # col_name <- names(NAVIG_displayTable())[input$ui_navig_dataviewer_cells_selected[row,2]+1]
-          # value_raw <- NAVIG_displayTable()[input$ui_navig_dataviewer_cells_selected[row,1],input$ui_navig_dataviewer_cells_selected[row,2]+1] %>% pull(col_name)
-        #   
-        #   
-        #   ## Specific Oracle et filtre de date : 
-        #   if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
-        #     value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
-        #     
-        #   }else{
-        #     value_parsed <- paste0("\"",value_raw,"\"")
-        #   }
-        #   
-        #   if(is.na(value_raw)){
-        #     string <- paste0("is.na(",col_name,")")
-        #   }else{
-        #     string <- paste0(col_name," == ",value_parsed)
-        #   }
-        #   
-        #   
-        #   string_filter[row]<-string
-        # }
         
         current_filter=strsplit(input$navig_data_filter," &\n")[[1]]
         if(input$navig_cumulateFilters){
           string_filter=unique(c(current_filter,string_filter))
         }
-        
         str <- paste0(string_filter,collapse = " &\n")
         updateTextAreaInput(session,inputId = "navig_data_filter",value =str)
         
+        ## Besoin de reset le cellClicked car sinon on ne peut pas recliquer sur une celulle en meme position
         session$sendCustomMessage(type="resetShinyInput",list(input_name=NS(id,"cellClicked"),input_value=""))
         ## On position le curseur sur le filtre de données
         session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
-        
       })      
       
       NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
