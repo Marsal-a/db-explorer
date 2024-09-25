@@ -242,3 +242,12 @@ tab_title_removable <- function(name, removeInputName) {
 #     )
 #   )
 # }
+
+
+IsDateWithoutTime <- function(col){
+  if (inherits(col, "POSIXct")) {
+    all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
+  } else {
+    FALSE
+  }
+}
