@@ -539,48 +539,50 @@ viewTabServer <- function(id,parent_session,logins){
             ),
             caption = caption,
             ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155,
-            callback=DT::JS(c(glue::glue(
-              "table.on('dblclick', 'td',
-                  function() {{
-                            var row = table.cell(this).index().row;
-                            var col = table.cell(this).index().column;
-                            
-                            console.log('{cellClicked}');
-                            clearTimeout(clickTimer);
-                            Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
-                            Shiny.setInputValue('{cellClickType}','double')
-                            // Prevent the click event from being triggered
-                            event.stopPropagation();
-                }}
-              );"),
+            callback=DT::JS(c(
+              "var clickTimer = null;",
               glue::glue(
-                "table.on('click', 'td',
-                  function() {{
-                            var row = table.cell(this).index().row;
-                            var col = table.cell(this).index().column;
-                            
-                            clickTimer = setTimeout(function() {{
-                              console.log('{cellClicked}');
-                              Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
-                              Shiny.setInputValue('{cellClickType}','simple')
-                            }}, 300); 
-                            
-                            
-                }}
-              );"),
+                "table.on('click', 'td', function() {{
+                    var row = table.cell(this).index().row;
+                    var col = table.cell(this).index().column;
+                    
+                    if (clickTimer === null) {{
+                      clickTimer = setTimeout(function() {{
+                        clickTimer = null;
+                        console.log('{cellClicked}');
+                        Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
+                        Shiny.setInputValue('{cellClickType}', 'simple');
+                      }}, 300);
+                    }}
+                  }});"
+              ),
+              glue::glue(
+                "table.on('dblclick', 'td', function() {{
+                    if (clickTimer !== null) {{
+                      clearTimeout(clickTimer);
+                      clickTimer = null;
+                    }}
+                    
+                    var row = table.cell(this).index().row;
+                    var col = table.cell(this).index().column;
+                    
+                    console.log('{cellClicked}');
+                    Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
+                    Shiny.setInputValue('{cellClickType}', 'double');
+                  }});"),
               glue::glue("table.on('init.dt', function() {{
-                table.table().header().addEventListener('click', function(event) {{
-                  var target = event.target;
-                  console.log($(this));
-                  if (target.tagName === 'TH') {{
-                    console.log('p1');
-                    console.log('{columnCliked}')
-                    var colIdx = $(target).index();
-                    var colName = table.column(colIdx).header().innerHTML;
-                    Shiny.setInputValue('{columnCliked}', colName);
-                  }}
-                }});
-              });")
+                        table.table().header().addEventListener('click', function(event) {{
+                          var target = event.target;
+                          console.log($(this));
+                          if (target.tagName === 'TH') {{
+                            console.log('p1');
+                            console.log('{columnCliked}')
+                            var colIdx = $(target).index();
+                            var colName = table.column(colIdx).header().innerHTML;
+                            Shiny.setInputValue('{columnCliked}', colName);
+                          }}
+                        }});
+                      });")
             )),
             selection = list(target = 'cell')
           )
@@ -630,15 +632,15 @@ viewTabServer <- function(id,parent_session,logins){
       
       observeEvent(c(input$cellClicked,input$cellDoubleClicked),{
         
-        # browser()
         req(input$navig_filterByClick)
+        req(input$cellClicked)
         
         
         string_filter <- c()
-        
+
         col_name <-  names(NAVIG_displayTable())[input$ui_navig_dataviewer_cell_clicked$col+1]
         value_raw <- input$ui_navig_dataviewer_cell_clicked$value
-        
+
         if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
           value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
         }else{
@@ -647,20 +649,20 @@ viewTabServer <- function(id,parent_session,logins){
 
         if(is.null(value_raw)){
           if(input$cellClickType=="simple"){
-            string <- paste0("is.na(",col_name,")")  
+            string <- paste0("is.na(",col_name,")")
           }else{
-            string <- paste0("!is.na(",col_name,")")  
+            string <- paste0("!is.na(",col_name,")")
           }
-          
+
         }else{
           if(input$cellClickType=="simple"){
-            string <- paste0(col_name," == ",value_parsed)  
+            string <- paste0(col_name," == ",value_parsed)
           }else{
-            string <- paste0(col_name," != ",value_parsed)  
+            string <- paste0(col_name," != ",value_parsed)
           }
-          
+
         }
-        
+
         string_filter[1] <- string
         
         # for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
@@ -694,17 +696,13 @@ viewTabServer <- function(id,parent_session,logins){
         str <- paste0(string_filter,collapse = " &\n")
         updateTextAreaInput(session,inputId = "navig_data_filter",value =str)
         
-        # session$sendCustomMessage(type="reset_cell_clicked",NS(id,"cellClicked"))
+        session$sendCustomMessage(type="resetShinyInput",list(input_name=NS(id,"cellClicked"),input_value=""))
         ## On position le curseur sur le filtre de données
         session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
         
       })      
       
       NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
-      
-      observeEvent(input$cellDoubleClicked,{
-        # browser()
-      })
       
       observeEvent(input$columnClicked,{
         #### Cet observeur écoute les cliques sur les entetes de colonnes du tableau principal.
