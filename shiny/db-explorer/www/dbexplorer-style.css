@@ -7,16 +7,6 @@
   height: 10px;
 }
 
-/*
-### PARAMETRAGE DU NAVBAR 
-*/
-
-/*
-form.well[role="complementary"] {
-  background-color: transparent;
-  border-color: transparent;
-}
-*/
 
 
 .well {
@@ -29,7 +19,6 @@ form.well[role="complementary"] {
   margin-top: 0;
   margin-bottom: 0;
 }
-
 
 /* Espacement les boites */
 .form-group {
@@ -47,6 +36,15 @@ form.well[role="complementary"] {
   width: calc(100% - 330px);
 }
 
+/* Couleur des boutons : */
+.help_btn  {
+  color: #5cb85c;
+  
+}
+.btn {
+  color: white;
+  background-color: #5cb85c;
+}
 
 
 
@@ -71,11 +69,6 @@ form.well[role="complementary"] {
 }
 
 
-.navbar-default .navbar-nav>li>a:hover, {
-    color: red !important;
-    background-color: red !important;
-}
-
 .navbar-nav > .active > a {
   color: #000091 !important;
   background-color:white !important;
@@ -99,9 +92,29 @@ form.well[role="complementary"] {
   min-height:750px;
 }
 
+
+
+/* disposition des onglets et du bouton pour ajouter des onglets */
 .nav-pills {
   margin-bottom: 8px;
 }
+
+.nav-pills>li+li{
+  margin-left: 8px;
+}
+
+.nav-pills > .list_button {
+  padding: 0px 0px;
+  transform: scale(1);
+}
+.nav-pills > .list_button > button {
+  padding: 9px 15px;
+}
+
+.nav-pills > li:not(.active) > a {
+  background-color: #bed4e759 ;
+}
+
 
 
 /*

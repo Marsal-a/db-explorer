@@ -108,16 +108,31 @@ is_not <- function(x) {
 ################################################################
 
 ## textarea where the return key submits the content
-returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
+returnTextAreaInput <- function(inputId, label = NULL, label_icon=NULL, rows = 2,
                                 placeholder = NULL, resize = "vertical",
                                 value = "") {
-  ## avoid all sorts of 'helpful' behavior from your browser
-  ## see https://stackoverflow.com/a/35514029/1974918
+  
+  
+  if (is.null(label_icon)) {
+    label_element <- tags$label(label, `for` = inputId)
+  } else {
+    label_element <- tags$div(
+      style = "display: flex; justify-content: space-between; align-items: center",
+      tags$label(label, `for` = inputId),
+      tags$div(
+        style = "text-align: right;margin-bottom: 5px",
+        icon(label_icon, "Help Icon"),
+        onclick = paste0("
+              Shiny.setInputValue(\"", paste0(inputId,'_icon_clicked') , "\", \"",  "Math.random()", "\", {priority: \"event\"});
+              "),
+        class="help_btn"
+      )
+    )
+  }
+
   tagList(
     tags$div(
-      # using containing element based on
-      # https://github.com/niklasvh/html2canvas/issues/2008#issuecomment-1445503369
-      tags$label(label, `for` = inputId), br(),
+      label_element,
       tags$textarea(
         value,
         id = inputId,
@@ -182,16 +197,15 @@ logger <- function(path_out){
     full_l=tibble(logg_full)
   )
 
-  # write.csv(res, file = fname, row.names = T, quote = FALSE)
+  options(tibble.print_max = Inf)
   writeLines(capture.output(print(res)), con = fname)
-  
+  options(tibble.print_max = NULL)
   
 }
 
 
+tab_title_removable <- function(name, removeInputName) {
 
-
-tab_title_removable <- function(name, type = "data", removeInputName) {
   tags$span(
     name,
     tags$span(icon("remove"),
@@ -203,4 +217,28 @@ tab_title_removable <- function(name, type = "data", removeInputName) {
   
 }
 
+# inputLabelWithHelper <- function(name,triggerdInput){
+#   tags$span(
+#     name,
+#     tags$span(icon("question-circle"),
+#               style = "margin-left: 5px;",
+#               onclick = paste0("
+#               Shiny.setInputValue(\"", triggerdInput , "\", \"",  "Math.random()", "\", {priority: \"event\"});
+#               "))
+#   )
+# }
 
+# inputLabelWithHelper <- function(inputId,label,icon="question-circle"){
+#   tags$div(
+#     style = "display: flex; justify-content: space-between; align-items: center",
+#     tags$label(label, `for` = inputId),
+#     tags$div(
+#       style = "text-align: right;",
+#       icon(icon, "Help Icon"),
+#       onclick = paste0("
+#               Shiny.setInputValue(\"", paste0(inputId,'_icon_clicked') , "\", \"",  "Math.random()", "\", {priority: \"event\"});
+#               "),
+#       class="help_btn"
+#     )
+#   )
+# }

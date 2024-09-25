@@ -31,13 +31,15 @@ ui <- navbarPage(
 
            tabsetPanel(id="Navig_tabset_panel",
                        type = "pills",
-                       tabPanel(title = "Table_1",viewTabUi("Onglet_1"))
+                       tabPanel(title = "Table_1",viewTabUi("NAVIG_TAB_1"))
            )
   ),
   tabPanel("Console SQL",
            tabsetPanel(id="ConsoleSQL_tabset_panel",
                        type = "pills",
-                       tabPanel(title="SQL_1",viewSqlUi("Onglet_1"))
+
+                       tabPanel(title="SQL_1",viewSqlUi("SQL_TAB_1"))
+
            )
   )
 )
