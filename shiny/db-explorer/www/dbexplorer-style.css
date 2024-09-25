@@ -46,7 +46,16 @@
   background-color: #5cb85c;
 }
 
-
+/* allow all textareas and multiple-select inputs to resize vertically */
+/* have to set overflow to make resize work on Safari                   */
+/* based on https://css-tricks.com/almanac/properties/r/resize/         */
+textarea,
+select {
+  resize: vertical;
+  overflow: auto;
+  max-width: 100%;
+  font-size:13px !important;
+}
 
 
 /*
