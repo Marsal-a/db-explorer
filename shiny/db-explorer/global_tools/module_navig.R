@@ -217,13 +217,10 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           selectInput(
-<<<<<<< HEAD
-            inputId   = NS(id,"navig_view_vars"), "Sélectionner les colonnes :",
-=======
+
             inputId   = NS(id,"navig_view_vars"), 
             label="Sélectionner les colonnes :",
             # label=inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
->>>>>>> master
             choices   = vars,
             selected  = vars,
             multiple  = TRUE,
