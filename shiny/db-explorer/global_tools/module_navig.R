@@ -175,6 +175,7 @@ viewTabServer <- function(id,parent_session,logins){
           returnTextAreaInput(NS(id,"navig_data_filter"),
                               label = "Filtrer la table :",
                               value = "",
+                              resize="vertical",
                               rows=2,
                               placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
           ),
@@ -246,47 +247,14 @@ viewTabServer <- function(id,parent_session,logins){
                 isolate(NAVIG_filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
               }else{
                 
-                # browser()
-                
                 filter_cmd <- isolate(input$navig_data_filter) %>%
-                  gsub("\\n", "", .) %>%
-                  gsub("'", "\\\\'", .) %>%
-                  gsub("\"", "\'", .) %>%
-                  fix_smart() %>% 
-                  stringr::str_trim("both") %>% 
-                  stringr::str_squish()
-                
-                
-                if(inherits(NAVIG_connector(),"OraConnection")){
-                  
-                  
-                  decomp_filter=decompose_filter(filter_cmd)
-                  
-                  recomposed_filter=list()
-                  
-                  recomposed_filter=purrr::map(decomp_filter, function(filter_components){
-                    
-                    # browser()
-                    if(get_class(prepared_data %>% head(10) %>% collect())[filter_components$column]=="date"){
-                      recomposed_filter=paste0(filter_components$column,
-                                               filter_components$operator,
-                                               "sql(\"TO_DATE('",filter_components$value,"', 'YYYY-MM-DD')","\")")
-                    }else{
-                      recomposed_filter=paste0(filter_components$column,
-                                               filter_components$operator,
-                                               paste0("'",filter_components$value,"'"))
-                    }
-                    
-                  })
-                }
-                recomposed_filter=paste(unlist(recomposed_filter),collapse = " & ")
-                # browser()
+                  preProcessFilter()
                 
                 safefilter=purrr::safely(function(tbl,filter){
                   tbl %>%
                     (function(x) if (!is.empty(filter)) x %>% filter(!!rlang::parse_expr(filter)) else x)
                 })
-                filtered_data <- safefilter(prepared_data,recomposed_filter)
+                filtered_data <- safefilter(prepared_data,filter_cmd)
                 
                 if(is.null(filtered_data$error)){
                   isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
@@ -539,7 +507,11 @@ viewTabServer <- function(id,parent_session,logins){
         
         caption <- if (is.empty(input$view_tab_slice)) NULL else htmltools::tags$caption(glue("Table slice {input$view_tab_slice} will be applied on Download, Store, or Report"))
         
-        columnclik = NS(id,"columnClicked")
+        columnCliked = NS(id,"columnClicked")
+        
+        cellClicked = NS(id,"cellClicked")
+        cellDoubleClicked = NS(id,"cellDoubleClicked")
+        cellClickType = NS(id,"cellClickType")
         
         withProgress(
           message = "Generating view table", value = 1,
@@ -567,24 +539,45 @@ viewTabServer <- function(id,parent_session,logins){
             ),
             caption = caption,
             ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155,
-            callback=DT::JS(c(
+            callback=DT::JS(c(glue::glue(
               "table.on('dblclick', 'td',
-                  function() {
+                  function() {{
                             var row = table.cell(this).index().row;
                             var col = table.cell(this).index().column;
-                            Shiny.setInputValue('NAVIG_dt_dblclick', {dt_row: row, dt_col: col});
-                }
-              );",
+                            
+                            console.log('{cellClicked}');
+                            clearTimeout(clickTimer);
+                            Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
+                            Shiny.setInputValue('{cellClickType}','double')
+                            // Prevent the click event from being triggered
+                            event.stopPropagation();
+                }}
+              );"),
+              glue::glue(
+                "table.on('click', 'td',
+                  function() {{
+                            var row = table.cell(this).index().row;
+                            var col = table.cell(this).index().column;
+                            
+                            clickTimer = setTimeout(function() {{
+                              console.log('{cellClicked}');
+                              Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
+                              Shiny.setInputValue('{cellClickType}','simple')
+                            }}, 300); 
+                            
+                            
+                }}
+              );"),
               glue::glue("table.on('init.dt', function() {{
                 table.table().header().addEventListener('click', function(event) {{
                   var target = event.target;
                   console.log($(this));
                   if (target.tagName === 'TH') {{
                     console.log('p1');
-                    console.log('{columnclik}')
+                    console.log('{columnCliked}')
                     var colIdx = $(target).index();
                     var colName = table.column(colIdx).header().innerHTML;
-                    Shiny.setInputValue('{columnclik}', colName);
+                    Shiny.setInputValue('{columnCliked}', colName);
                   }}
                 }});
               });")
@@ -635,28 +628,63 @@ viewTabServer <- function(id,parent_session,logins){
         isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
       })
       
-      observeEvent(input$ui_navig_dataviewer_cells_selected,{
+      observeEvent(c(input$cellClicked,input$cellDoubleClicked),{
         
-        req(input$ui_navig_dataviewer_cells_selected)
-        req(input$navig_filterByClick)
         # browser()
+        req(input$navig_filterByClick)
+        
+        
         string_filter <- c()
-        for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
-          col_name <- names(NAVIG_displayTable())[input$ui_navig_dataviewer_cells_selected[row,2]+1]
-          value <- NAVIG_displayTable()[input$ui_navig_dataviewer_cells_selected[row,1],input$ui_navig_dataviewer_cells_selected[row,2]+1] %>% pull(col_name)
-          
-          
-          ## Specific Oracle et filtre de date : 
-          # if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
-          #   value=paste0("sql(\"TO_DATE('",value,"', 'YYYY-MM-DD')","\")")
-          #   # sql("TO_DATE('2022-01-01','YYYY-MM-DD')")
-          # }else{
-          #   value <- paste0("\"",value,"\"")
-          # }
-          value <- paste0("\"",value,"\"")
-          string <- paste0(col_name,"==",value)
-          string_filter[row]<-string
+        
+        col_name <-  names(NAVIG_displayTable())[input$ui_navig_dataviewer_cell_clicked$col+1]
+        value_raw <- input$ui_navig_dataviewer_cell_clicked$value
+        
+        if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
+          value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
+        }else{
+          value_parsed <- paste0("\"",value_raw,"\"")
         }
+
+        if(is.null(value_raw)){
+          if(input$cellClickType=="simple"){
+            string <- paste0("is.na(",col_name,")")  
+          }else{
+            string <- paste0("!is.na(",col_name,")")  
+          }
+          
+        }else{
+          if(input$cellClickType=="simple"){
+            string <- paste0(col_name," == ",value_parsed)  
+          }else{
+            string <- paste0(col_name," != ",value_parsed)  
+          }
+          
+        }
+        
+        string_filter[1] <- string
+        
+        # for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
+          # col_name <- names(NAVIG_displayTable())[input$ui_navig_dataviewer_cells_selected[row,2]+1]
+          # value_raw <- NAVIG_displayTable()[input$ui_navig_dataviewer_cells_selected[row,1],input$ui_navig_dataviewer_cells_selected[row,2]+1] %>% pull(col_name)
+        #   
+        #   
+        #   ## Specific Oracle et filtre de date : 
+        #   if(inherits(NAVIG_connector(),"OraConnection") & get_class(NAVIG_displayTable())[col_name]=="date"){
+        #     value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
+        #     
+        #   }else{
+        #     value_parsed <- paste0("\"",value_raw,"\"")
+        #   }
+        #   
+        #   if(is.na(value_raw)){
+        #     string <- paste0("is.na(",col_name,")")
+        #   }else{
+        #     string <- paste0(col_name," == ",value_parsed)
+        #   }
+        #   
+        #   
+        #   string_filter[row]<-string
+        # }
         
         current_filter=strsplit(input$navig_data_filter," &\n")[[1]]
         if(input$navig_cumulateFilters){
@@ -666,12 +694,17 @@ viewTabServer <- function(id,parent_session,logins){
         str <- paste0(string_filter,collapse = " &\n")
         updateTextAreaInput(session,inputId = "navig_data_filter",value =str)
         
+        # session$sendCustomMessage(type="reset_cell_clicked",NS(id,"cellClicked"))
         ## On position le curseur sur le filtre de données
         session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
         
       })      
       
       NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
+      
+      observeEvent(input$cellDoubleClicked,{
+        # browser()
+      })
       
       observeEvent(input$columnClicked,{
         #### Cet observeur écoute les cliques sur les entetes de colonnes du tableau principal.
