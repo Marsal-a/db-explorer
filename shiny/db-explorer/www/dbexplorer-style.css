@@ -7,6 +7,9 @@
   height: 10px;
 }
 
+.control-label {
+    width:100%;
+}
 
 
 .well {

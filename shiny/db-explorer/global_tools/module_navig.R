@@ -173,8 +173,7 @@ viewTabServer <- function(id,parent_session,logins){
         
         wellPanel(
           returnTextAreaInput(NS(id,"navig_data_filter"),
-                              label = "Filtrer la table :",
-                              label_icon="question-circle",
+                              label=inputLabelWithHelper(NS(id,"navig_data_filter"),"Filtrer la table :"),
                               value = "",
                               resize="vertical",
                               rows=2,
@@ -200,7 +199,7 @@ viewTabServer <- function(id,parent_session,logins){
       
       observeEvent(input$navig_data_filter_icon_clicked,{
         showModal(modalDialog(
-          tags$iframe(src="help/helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+          tags$iframe(src="help/filter_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
           size="l",
           easyClose = TRUE
         ))
@@ -225,15 +224,21 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           selectInput(
-
             inputId   = NS(id,"navig_view_vars"), 
-            label="Sélectionner les colonnes :",
-            # label=inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
+            label = inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
             choices   = vars,
             selected  = vars,
             multiple  = TRUE,
             selectize = FALSE, 
             size = min(20, length(vars))+1
+        ))
+      })
+      
+      observeEvent(input$navig_view_vars_icon_clicked,{
+        showModal(modalDialog(
+          tags$iframe(src="help/selectColumn_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+          size="l",
+          easyClose = TRUE
         ))
       })
       
