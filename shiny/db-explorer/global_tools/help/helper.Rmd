@@ -1,8 +1,26 @@
-#### Filtrer les données
+---
+title:
+output: 
+  html_document:
+    theme: cerulean
+---
 
-La fenêtre 'data fitler' permet d'appliquer des filtres sur les données visualisées.
+# Deux méthodes pour utiliser les filtres : {.tabset}
 
-La syntaxe est similaire à celle que l'on appliquerait dans la fonction `filter` du package **`dplyr`**   
+## **Filtrer en cliquant sur le tableau**
+<br>
+Lorsque l'option `Cliquer pour filtrer` est activé, un clique sur le tableau de données déclenche le filtre :
+
+- **Un clique** = Conservation valeur selectionné (== ou is.na())
+- **Un double-clique** = Exclusion de la valeur selection (!= ou !is.na())
+
+![](cliquerPourFiltrer3.gif)
+
+## **Filtrer avec une commande manuelle**
+<br>
+Il est également possible de saisir manuellement des filtres dans la fenêtre de saisie des filtres.
+
+La syntaxe est similaire à celle que l'on appliquerait dans la fonction `filter` du package **`dplyr`**\
 Ici sont présentés quelques exemples de syntaxes à faire et à éviter :
 
 <p>
@@ -18,7 +36,7 @@ Ici sont présentés quelques exemples de syntaxes à faire et à éviter :
 +------------------------------------------------------+---------------------------------------+
 | ```{=html}                                           | ```{=html}                            |
 | <pre>                                                | <pre>                                 |
-| PER_ID==123456<br>E_IELST==123                       | PER_ID=123456<br>E_IELST=123   |
+| PER_ID==123456<br>E_IELST==123                       | PER_ID=123456<br>E_IELST=123          |
 | </pre>                                               | </pre>                                |
 | ```                                                  | ```                                   |
 | **Filtrer sur une liste de valeurs :**               |                                       |
@@ -35,7 +53,7 @@ Ici sont présentés quelques exemples de syntaxes à faire et à éviter :
 | <pre>                                                |  <pre>                                |
 | COL_TEXTE %like% "%pattern%"                         | COL_TEXTE %like% "pattern"            |
 | sql("COL_TEXTE like '%pattern%'")                    | COL_TEXTE like "%pattern%"            |
-|                                                      | COL_TEXTE CONTAINS "%pattern%"        |
-| </pre>                                               | </pre>                                |
-| ```                                                  | ```                                   |
+| </pre>                                               | COL_TEXTE CONTAINS "%pattern%"        |
+| ```                                                  | </pre>                                |
+|                                                      | ```                                   |
 +------------------------------------------------------+---------------------------------------+

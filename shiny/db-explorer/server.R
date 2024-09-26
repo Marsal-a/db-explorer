@@ -31,11 +31,15 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  session$options$FilterClick    <- FALSE
+  session$options$CumulateFilter <- FALSE
+  
   logins <- reactiveValues()
   
   viewTabServer("NAVIG_TAB_1",parent_session=session,logins=logins)
-  
+
   viewSqlServer("SQL_TAB_1",parent_session=session,logins=logins)
+
   
   rv <- reactiveValues(
     logg_full = c()

@@ -36,6 +36,12 @@ viewTabServer <- function(id,parent_session,logins){
     id = id,
     module = function(input,output,session){
       
+      
+      for (file in list.files(c("server_tools/navig_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
+        source(file, encoding = enc, local = TRUE)
+      }
+      
+      
       ### WORKS : 
       shinyjs::runjs(sprintf("
         $(document).keyup(function(event) {
@@ -164,28 +170,39 @@ viewTabServer <- function(id,parent_session,logins){
       
       output$ui_navig_filters <- renderUI({
         req(input$navig_table)
+        
         wellPanel(
-          
           returnTextAreaInput(NS(id,"navig_data_filter"),
                               label = "Filtrer la table :",
+                              label_icon="question-circle",
                               value = "",
+                              resize="vertical",
                               rows=2,
                               placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
           ),
-          fluidRow(
-            column(width = 10,actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black")),
-            column(width = 2,actionLink(NS(id,"navig_help_filter"), "", icon = icon("question-circle", verify_fa = FALSE), style = "color:#4b8a8c"))
-          ),
-          checkboxInput(NS(id,"navig_filterByClick"), "Cliquer pour filtrer?", value = F),
-          checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres?", value = F)
+          actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+          checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer", value = parent_session$options$FilterClick),
+          conditionalPanel(
+            condition="input.navig_filterByClick== true",
+            checkboxInput(NS(id,"navig_cumulateFilters"), "Accumuler filtres", value = parent_session$options$CumulateFilter),
+            ns=NS(id)
+          )
         )
       })
       
-      observeEvent(input$navig_help_filter,{
+      observeEvent(input$navig_filterByClick,{
+        parent_session$options$FilterClick <- input$navig_filterByClick
+      })
+      
+      observeEvent(input$navig_cumulateFilters,{
+        parent_session$options$CumulateFilter <- input$navig_cumulateFilters
+      })
+      
+      observeEvent(input$navig_data_filter_icon_clicked,{
         showModal(modalDialog(
-          tags$iframe(src="help/help_filters.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
-          # includeHTML("tools/help/help_filters.html"),
-          size="l"
+          tags$iframe(src="help/helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+          size="l",
+          easyClose = TRUE
         ))
       })
       
@@ -208,7 +225,10 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           selectInput(
-            inputId   = NS(id,"navig_view_vars"), "Sélectionner les colonnes :",
+
+            inputId   = NS(id,"navig_view_vars"), 
+            label="Sélectionner les colonnes :",
+            # label=inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
             choices   = vars,
             selected  = vars,
             multiple  = TRUE,
@@ -239,11 +259,10 @@ viewTabServer <- function(id,parent_session,logins){
               if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
                 isolate(NAVIG_filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
               }else{
-                filter_cmd <- isolate(input$navig_data_filter) %>%
-                  gsub("\\n", "", .) %>%
-                  gsub("'", "\\\\'", .) %>%
-                  gsub("\"", "\'", .) %>%
-                  fix_smart()
+                
+                filter_cmd <- isolate(input$navig_data_filter) %>% 
+                  fixSmartFilter() %>% 
+                  preProcessFilter()
                 
                 safefilter=purrr::safely(function(tbl,filter){
                   tbl %>%
@@ -487,14 +506,6 @@ viewTabServer <- function(id,parent_session,logins){
         fbox <- "none"
         ## for rounding
 
-        IsDateWithoutTime <- function(col){
-          if (inherits(col, "POSIXct")) {
-            all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
-          } else {
-            FALSE
-          }
-        }
-        
         dat <- dat %>% mutate(across(where(~IsDateWithoutTime(.)),~as.Date(format(., "%Y-%m-%d"))))
         
         dec <- input$view_dec %>%
@@ -502,7 +513,10 @@ viewTabServer <- function(id,parent_session,logins){
         
         caption <- if (is.empty(input$view_tab_slice)) NULL else htmltools::tags$caption(glue("Table slice {input$view_tab_slice} will be applied on Download, Store, or Report"))
         
-        columnclik = NS(id,"columnClicked")
+        columnCliked = NS(id,"columnClicked")
+        
+        cellClicked = NS(id,"cellClicked")
+        cellClickType = NS(id,"cellClickType")
         
         withProgress(
           message = "Generating view table", value = 1,
@@ -531,26 +545,49 @@ viewTabServer <- function(id,parent_session,logins){
             caption = caption,
             ## https://github.com/rstudio/DT/issues/146#issuecomment-534319155,
             callback=DT::JS(c(
-              "table.on('dblclick', 'td',
-                  function() {
-                            var row = table.cell(this).index().row;
-                            var col = table.cell(this).index().column;
-                            Shiny.setInputValue('NAVIG_dt_dblclick', {dt_row: row, dt_col: col});
-                }
-              );",
+              "var clickTimer = null;",
+              glue::glue(
+                "table.on('click', 'td', function() {{
+                    var row = table.cell(this).index().row;
+                    var col = table.cell(this).index().column;
+                    
+                    if (clickTimer === null) {{
+                      clickTimer = setTimeout(function() {{
+                        clickTimer = null;
+                        console.log('{cellClicked}');
+                        Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
+                        Shiny.setInputValue('{cellClickType}', 'simple');
+                      }}, 300);
+                    }}
+                  }});"
+              ),
+              glue::glue(
+                "table.on('dblclick', 'td', function() {{
+                    if (clickTimer !== null) {{
+                      clearTimeout(clickTimer);
+                      clickTimer = null;
+                    }}
+                    
+                    var row = table.cell(this).index().row;
+                    var col = table.cell(this).index().column;
+                    
+                    console.log('{cellClicked}');
+                    Shiny.setInputValue('{cellClicked}', {{dt_row: row, dt_col: col}});
+                    Shiny.setInputValue('{cellClickType}', 'double');
+                  }});"),
               glue::glue("table.on('init.dt', function() {{
-                table.table().header().addEventListener('click', function(event) {{
-                  var target = event.target;
-                  console.log($(this));
-                  if (target.tagName === 'TH') {{
-                    console.log('p1');
-                    console.log('{columnclik}')
-                    var colIdx = $(target).index();
-                    var colName = table.column(colIdx).header().innerHTML;
-                    Shiny.setInputValue('{columnclik}', colName);
-                  }}
-                }});
-              });")
+                        table.table().header().addEventListener('click', function(event) {{
+                          var target = event.target;
+                          console.log($(this));
+                          if (target.tagName === 'TH') {{
+                            console.log('p1');
+                            console.log('{columnCliked}')
+                            var colIdx = $(target).index();
+                            var colName = table.column(colIdx).header().innerHTML;
+                            Shiny.setInputValue('{columnCliked}', colName);
+                          }}
+                        }});
+                      });")
             )),
             selection = list(target = 'cell')
           )
@@ -598,30 +635,56 @@ viewTabServer <- function(id,parent_session,logins){
         isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
       })
       
-      observeEvent(input$ui_navig_dataviewer_cells_selected,{
+      observeEvent(c(input$cellClicked),{
         
-        req(input$ui_navig_dataviewer_cells_selected)
         req(input$navig_filterByClick)
+        req(input$cellClicked)
         
         string_filter <- c()
-        for (row in seq_len(nrow(input$ui_navig_dataviewer_cells_selected))){
-          col_name <- names(NAVIG_displayTable())[input$ui_navig_dataviewer_cells_selected[row,2]+1]
-          value <- NAVIG_displayTable()[input$ui_navig_dataviewer_cells_selected[row,1],input$ui_navig_dataviewer_cells_selected[row,2]+1] %>% pull(col_name)
-          string <- paste0(col_name,"==\"",value,"\"")
-          string_filter[row]<-string
+
+        col_name <-  names(NAVIG_displayTable())[input$ui_navig_dataviewer_cell_clicked$col+1]
+        value_raw <- input$ui_navig_dataviewer_cell_clicked$value
+
+        ### SPECIFIC SSER : with ORACLE 10, (probably same with more recent version) it is impossible to filter date
+        ### using DATE_COLUMN == 'YYYY-MM-DD', and need to use specific TO_DATE function
+        req(col_name)
+        
+        if(inherits(NAVIG_connector(),"OraConnection") & isTRUE(IsDateWithoutTime(NAVIG_displayTable()[[col_name]]))){
+          
+          value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
+        }else{
+          value_parsed <- paste0("\"",value_raw,"\"")
         }
+        
+        if(is.null(value_raw)){
+          if(input$cellClickType=="simple"){
+            string <- paste0("is.na(",col_name,")")
+          }else{
+            string <- paste0("!is.na(",col_name,")")
+          }
+
+        }else{
+          if(input$cellClickType=="simple"){
+            string <- paste0(col_name," == ",value_parsed)
+          }else{
+            string <- paste0(col_name," != ",value_parsed)
+          }
+
+        }
+        string_filter[1] <- string
         
         current_filter=strsplit(input$navig_data_filter," &\n")[[1]]
         if(input$navig_cumulateFilters){
           string_filter=unique(c(current_filter,string_filter))
         }
-        
         str <- paste0(string_filter,collapse = " &\n")
         updateTextAreaInput(session,inputId = "navig_data_filter",value =str)
         
+        ## Besoin de reset le cellClicked car sinon on ne peut pas recliquer sur une celulle en meme position
+        session$sendCustomMessage(type="resetShinyInput",list(input_name=NS(id,"cellClicked"),input_value=""))
+        ## On position le curseur sur le filtre de données
         session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
-        
-      })
+      })      
       
       NAVIG_current_order_clicked <- reactiveVal("init_reserved_string")
       
