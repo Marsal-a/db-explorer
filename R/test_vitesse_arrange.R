@@ -3,6 +3,23 @@ source("./shiny/db-explorer/global_tools/libraries.R")
 ora <- connectOraSDSE()
 nz <- connectNzSDSE()
 
+arrange_classic <- function(connecteur,schema,table,col_order,filter=NULL){
+  
+  con <- connecteur()
+  tbl_ora_1 <- tbl(con,in_schema(schema,table))
+  
+  if(!is.null(filter)){
+    tbl_ora_1<-tbl_ora_1 %>% filter(!!rlang::parse_expr(filter))  
+  }
+  
+  df<-tbl_ora_1 %>% 
+    arrange(!!rlang::parse_expr(col_order)) %>% 
+    head(1000) %>% 
+    collect()
+  dbDisconnect(con)
+  return(df)
+  
+}
 arrange_alt1 <- function(connecteur,schema,table,col_order,filter=NULL){
   
   con <- connecteur()
@@ -30,7 +47,7 @@ arrange_alt2 <- function(connecteur,schema,table,col_order,filter=NULL){
   if(!is.null(filter)){
     tbl_ora_1<-tbl_ora_1 %>% filter(!!rlang::parse_expr(filter))  
   }
-  
+  browser()
   df <- tbl_ora_1 %>% 
     mutate(R=1) %>% 
     group_by(R) %>% 
@@ -60,6 +77,26 @@ arrange_alt3 <- function(connecteur,schema,table,col_order,filter=NULL){
   dbDisconnect(con)
   return(df)
 }
+arrange_alt4 <- function(connecteur,schema,table,col_order,filter=NULL){
+  
+  con <- connecteur()
+  
+  tbl_ora_1 <- tbl(con,in_schema(schema,table))
+  if(!is.null(filter)){
+    tbl_ora_1<-tbl_ora_1 %>% filter(!!rlang::parse_expr(filter))  
+  }
+  
+  # browser()
+  df <- tbl_ora_1 %>% 
+    window_order(!!rlang::parse_expr(col_order)) %>% 
+    mutate(n=row_number()) %>% 
+    filter(n<1000) %>% 
+    collect()
+  
+  dbDisconnect(con)
+  return(df)
+}
+
 
 alt1<-arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT")
 alt1f=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'")
@@ -67,42 +104,33 @@ alt2=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT")
 alt2f=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'")
 alt3=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT")
 alt3f=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'")
+alt4=arrange_alt4(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT")
 
 library(microbenchmark,lib.loc="~/R_Commun/Adam/custom_lib/AtelierR_data.table/")
 
 
 rbench_ora<-microbenchmark(
   alt1=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt1f=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  alt2=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt2f=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  alt3=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt3f=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  
-  times=3
-)
-
-rbench_nz<-microbenchmark(
-  alt1=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt1f=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  alt2=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt2f=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  alt3=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt3f=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
+  # alt1f=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
+  # alt2=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
+  # alt2f=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
+  # alt3=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
+  # alt3f=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
+  alt4=arrange_alt4(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
   
   times=3
 )
 
 
-rbench_pg<-microbenchmark(
-  alt1=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt1f=arrange_alt1(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  alt2=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt2f=arrange_alt2(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  alt3=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT"),
-  alt3f=arrange_alt3(connectOraSDSE,"PHAROS_V3","PHAROS_CPH","RETENT","C_TUS=='CPHN71'"),
-  
+rbench_nz <- microbenchmark(
+  arrange<-arrange_classic(connectNzSDSE,"DTL_APPI.","DCAPPI_CONDA","PER_DATE_NAISSANCE_APPI"),
+  arrange<-arrange_alt4(connectNzSDSE,"DTL_APPI.","DCAPPI_CONDA","PER_DATE_NAISSANCE_APPI"),
   times=3
 )
 
 
+tbl_ora_1 <- tbl(ora,in_schema("PHAROS_V3","PHAROS_CPH"))
+tbl_ora_1 %>% arrange(desc(RETENT)) %>%
+  mutate(seqnum = row_number()) %>% 
+  filter(seqnum<100) %>% collect()
+  show_query()
