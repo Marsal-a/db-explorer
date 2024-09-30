@@ -259,6 +259,7 @@ viewTabServer <- function(id,parent_session,logins){
           }else{
             if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
               
+
               isolate(NAVIG_errors[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
             
             }else{
@@ -318,7 +319,37 @@ viewTabServer <- function(id,parent_session,logins){
           
           prepared_tbl_lazy <- NAVIG_prepared_tbl_lazy()
           collect_tb <- function(lazy_tb,n){
+            
             collected_tb <- lazy_tb %>% head(n) %>% collect()
+            
+            con <- NAVIG_connector()
+            ## SPECIFICS SSER (Oracle 10)
+            ## La méthode de selection des lignes pour Oracle 10 utilise un where rownum<N
+            ## Lorsque combiné à un orderby, il n'est pas possible de récupérer la un résultats trié filtré sur les premieres lignes
+            ## sans recourir à une sous-requete :
+            ## https://stackoverflow.com/questions/15091849/how-to-use-oracle-order-by-and-rownum-correctly
+            ## Ce problèmes est corrigé avec Oracle >= 12 qui utilise une instruction FETCH ROWS pour filtrer les lignes
+            
+            ## dbplyr bloque également les instruction du type : 
+            ## lazy_tb %>% arrange(desc(COL)) %>%
+            ##   mutate(seqnum = row_number()) %>% 
+            ##   filter(seqnum<100) %>% collect()
+            
+            ## La commande fonctionne de manière générique mais trop peu performante 
+            # df <- tbl_ora_1 %>% 
+            #   window_order(!!rlang::parse_expr(col_order)) %>% 
+            #   mutate(n=row_number()) %>% 
+            #   filter(n<1000) %>% 
+            #   collect()
+            
+            # browser()
+            if(inherits(con,"OraConnection")){
+              if(ROracle:::.oci.ConnectionInfo(con)$serverVersion<"12"){
+                collected_tb <- dbGetQuery(con, glue::glue("SELECT * FROM ({dbplyr::remote_query(lazy_tb)}) WHERE ROWNUM < {n}"))
+              }
+            } 
+            
+            
             return(collected_tb)
           }
           
