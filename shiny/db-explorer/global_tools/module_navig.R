@@ -174,12 +174,7 @@ viewTabServer <- function(id,parent_session,logins){
         
         wellPanel(
           returnTextAreaInput(NS(id,"navig_data_filter"),
-<<<<<<< HEAD
-                              label = "Filtrer la table :",
-                              label_icon="question-circle",
-=======
                               label=inputLabelWithHelper(NS(id,"navig_data_filter"),"Filtrer la table :"),
->>>>>>> master
                               value = "",
                               resize="vertical",
                               rows=2,
@@ -205,11 +200,7 @@ viewTabServer <- function(id,parent_session,logins){
       
       observeEvent(input$navig_data_filter_icon_clicked,{
         showModal(modalDialog(
-<<<<<<< HEAD
-          tags$iframe(src="help/helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
-=======
           tags$iframe(src="help/filter_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
->>>>>>> master
           size="l",
           easyClose = TRUE
         ))
@@ -234,15 +225,8 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           selectInput(
-<<<<<<< HEAD
-
-            inputId   = NS(id,"navig_view_vars"), 
-            label="Sélectionner les colonnes :",
-            # label=inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
-=======
             inputId   = NS(id,"navig_view_vars"), 
             label = inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
->>>>>>> master
             choices   = vars,
             selected  = vars,
             multiple  = TRUE,
@@ -275,32 +259,8 @@ viewTabServer <- function(id,parent_session,logins){
           }else{
             if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
               
-<<<<<<< HEAD
-              if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
-                isolate(NAVIG_filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
-              }else{
-                
-                filter_cmd <- isolate(input$navig_data_filter) %>% 
-                  fixSmartFilter() %>% 
-                  preProcessFilter()
-                
-                safefilter=purrr::safely(function(tbl,filter){
-                  tbl %>%
-                    (function(x) if (!is.empty(filter)) x %>% filter(!!rlang::parse_expr(filter)) else x)
-                })
-                filtered_data <- safefilter(prepared_data,filter_cmd)
-                
-                if(is.null(filtered_data$error)){
-                  isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
-                  prepared_data <- filtered_data$result
-                }else{
-                  isolate(NAVIG_filter_error[["value_filter_error"]] <- paste0("Erreur dans la commande de filtre :\n",filtered_data$error$message,"\n",filtered_data$error$parent$message))
-                }
-              }
-            }
-=======
+
               isolate(NAVIG_errors[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
->>>>>>> master
             
             }else{
               
