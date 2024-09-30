@@ -144,11 +144,15 @@ viewTabServer <- function(id,parent_session,logins){
         
         tables <- NAVIG_tables()
         selectInput(NS(id,"navig_table"),
-                    "Sélection de la table :",
+                    # "Sélection de la table :",
+                    inputLabelWithHelper(NS(id,"navig_table"),"Sélection de la table :",icon="sync"),
                     choices = c('Sélectionner une table'="",tables),selected = default_table,
                     selectize=T)
       })
       
+      observeEvent(input$navig_table_icon_clicked,{
+        # browser()
+      })
       NAVIG_raw_tbl_lazy <- eventReactive(c(input$navig_table),{
         
         req(input$navig_table)
