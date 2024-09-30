@@ -8,6 +8,9 @@
 }
 
 
+.control-label {
+    width:100%;
+}
 
 .well {
   padding: 7px;

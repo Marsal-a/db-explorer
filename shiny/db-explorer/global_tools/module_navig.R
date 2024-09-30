@@ -2,13 +2,14 @@ viewTabUi <- function(id,label="Tab"){
   sidebarLayout(
     sidebarPanel(
       wellPanel(
-        selectInput(NS(id,"navig_db"),"Sélection de la base :", choices = c("Select database to explore"="",db_choices)),
+        selectInput(NS(id,"navig_db"),"Sélection de la base :", choices = c("Sélectionner une base"="",db_choices)),
         uiOutput(NS(id,"ui_navig_schemas")),
         uiOutput(NS(id,"ui_navig_tables")),
       ),
       uiOutput(NS(id,"ui_navig_filters")),
+      uiOutput(NS(id,"ui_NAVIG_errors")),
       uiOutput(NS(id,"ui_navig_arrange")),
-      uiOutput(NS(id,"ui_navig_filter_error")),
+      uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
       # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
@@ -134,7 +135,7 @@ viewTabServer <- function(id,parent_session,logins){
         schema <- NAVIG_schemas()
         selectInput(NS(id,"navig_schema"),
                     "Sélection du schéma :",
-                    choices = c('Please select the schema to explore'="",schema),
+                    choices = c('Sélectionner un schéma / dossier'="",schema),
                     selectize=T,selected = default_schema)
         
       })
@@ -144,7 +145,7 @@ viewTabServer <- function(id,parent_session,logins){
         tables <- NAVIG_tables()
         selectInput(NS(id,"navig_table"),
                     "Sélection de la table :",
-                    choices = c('Select the table to explore'="",tables),selected = default_table,
+                    choices = c('Sélectionner une table'="",tables),selected = default_table,
                     selectize=T)
       })
       
@@ -173,8 +174,12 @@ viewTabServer <- function(id,parent_session,logins){
         
         wellPanel(
           returnTextAreaInput(NS(id,"navig_data_filter"),
+<<<<<<< HEAD
                               label = "Filtrer la table :",
                               label_icon="question-circle",
+=======
+                              label=inputLabelWithHelper(NS(id,"navig_data_filter"),"Filtrer la table :"),
+>>>>>>> master
                               value = "",
                               resize="vertical",
                               rows=2,
@@ -200,7 +205,11 @@ viewTabServer <- function(id,parent_session,logins){
       
       observeEvent(input$navig_data_filter_icon_clicked,{
         showModal(modalDialog(
+<<<<<<< HEAD
           tags$iframe(src="help/helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+=======
+          tags$iframe(src="help/filter_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+>>>>>>> master
           size="l",
           easyClose = TRUE
         ))
@@ -225,10 +234,15 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           selectInput(
+<<<<<<< HEAD
 
             inputId   = NS(id,"navig_view_vars"), 
             label="Sélectionner les colonnes :",
             # label=inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
+=======
+            inputId   = NS(id,"navig_view_vars"), 
+            label = inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
+>>>>>>> master
             choices   = vars,
             selected  = vars,
             multiple  = TRUE,
@@ -237,7 +251,15 @@ viewTabServer <- function(id,parent_session,logins){
         ))
       })
       
-      NAVIG_filter_error<-reactiveValues()
+      observeEvent(input$navig_view_vars_icon_clicked,{
+        showModal(modalDialog(
+          tags$iframe(src="help/selectColumn_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
+          size="l",
+          easyClose = TRUE
+        ))
+      })
+      
+      NAVIG_errors<-reactiveValues()
       
       NAVIG_prepared_tbl_lazy <- eventReactive(
         eventExpr=c(NAVIG_raw_tbl_lazy(),input$navig_data_filter,input$navig_data_arrange),
@@ -248,14 +270,12 @@ viewTabServer <- function(id,parent_session,logins){
           
           prepared_data <- NAVIG_raw_tbl_lazy()
           
-          if(is.empty(input$navig_data_filter) & is.empty(input$navig_data_arrange)){
-            
-            isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
-            
+          if(is.empty(input$navig_data_filter)){
+            isolate(NAVIG_errors[["value_filter_error"]] <- "")
           }else{
-            
-            if(!is.empty(input$navig_data_filter)){
+            if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
               
+<<<<<<< HEAD
               if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
                 isolate(NAVIG_filter_error[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
               }else{
@@ -278,33 +298,58 @@ viewTabServer <- function(id,parent_session,logins){
                 }
               }
             }
+=======
+              isolate(NAVIG_errors[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
+>>>>>>> master
             
-            if(!is.empty(input$navig_data_arrange)){
-              arrange_cmd <- input$navig_data_arrange
-              if (!is.empty(arrange_cmd)) {
-                arrange_cmd <- arrange_cmd %>%
-                  strsplit(., split = "(&|,|\\s+)") %>%
-                  unlist() %>%
-                  .[!. == ""] %>%
-                  paste0(collapse = ", ") %>%
-                  (function(x) glue("arrange(x, {x})"))
-              }
+            }else{
               
-              safearrange=purrr::safely(function(tbl,arrange){
+              filter_cmd <- isolate(input$navig_data_filter) %>% 
+                fixSmartFilter() %>% 
+                preProcessFilter()
+              
+              safefilter=purrr::safely(function(tbl,filter){
                 tbl %>%
-                  (function(x) if (!is.empty(arrange)) eval(parse(text = arrange)) else x)
+                  (function(x) if (!is.empty(filter)) x %>% filter(!!rlang::parse_expr(filter)) else x)
               })
-              arranged_data <- safearrange(prepared_data,arrange_cmd)
-              # browser()
-              if(is.null(arranged_data$error)){
-                isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
-                prepared_data <- arranged_data$result
-              }else{
-                isolate(NAVIG_filter_error[["value_arrange_error"]] <- paste0("Erreur dans la commande de tri :\n",arranged_data$error$message,"\n",arranged_data$error$parent$message))
-              }
+              filtered_data <- safefilter(prepared_data,filter_cmd)
               
+              if(is.null(filtered_data$error)){
+                isolate(NAVIG_errors[["value_filter_error"]] <- "")
+                prepared_data <- filtered_data$result
+              }else{
+                isolate(NAVIG_errors[["value_filter_error"]] <- paste0("Erreur dans la commande de filtre :\n",filtered_data$error$message,"\n",filtered_data$error$parent$message))
+              }
             }
           }
+          
+          
+          if(is.empty(input$navig_data_arrange)){
+            isolate(NAVIG_errors[["value_arrange_error"]] <- "")
+          }else{
+            arrange_cmd <- input$navig_data_arrange
+            if (!is.empty(arrange_cmd)) {
+              arrange_cmd <- arrange_cmd %>%
+                strsplit(., split = "(&|,|\\s+)") %>%
+                unlist() %>%
+                .[!. == ""] %>%
+                paste0(collapse = ", ") %>%
+                (function(x) glue("arrange(x, {x})"))
+            }
+            safearrange=purrr::safely(function(tbl,arrange){
+              tbl %>%
+                (function(x) if (!is.empty(arrange)) eval(parse(text = arrange)) else x)
+            })
+            arranged_data <- safearrange(prepared_data,arrange_cmd)
+            
+            if(is.null(arranged_data$error)){
+              isolate(NAVIG_errors[["value_arrange_error"]] <- "")
+              prepared_data <- arranged_data$result
+            }else{
+              isolate(NAVIG_errors[["value_arrange_error"]] <- paste0("Erreur dans la commande de tri :\n",arranged_data$error$message,"\n",arranged_data$error$parent$message))
+            }
+          }
+          
           return(prepared_data)
         }
       )
@@ -357,7 +402,7 @@ viewTabServer <- function(id,parent_session,logins){
             collected_data <- collected_tb$result
           }else{
             
-            isolate(NAVIG_filter_error[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
+            isolate(NAVIG_errors[["value_filter_error"]] <- paste0("E2 ","Erreur dans la commande de filtre :\n\n",collected_tb$error$parent$message))
             collected_data <- NAVIG_raw_tbl_lazy() %>% head(n_rows_collected) %>% collect()
           }
           
@@ -515,15 +560,22 @@ viewTabServer <- function(id,parent_session,logins){
         }
       })
       
-      output$ui_navig_filter_error <- renderUI({
-        # browser()
-        if (is.empty(NAVIG_filter_error[["value_filter_error"]]) & is.empty(NAVIG_filter_error[["value_arrange_error"]])) {
+      output$ui_NAVIG_errors <- renderUI({
+        if (is.empty(NAVIG_errors[["value_filter_error"]])) {
           return()
         }
-        concat_error=paste(NAVIG_filter_error[["value_filter_error"]],NAVIG_filter_error[["value_arrange_error"]],sep = "\n")
-        helpText(concat_error,class = "shiny-output-error")
+        helpText(NAVIG_errors[["value_filter_error"]],class = "shiny-output-error")
         
       })
+      
+      output$ui_navig_arrange_error <- renderUI({
+        # browser()
+        if (is.empty(NAVIG_errors[["value_arrange_error"]])) {
+          return()
+        }
+        helpText(NAVIG_errors[["value_arrange_error"]],class = "shiny-output-error")
+      })
+      
       
       output$ui_navig_dataviewer <- DT::renderDataTable({
         
@@ -631,8 +683,8 @@ viewTabServer <- function(id,parent_session,logins){
         updateTextAreaInput(session,inputId = "navig_data_filter",value ="")
         updateTextAreaInput(session,inputId = "navig_data_arrange",value ="")
         updateSelectInput(session,inputId = "navig_view_vars",selected ="")
-        isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
-        isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
+        isolate(NAVIG_errors[["value_filter_error"]] <- "")
+        isolate(NAVIG_errors[["value_arrange_error"]] <- "")
       })
       
       observeEvent(input$navig_schema,{
@@ -640,8 +692,8 @@ viewTabServer <- function(id,parent_session,logins){
         updateTextAreaInput(session,inputId = "navig_data_filter",value ="")
         updateTextAreaInput(session,inputId = "navig_data_arrange",value ="")
         updateSelectInput(session,inputId = "navig_view_vars",selected ="")
-        isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
-        isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
+        isolate(NAVIG_errors[["value_filter_error"]] <- "")
+        isolate(NAVIG_errors[["value_arrange_error"]] <- "")
         
       })
       
@@ -655,14 +707,14 @@ viewTabServer <- function(id,parent_session,logins){
         updateSelectInput(session,inputId = "navig_view_vars",selected =NAVIG_varnames())
         
         ## Reset du message d'erreur de filtre :
-        isolate(NAVIG_filter_error[["value_filter_error"]]  <- "")
-        isolate(NAVIG_filter_error[["value_arrange_error"]] <- "")
+        isolate(NAVIG_errors[["value_filter_error"]]  <- "")
+        isolate(NAVIG_errors[["value_arrange_error"]] <- "")
         
       })
       
       observeEvent(input$navig_clearFilters, {
         updateTextAreaInput(session,inputId = "navig_data_filter",value ="")
-        isolate(NAVIG_filter_error[["value_filter_error"]] <- "")
+        isolate(NAVIG_errors[["value_filter_error"]] <- "")
       })
       
       observeEvent(c(input$cellClicked),{
@@ -684,7 +736,27 @@ viewTabServer <- function(id,parent_session,logins){
           value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
         }else{
           value_parsed <- paste0("\"",value_raw,"\"")
+<<<<<<< HEAD
         }
+        
+        if(is.null(value_raw)){
+          if(input$cellClickType=="simple"){
+            string <- paste0("is.na(",col_name,")")
+          }else{
+            string <- paste0("!is.na(",col_name,")")
+          }
+
+        }else{
+          if(input$cellClickType=="simple"){
+            string <- paste0(col_name," == ",value_parsed)
+          }else{
+            string <- paste0(col_name," != ",value_parsed)
+          }
+
+=======
+>>>>>>> master
+        }
+        string_filter[1] <- string
         
         if(is.null(value_raw)){
           if(input$cellClickType=="simple"){

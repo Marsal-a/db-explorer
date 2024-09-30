@@ -24,8 +24,12 @@ preProcessFilter <- function(filer_cmd){
     gsub("'", "\\\\'", .) %>%
     gsub("\"", "\'", .) %>%
     fixSmartFilter() %>%
+<<<<<<< HEAD
     stringr::str_trim("both") %>%
     stringr::str_squish()
+=======
+    stringr::str_trim("both")
+>>>>>>> master
 }
 
 decomposeFilter <- function(raw_filter_text){

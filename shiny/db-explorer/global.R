@@ -107,8 +107,8 @@ is_not <- function(x) {
 ## functions used to create Shiny in and outputs
 ################################################################
 
-## textarea where the return key submits the content
-returnTextAreaInput <- function(inputId, label = NULL, label_icon=NULL, rows = 2,
+
+returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
                                 placeholder = NULL, resize = "vertical",
                                 value = "") {
   
@@ -132,7 +132,9 @@ returnTextAreaInput <- function(inputId, label = NULL, label_icon=NULL, rows = 2
 
   tagList(
     tags$div(
-      label_element,
+      # using containing element based on
+      # https://github.com/niklasvh/html2canvas/issues/2008#issuecomment-1445503369
+      tags$label(label, `for` = inputId,class="control-label"), br(),
       tags$textarea(
         value,
         id = inputId,
@@ -149,6 +151,7 @@ returnTextAreaInput <- function(inputId, label = NULL, label_icon=NULL, rows = 2
     )
   )
 }
+
 
 ### Fonction de débogage, à insérer dans les fonctions réactives pour suivre l'éxecution des déclenchements
 ts_print <- function(x,...){
@@ -243,6 +246,21 @@ tab_title_removable <- function(name, removeInputName) {
 #   )
 # }
 
+
+inputLabelWithHelper <- function(inputId,label,icon="question-circle"){
+  tags$div(
+    style = "display: flex; justify-content: space-between",
+    tags$label(label, `for` = inputId,style="margin-bottom:0px"),
+    tags$div(
+      style = "text-align: right;",
+      icon(icon, "Help Icon"),
+      onclick = paste0("
+              Shiny.setInputValue(\"", paste0(inputId,'_icon_clicked') , "\", \"",  "Math.random()", "\", {priority: \"event\"});
+              "),
+      class="help_btn"
+    )
+  )
+}
 
 IsDateWithoutTime <- function(col){
   if (inherits(col, "POSIXct")) {
