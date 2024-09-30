@@ -696,25 +696,6 @@ viewTabServer <- function(id,parent_session,logins){
           value_parsed=paste0("sql(\"TO_DATE('",value_raw,"', 'YYYY-MM-DD')","\")")
         }else{
           value_parsed <- paste0("\"",value_raw,"\"")
-<<<<<<< HEAD
-        }
-        
-        if(is.null(value_raw)){
-          if(input$cellClickType=="simple"){
-            string <- paste0("is.na(",col_name,")")
-          }else{
-            string <- paste0("!is.na(",col_name,")")
-          }
-
-        }else{
-          if(input$cellClickType=="simple"){
-            string <- paste0(col_name," == ",value_parsed)
-          }else{
-            string <- paste0(col_name," != ",value_parsed)
-          }
-
-=======
->>>>>>> master
         }
         string_filter[1] <- string
         
