@@ -697,7 +697,6 @@ viewTabServer <- function(id,parent_session,logins){
         }else{
           value_parsed <- paste0("\"",value_raw,"\"")
         }
-        string_filter[1] <- string
         
         if(is.null(value_raw)){
           if(input$cellClickType=="simple"){
