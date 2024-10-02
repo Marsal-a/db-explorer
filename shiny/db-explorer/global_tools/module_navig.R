@@ -143,16 +143,26 @@ viewTabServer <- function(id,parent_session,logins){
       output$ui_navig_tables  <- renderUI({
         
         tables <- NAVIG_tables()
-        selectInput(NS(id,"navig_table"),
-                    # "Sélection de la table :",
-                    inputLabelWithHelper(NS(id,"navig_table"),"Sélection de la table :",icon="sync"),
-                    choices = c('Sélectionner une table'="",tables),selected = default_table,
-                    selectize=T)
+        fluidPage(
+          uiLabelWithIcon(NS(id,"navig_table"), "Sélection de la table :", icon="sync"),
+          selectInput(NS(id,"navig_table"),
+                      label=NULL,
+                      choices = c('Sélectionner une table'="",tables),selected = default_table,
+                      selectize=T),
+          style="padding-left: 0px; padding-right:0px;"
+        )
       })
       
       observeEvent(input$navig_table_icon_clicked,{
-        # browser()
+        session$cache$reset()
+        current_schema = input$navig_schema
+        current_table = input$navig_table
+        updateSelectInput(session = session,inputId = "navig_schema",selected = "")
+        updateSelectInput(session = session,inputId = "navig_schema",selected = current_schema)
+        # updateSelectInput(session = session,inputId = "navig_table",selected = current_table)
+        
       })
+      
       NAVIG_raw_tbl_lazy <- eventReactive(c(input$navig_table),{
         
         req(input$navig_table)
@@ -177,12 +187,16 @@ viewTabServer <- function(id,parent_session,logins){
         req(input$navig_table)
         
         wellPanel(
-          returnTextAreaInput(NS(id,"navig_data_filter"),
-                              label=inputLabelWithHelper(NS(id,"navig_data_filter"),"Filtrer la table :"),
-                              value = "",
-                              resize="vertical",
-                              rows=2,
-                              placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
+          fluidPage(
+            uiLabelWithIcon(NS(id,"navig_data_filter"),"Filtrer la table :"),
+            returnTextAreaInput(NS(id,"navig_data_filter"),
+                                label=NULL,
+                                value = "",
+                                resize="vertical",
+                                rows=2,
+                                placeholder = "Ecrire une condition de filtre et appuyer sur Entrée"
+            ),
+            style="padding-left: 0px;padding-right:0px"
           ),
           actionLink(NS(id,"navig_clearFilters"), "Clear filters", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
           checkboxInput(NS(id,"navig_filterByClick"),"Cliquer pour filtrer", value = parent_session$options$FilterClick),
@@ -228,15 +242,20 @@ viewTabServer <- function(id,parent_session,logins){
         
         vars <- NAVIG_varnames()
         wellPanel(
-          selectInput(
-            inputId   = NS(id,"navig_view_vars"), 
-            label = inputLabelWithHelper(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
-            choices   = vars,
-            selected  = vars,
-            multiple  = TRUE,
-            selectize = FALSE, 
-            size = min(20, length(vars))+1
-        ))
+          fluidPage(
+            uiLabelWithIcon(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
+            selectInput(
+              inputId   = NS(id,"navig_view_vars"), 
+              label = NULL,
+              choices   = vars,
+              selected  = vars,
+              multiple  = TRUE,
+              selectize = FALSE, 
+              size = min(20, length(vars))+1
+            ),
+            style="padding-left: 0px;padding-right:0px"
+          )
+        )
       })
       
       observeEvent(input$navig_view_vars_icon_clicked,{
@@ -756,8 +775,6 @@ viewTabServer <- function(id,parent_session,logins){
       observeEvent(input$trigtest_DEV,{
         browser()
       })
-      
-      
       
     }
   )
