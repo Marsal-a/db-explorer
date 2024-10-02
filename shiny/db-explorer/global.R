@@ -116,7 +116,8 @@ returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
     tags$div(
       # using containing element based on
       # https://github.com/niklasvh/html2canvas/issues/2008#issuecomment-1445503369
-      tags$label(label, `for` = inputId,class="control-label"), br(),
+      shiny:::shinyInputLabel(inputId,label),
+      # tags$label(label, `for` = inputId,class="control-label"), br(),
       tags$textarea(
         value,
         id = inputId,
@@ -202,22 +203,26 @@ tab_title_removable <- function(name, removeInputName) {
   
 }
 
-
-
-inputLabelWithHelper <- function(inputId,label,icon="question-circle"){
+uiLabelWithIcon <- function(inputId, label, icon = "question-circle") {
   tags$div(
     style = "display: flex; justify-content: space-between",
-    tags$label(label, `for` = inputId,style="margin-bottom:0px"),
+    tags$label(label,`for` = inputId),
     tags$div(
       style = "text-align: right;",
-      icon(icon, "Help Icon"),
-      onclick = paste0("
-              Shiny.setInputValue(\"", paste0(inputId,'_icon_clicked') , "\", \"",  "Math.random()", "\", {priority: \"event\"});
-              "),
-      class="help_btn"
+      tags$span(
+        icon(icon, "Help Icon"),
+        onclick = paste0("
+          event.stopPropagation();
+          Shiny.setInputValue(\"", paste0(inputId, '_icon_clicked'), "\", Math.random(), {priority: \"event\"});
+        "),
+        class = "help_btn",
+        style = "cursor: pointer;"
+      )
     )
   )
 }
+
+
 
 
 IsDateWithoutTime <- function(col){
