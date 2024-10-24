@@ -419,14 +419,13 @@ viewTabServer <- function(id,parent_session,logins){
           req(NAVIG_prepared_tbl_lazy())
           
           preview_information <- function(connexion,prepared_data,raw_data_lz,selected_table){
-            browser()
-            current_query <- dplyr::show_query(prepared_data)
-            rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
-            rowcount <- DBI::dbGetQuery(connexion, rowcount_query)
+            
+            # On enleve le paramétre de tri avec arrange() avant de compter les lignes
+            rowcount <- prepared_data %>% arrange() %>%  count() %>% collect()
+           
             rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
             
             colcount=dim(raw_data_lz)[2]
-            # length(C_FAIT$lazy_query$vars)
             
             glue1 <- glue::glue("
             Prévisualisation de la table {crayon::bold$blue(input$navig_table)} ({min(n_rows_collected,as.integer(rowcount))} premières lignes)
@@ -474,7 +473,7 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_sql_query <- eventReactive(
         eventExpr = c(NAVIG_prepared_tbl_lazy()),
         ignoreNULL=T,ignoreInit = F,{
-          # browser()
+          browser()
           lazy_tbl <- NAVIG_prepared_tbl_lazy()
 
           uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
