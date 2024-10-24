@@ -11,13 +11,13 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
       fluidRow(
         column(12,htmlOutput(NS(id,"ui_navig_summary"))),
-        # column(4,htmlOutput(NS(id,"ui_current_query")))
+        column(4,htmlOutput(NS(id,"ui_current_query")))
         ),
       fluidRow(
         column(10),
@@ -269,7 +269,7 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_errors<-reactiveValues()
       
       NAVIG_prepared_tbl_lazy <- eventReactive(
-        eventExpr=c(NAVIG_raw_tbl_lazy(),input$navig_data_filter,input$navig_data_arrange),
+        eventExpr=list(NAVIG_raw_tbl_lazy(),input$navig_data_filter,input$navig_data_arrange),
         ignoreInit = T,
         ignoreNULL = T,{
           
@@ -395,7 +395,7 @@ viewTabServer <- function(id,parent_session,logins){
       )
       
       NAVIG_displayTable <- eventReactive(
-        eventExpr = c(NAVIG_collected_data(),input$navig_view_vars),
+        eventExpr = list(NAVIG_collected_data(),input$navig_view_vars),
         ignoreNULL=T,ignoreInit = F,{
           
           req(input$navig_view_vars)
@@ -411,7 +411,7 @@ viewTabServer <- function(id,parent_session,logins){
         })
       
       NAVIG_tableSummary <- eventReactive(
-        eventExpr = c(input$navig_table,input$navig_data_filter),
+        eventExpr = list(input$navig_table,input$navig_data_filter),
         ignoreInit = T,
         ignoreNULL=F,{
           
@@ -419,7 +419,8 @@ viewTabServer <- function(id,parent_session,logins){
           req(NAVIG_prepared_tbl_lazy())
           
           preview_information <- function(connexion,prepared_data,raw_data_lz,selected_table){
-            current_query <- dbplyr::remote_query(prepared_data)
+            browser()
+            current_query <- dplyr::show_query(prepared_data)
             rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
             rowcount <- DBI::dbGetQuery(connexion, rowcount_query)
             rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
@@ -470,18 +471,18 @@ viewTabServer <- function(id,parent_session,logins){
       #   }
       # )
       
-      # NAVIG_sql_query <- eventReactive(
-      #   eventExpr = c(NAVIG_prepared_tbl_lazy()),
-      #   ignoreNULL=T,ignoreInit = F,{
-      #     # browser()
-      #     lazy_tbl <- NAVIG_prepared_tbl_lazy()
-      # 
-      #     uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
-      #     withr::local_options(list(dbplyr_use_colour = TRUE))
-      #     colored_query <- lazy_tbl %>% dbplyr::remote_query()
-      # 
-      #     return(list(uncolored=uncolored_query,colored=colored_query))
-      # })
+      NAVIG_sql_query <- eventReactive(
+        eventExpr = c(NAVIG_prepared_tbl_lazy()),
+        ignoreNULL=T,ignoreInit = F,{
+          # browser()
+          lazy_tbl <- NAVIG_prepared_tbl_lazy()
+
+          uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
+          withr::local_options(list(dbplyr_use_colour = TRUE))
+          colored_query <- lazy_tbl %>% dbplyr::remote_query()
+
+          return(list(uncolored=uncolored_query,colored=colored_query))
+      })
       
       # output$ui_clip_current_query_button <- renderUI({
       #   req(input$navig_table)

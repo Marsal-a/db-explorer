@@ -154,8 +154,76 @@ postgre_objects_test <- list(
   }
 )
 
+base_parquet_test <- list(
+  connect_function=function(){
+    invisible(NULL)
+  },
+  req_login = FALSE,
+  list_schemas_function = function(con){
+    print(con)
+    schemas=c("parquet partitioned"="~/nfs-slr1/données parquet/parquet_part/",
+              "parquet un-partitionned"="~/nfs-slr1/données parquet/parquet_unpart/")
+  },
+  list_tables_function = function(con,dbname){
+    print(con)
+    tables_unpart <- list.files(dbname,pattern = "*.parquet$",full.names = F,include.dirs = F)
+    tables_part   <- list.dirs(dbname,recursive = F,full.names = F)
+    tables <- c(tables_unpart,tables_part)
+    return(tables)
+  },
+  remote_table_function = function(con,dbname,tablename){
+    # browser()
+    file=paste0(con,dbname,tablename)
+    lz_ds <- arrow::open_dataset(file)
+    
+    return(lz_ds)
+  }
+)
+
+base_duckdb_test <- list(
+  connect_function=function(){
+    con <- dbConnect(duckdb())
+  },
+  req_login = FALSE,
+  list_schemas_function = function(con){
+    print(con)
+    schemas=c("parquet partitioned"="~/nfs-slr1/données parquet/parquet_part/",
+              "parquet un-partitionned"="~/nfs-slr1/données parquet/parquet_unpart/")
+    return(schemas)
+  },
+  list_tables_function = function(con,dbname){
+    
+    print(con)
+    tables_unpart <- list.files(dbname,pattern = "*.parquet$",full.names = F,include.dirs = F)
+    tables_part   <- list.dirs(dbname,recursive = F,full.names = F)
+    
+    tables <- c(tables_unpart,tables_part)
+    
+    return(tables)
+  },
+  remote_table_function = function(con,dbname,tablename){
+    
+    lz_ds <- NULL
+    
+    full_fn <-  paste0(dbname,tablename)
+    if(dir.exists(full_fn)){
+      tablename_pq <- paste0(dbname,tablename,"/**/*.parquet")
+      lz_ds <- tbl(con,glue::glue("read_parquet('{tablename_pq}', hive_partitioning = true)"))
+    }else{
+      tablename_pq <- paste0(dbname,tablename)
+      lz_ds <- tbl(con,glue::glue("read_parquet('{tablename_pq}', hive_partitioning = false)"))
+    }
+    
+    return(lz_ds)
+  } 
+)
+
+
 connectors <- list("Netezza"=netezza_objects,
                    "Oracle - Prod"=oracle_objects_prod,
                    "Oracle - Test"=oracle_objects_test,
                    "PostgreSQL - Prod" = postgre_objects_prod,
-                   "PostgreSQL - Test" = postgre_objects_test)
+                   "PostgreSQL - Test" = postgre_objects_test,
+                   "arrow" = base_parquet_test,
+                   "duckdb" = base_duckdb_test)
+

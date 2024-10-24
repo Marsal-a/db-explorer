@@ -55,6 +55,8 @@ library(fontawesome)
 library(stringi)
 library(stringr)
 library(sodium)
+library(duckdb)
+library(arrow)
 # library(rclipboard)
 
 options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx8192m","-Xss3m"))
