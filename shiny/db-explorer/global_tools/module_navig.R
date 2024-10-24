@@ -475,12 +475,22 @@ viewTabServer <- function(id,parent_session,logins){
         ignoreNULL=T,ignoreInit = F,{
           
           lazy_tbl <- NAVIG_prepared_tbl_lazy()
-          inherits(lazy_tbl,"tbl_lazy")
           
+          browser()
           
-          uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
-          withr::local_options(list(dbplyr_use_colour = TRUE))
-          colored_query <- lazy_tbl %>% dbplyr::remote_query()
+          if(inherits(lazy_tbl,"tbl_lazy")){
+            withr::local_options(list(dbplyr_use_colour = TRUE))
+            colored_query <- lazy_tbl %>% dbplyr::remote_query()
+          }else{
+            colored_query <- lazy_tbl %>% dbplyr::remote_query() 
+          }
+          
+          colored_query <- colored_query %>% 
+            as.character() %>% 
+            str_replace_all("\"","")
+          
+          uncolored_query <- strip_style(colored_query)
+          
 
           return(list(uncolored=uncolored_query,colored=colored_query))
       })
