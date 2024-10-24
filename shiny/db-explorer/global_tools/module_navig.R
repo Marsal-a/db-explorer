@@ -473,9 +473,11 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_sql_query <- eventReactive(
         eventExpr = c(NAVIG_prepared_tbl_lazy()),
         ignoreNULL=T,ignoreInit = F,{
-          browser()
+          
           lazy_tbl <- NAVIG_prepared_tbl_lazy()
-
+          inherits(lazy_tbl,"tbl_lazy")
+          
+          
           uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
           withr::local_options(list(dbplyr_use_colour = TRUE))
           colored_query <- lazy_tbl %>% dbplyr::remote_query()
