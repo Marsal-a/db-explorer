@@ -222,9 +222,6 @@ uiLabelWithIcon <- function(inputId, label, icon = "question-circle") {
   )
 }
 
-
-
-
 IsDateWithoutTime <- function(col){
   if (inherits(col, "POSIXct")) {
     all(format(col[!is.na(col)], "%H:%M:%S") == "00:00:00")
