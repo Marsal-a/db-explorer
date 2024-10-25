@@ -16,16 +16,14 @@ viewTabUi <- function(id,label="Tab"){
     ),
     mainPanel(
       fluidRow(
-        column(12,htmlOutput(NS(id,"ui_navig_summary"))),
-        column(4,htmlOutput(NS(id,"ui_current_query")))
-        ),
-      fluidRow(
-        column(10),
-        column(1,uiOutput(NS(id,"ui_clip_current_query_button"))),
-        column(1,uiOutput(NS(id,"ui_navig_dl_view_tab")))
+        div(
+          style = "display: flex; justify-content: flex-end; align-items: center; gap: 10px;",
+          uiOutput(NS(id, "ui_button_sql_query")),
+          uiOutput(NS(id, "ui_navig_dl_view_tab"))
+        )
       ),
-      # uiOutput(NS(id,"ui_button_sql_query")),
-      
+      fluidRow(htmlOutput(NS(id,"ui_navig_summary"))),
+      fluidRow(hidden(uiOutput(NS(id,"ui_current_query")))),
       DT::dataTableOutput(NS(id,"ui_navig_dataviewer"),height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
       width = 9
     )
@@ -51,7 +49,6 @@ viewTabServer <- function(id,parent_session,logins){
             }
         });
     ", NS(id,'modal_pw'), NS(id,'modal_submit_login')))
-      
       
       
       connexion_modal <- function(failed = FALSE,title='Login for PostgreSQL (Production)') {
@@ -476,13 +473,13 @@ viewTabServer <- function(id,parent_session,logins){
           
           lazy_tbl <- NAVIG_prepared_tbl_lazy()
           
-          browser()
+          # browser()
           
           if(inherits(lazy_tbl,"tbl_lazy")){
             withr::local_options(list(dbplyr_use_colour = TRUE))
             colored_query <- lazy_tbl %>% dbplyr::remote_query()
           }else{
-            colored_query <- lazy_tbl %>% dbplyr::remote_query() 
+            colored_query <- lazy_tbl %>% dplyr::show_query() 
           }
           
           colored_query <- colored_query %>% 
@@ -491,7 +488,6 @@ viewTabServer <- function(id,parent_session,logins){
           
           uncolored_query <- strip_style(colored_query)
           
-
           return(list(uncolored=uncolored_query,colored=colored_query))
       })
       
@@ -510,11 +506,37 @@ viewTabServer <- function(id,parent_session,logins){
       #   )
       # })
       
-      # output$ui_button_sql_query <- renderUI({
-      #   req(input$navig_table)
-      #   req(NAVIG_displayTable())
-      #   actionButton(NS(id,"sql_query_button"),"la")
-      # })
+      output$ui_button_sql_query <- renderUI({
+        req(input$navig_table)
+        req(NAVIG_displayTable())
+        # actionButton(NS(id,"sql_query_button"),"Show SQL query")
+        shinyBS::tipify(
+          el = actionButton(
+            NS(id, "sql_query_button"),
+            label = NULL,
+            icon = icon("code"),
+            class = "btn-link",
+          ),
+          title="Afficher / Masquer la requete SQL",
+          placement="bottom",
+          trigger="hover"
+          )
+        
+        
+      })
+      
+      observeEvent(input$sql_query_button, {
+        toggle("ui_current_query")
+        # if(input$sql_query_button %% 2 == 0){
+        #   updateActionButton(session, "sql_query_button", label = "Show SQL query")  
+        # }else{
+        #   updateActionButton(session, "sql_query_button", label = "Hide SQL query")
+        # }
+        # session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
+        # session$sendCustomMessage(type="refocus",message=list(NS(id,"ui_current_query")))
+        # # session$sendCustomMessage(type="refocus",message=list("ui_current_query"))
+        
+      })
       
       # observeEvent(input$sql_query_button, {
       #   query <- NAVIG_sql_query()
@@ -549,7 +571,17 @@ viewTabServer <- function(id,parent_session,logins){
       
       output$ui_navig_dl_view_tab <- renderUI({
         if(!is.null(NAVIG_displayTable())){
-          downloadButton(NS(id,"navig_dl_data"),label="Ctrl + S",ic = "download",class = "alignright")
+          shinyBS::tipify(
+            el = downloadButton(
+              NS(id,"navig_dl_data"),
+              label=NULL,
+              ic = "download",
+              class = "btn-link"
+            ),
+            title="Télécharger les données en cliquant ici ou en tappant CTRL+S",
+            placement="bottom",
+            trigger="hover"
+          )
         }else{
           NULL
         }
