@@ -11,7 +11,7 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
@@ -471,11 +471,25 @@ viewTabServer <- function(id,parent_session,logins){
         eventExpr = c(NAVIG_prepared_tbl_lazy()),
         ignoreNULL=T,ignoreInit = F,{
           
-          lazy_tbl <- NAVIG_prepared_tbl_lazy() %>% head(n_rows_collected)
+          lazy_tbl <- NAVIG_prepared_tbl_lazy() 
+          con <- lazy_tbl$src$con
           
           if(inherits(lazy_tbl,"tbl_lazy")){
+            
             withr::local_options(list(dbplyr_use_colour = TRUE))
-            colored_query <- lazy_tbl %>% dbplyr::remote_query()
+            colored_query <- lazy_tbl %>% head(n_rows_collected) %>% dbplyr::remote_query()
+            withr::local_options(list(dbplyr_use_colour = FALSE))
+            
+            if(inherits(con,"OraConnection")){
+              if(ROracle:::.oci.ConnectionInfo(con)$serverVersion<"12"){
+                if(!is.null(lazy_tbl$lazy_query$order_by)){
+                  withr::local_options(list(dbplyr_use_colour = TRUE))
+                  colored_query <- glue::glue("SELECT * FROM (\n{dbplyr::remote_query(lazy_tbl)})\nWHERE ROWNUM < {n_rows_collected}")  
+                  withr::local_options(list(dbplyr_use_colour = FALSE))
+                }
+              }
+            } 
+            
           }else{
             colored_query <- lazy_tbl %>% dplyr::show_query() 
           }
