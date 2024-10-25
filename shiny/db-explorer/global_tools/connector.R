@@ -61,9 +61,9 @@ netezza_objects <- list(
   remote_table_function = function(con,dbname,tablename){
     table_name <- stringr::str_extract(tablename, "^[^ ]*")
     if(packageVersion("dbplyr")>"2.2.0"){
-      lz <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),".", tablename))
+      lz <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),"ADMIN", tablename))
     }else{
-      lz <- dplyr::tbl(con, dbplyr::in_schema(dbplyr::sql(paste0(isolate(dbname),".")), tablename))
+      lz <- dplyr::tbl(con, dbplyr::in_schema(dbplyr::sql(paste0(isolate(dbname),"ADMIN")), tablename))
     }
   }
 )
