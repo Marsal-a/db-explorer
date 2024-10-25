@@ -191,7 +191,6 @@ logger <- function(path_out){
 
 
 tab_title_removable <- function(name, removeInputName) {
-  
   tags$span(
     name,
     tags$span(icon("remove"),
@@ -200,7 +199,6 @@ tab_title_removable <- function(name, removeInputName) {
               Shiny.setInputValue(\"", removeInputName , "\", \"", name, "\", {priority: \"event\"});
               "))
   )
-  
 }
 
 uiLabelWithIcon <- function(inputId, label, icon = "question-circle") {
