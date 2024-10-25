@@ -471,9 +471,7 @@ viewTabServer <- function(id,parent_session,logins){
         eventExpr = c(NAVIG_prepared_tbl_lazy()),
         ignoreNULL=T,ignoreInit = F,{
           
-          lazy_tbl <- NAVIG_prepared_tbl_lazy()
-          
-          # browser()
+          lazy_tbl <- NAVIG_prepared_tbl_lazy() %>% head(n_rows_collected)
           
           if(inherits(lazy_tbl,"tbl_lazy")){
             withr::local_options(list(dbplyr_use_colour = TRUE))
@@ -521,21 +519,10 @@ viewTabServer <- function(id,parent_session,logins){
           placement="bottom",
           trigger="hover"
           )
-        
-        
       })
       
       observeEvent(input$sql_query_button, {
-        toggle("ui_current_query")
-        # if(input$sql_query_button %% 2 == 0){
-        #   updateActionButton(session, "sql_query_button", label = "Show SQL query")  
-        # }else{
-        #   updateActionButton(session, "sql_query_button", label = "Hide SQL query")
-        # }
-        # session$sendCustomMessage(type="refocus",message=list(NS(id,"navig_data_filter")))
-        # session$sendCustomMessage(type="refocus",message=list(NS(id,"ui_current_query")))
-        # # session$sendCustomMessage(type="refocus",message=list("ui_current_query"))
-        
+        shinyjs::toggle("ui_current_query")
       })
       
       # observeEvent(input$sql_query_button, {
