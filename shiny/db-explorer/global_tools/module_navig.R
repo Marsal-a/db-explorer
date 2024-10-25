@@ -578,7 +578,7 @@ viewTabServer <- function(id,parent_session,logins){
               ic = "download",
               class = "btn-link"
             ),
-            title="Télécharger les données en cliquant ici ou en tappant CTRL+S",
+            title="Télécharger les données en cliquant ici ou avec CTRL+S",
             placement="bottom",
             trigger="hover"
           )
