@@ -41,4 +41,4 @@ push_db_explorer <- function(launch=FALSE){
   
 }
 
-push_db_explorer()
+push_db_explorer(launch = T)
