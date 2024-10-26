@@ -2,8 +2,6 @@
 .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
 # .libPaths(.libPaths()[1])
 
-
-
 library(crayon)
 library(shinyAce)
 library(shiny)
@@ -16,17 +14,15 @@ library(purrr)
 library(rlang)
 library(orasdse)
 library(pgsdse)
-library(nzsdse)
+# library(nzsdse)
 library(fontawesome)
 library(stringi)
 library(stringr)
-# library(sodium)
 library(duckdb)
 library(arrow)
 library(shinyjs)
 library(shinyBS)
-
-# library(rclipboard)
+library(rclipboard)
 
 options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx8192m","-Xss3m"))
 

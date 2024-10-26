@@ -20,6 +20,7 @@ sqlLite_objects <- list(
 
 netezza_objects <- list(
   connect_function = function(user,pw){
+    library(nzsdse)
     connectNzSDSE()
   },
   req_login = FALSE,
