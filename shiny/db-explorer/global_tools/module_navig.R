@@ -561,7 +561,7 @@ viewTabServer <- function(id,parent_session,logins){
         tags$div(
           style = "position: relative;",
           tags$div(
-            style = "position: absolute; bottom: 1; right: 1;",
+            style = "position: absolute; bottom: 1; right: 0;",
             actionButton(
               NS(id, "AAAA"),
               label = NULL,
