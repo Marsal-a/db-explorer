@@ -558,7 +558,24 @@ viewTabServer <- function(id,parent_session,logins){
       
       output$ui_current_query <- renderUI({
         ansi2html(NAVIG_sql_query()$colored)
+        tags$div(
+          style = "position: relative;",
+          tags$div(
+            style = "position: absolute; bottom: 1; right: 1;",
+            actionButton(
+              NS(id, "AAAA"),
+              label = NULL,
+              icon = icon("copy"),
+              class = "btn-link"
+            )
+          ),
+          tags$div(
+            HTML(ansi2html(NAVIG_sql_query()$colored))
+          )
+        )
       })
+      
+      
           
       output$navig_dl_data <- downloadHandler(
         filename = function() {
