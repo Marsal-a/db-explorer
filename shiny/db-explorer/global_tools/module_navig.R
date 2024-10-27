@@ -575,7 +575,10 @@ viewTabServer <- function(id,parent_session,logins){
         )
       })
       
-      
+      observeEvent(input$AAAA,{
+        text <- NAVIG_sql_query()$uncolored
+        session$sendCustomMessage("txt", text)
+      })
           
       output$navig_dl_data <- downloadHandler(
         filename = function() {
