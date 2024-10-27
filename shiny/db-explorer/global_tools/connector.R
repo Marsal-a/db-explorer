@@ -71,6 +71,7 @@ netezza_objects <- list(
 
 oracle_objects_prod <- list(
   connect_function = function(user,pw){
+    library(orasdse)
     connectOraSDSE()
   },
   req_login = FALSE,
@@ -91,6 +92,7 @@ oracle_objects_prod <- list(
 
 oracle_objects_test <- list(
   connect_function = function(user,pw){
+    library(orasdse)
     connectOraSDSE(dbname = "TEST10", dbhost = "10.33.0.24")
   },
   req_login = FALSE,
@@ -112,6 +114,7 @@ oracle_objects_test <- list(
 postgre_objects_prod <- list(
   connect_function = function(user,pw){
     if(!is.null(user) & !is.null(pw)){
+      library(pgsdse)
       con <- connectPostgreSDSE(user = user, password=pw)
     }else{
       con <- NULL
@@ -134,6 +137,7 @@ postgre_objects_prod <- list(
 
 postgre_objects_test <- list(
   connect_function = function(user,pw){
+    library(pgsdse)
     if(!is.null(user) & !is.null(pw)){
       con <- connectPostgreSDSE(dbhost="10.21.2.217",dbport = "5432",dbname = "test",user = user, password=pw)
     }else{
