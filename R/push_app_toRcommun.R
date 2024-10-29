@@ -25,7 +25,7 @@ archive_location <- "~/R_Commun/Adam/archive/"
 push_db_explorer <- function(launch=FALSE){
   current_branch <- gert::git_branch()
   if(current_branch=="master"){
-    
+    branch_dir <- master_location
     ask<-askYesNo("Pousser sur le répertoire master?",prompts = c("y","n","NA"),default = FALSE)
     if(ask){
       archiveApp(appPath = master_location,archive_path = archive_location)
