@@ -15,15 +15,15 @@ viewTabUi <- function(id,label="Tab"){
       width = 3
     ),
     mainPanel(
-      fluidRow(
+      fluidRow(column(12,
         div(
           style = "display: flex; justify-content: flex-end; align-items: center; gap: 10px;",
           uiOutput(NS(id, "ui_navig_button_show_sql_query")),
           uiOutput(NS(id, "ui_navig_dl_view_tab"))
         )
-      ),
-      fluidRow(htmlOutput(NS(id,"ui_navig_summary"))),
-      fluidRow(hidden(uiOutput(NS(id,"ui_navig_current_sql_query")))),
+      )),
+      fluidRow(column(12,htmlOutput(NS(id,"ui_navig_summary")))),
+      fluidRow(column(12,hidden(uiOutput(NS(id,"ui_navig_current_sql_query"))))),
       DT::dataTableOutput(NS(id,"ui_navig_dataviewer"),height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
       width = 9
     )
