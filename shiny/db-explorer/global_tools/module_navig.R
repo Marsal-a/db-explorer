@@ -7,7 +7,7 @@ viewTabUi <- function(id,label="Tab"){
         uiOutput(NS(id,"ui_navig_tables")),
       ),
       uiOutput(NS(id,"ui_navig_filters")),
-      uiOutput(NS(id,"ui_NAVIG_errors")),
+      uiOutput(NS(id,"ui_navig_filter_errors")),
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
@@ -18,12 +18,12 @@ viewTabUi <- function(id,label="Tab"){
       fluidRow(
         div(
           style = "display: flex; justify-content: flex-end; align-items: center; gap: 10px;",
-          uiOutput(NS(id, "ui_button_sql_query")),
+          uiOutput(NS(id, "ui_navig_button_show_sql_query")),
           uiOutput(NS(id, "ui_navig_dl_view_tab"))
         )
       ),
       fluidRow(htmlOutput(NS(id,"ui_navig_summary"))),
-      fluidRow(hidden(uiOutput(NS(id,"ui_current_query")))),
+      fluidRow(hidden(uiOutput(NS(id,"ui_navig_current_sql_query")))),
       DT::dataTableOutput(NS(id,"ui_navig_dataviewer"),height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
       width = 9
     )
@@ -474,11 +474,16 @@ viewTabServer <- function(id,parent_session,logins){
           lazy_tbl <- NAVIG_prepared_tbl_lazy() 
           con <- lazy_tbl$src$con
           
+          ### S'il s'agit d'un tbl_lazy, on peut récupérer la requete via dbplyr::remote_query() 
           if(inherits(lazy_tbl,"tbl_lazy")){
             
             withr::local_options(list(dbplyr_use_colour = TRUE))
             colored_query <- lazy_tbl %>% head(n_rows_collected) %>% dbplyr::remote_query()
             withr::local_options(list(dbplyr_use_colour = FALSE))
+            
+            ### Spécifique Oracle version <12, la sélection d'un subset de nombre de ligne via `WHERE ROWNUM < n` 
+            ### n'est pas compatible avec une condition order by sans faire une requete imbriqué. 
+            ### dbplyr ne sait pas traiter ce cas de figure, donc besoin d'un cas spécifique : 
             
             if(inherits(con,"OraConnection")){
               if(ROracle:::.oci.ConnectionInfo(con)$serverVersion<"12"){
@@ -489,9 +494,10 @@ viewTabServer <- function(id,parent_session,logins){
                 }
               }
             } 
-            
+          
+          ### Cas du traitement sur fichiers parquets : 
           }else{
-            colored_query <- lazy_tbl %>% dplyr::show_query() 
+            colored_query <- lazy_tbl %>% head(n_rows_collected) %>% dplyr::show_query() 
           }
           
           colored_query <- colored_query %>% 
@@ -518,10 +524,9 @@ viewTabServer <- function(id,parent_session,logins){
       #   )
       # })
       
-      output$ui_button_sql_query <- renderUI({
+      output$ui_navig_button_show_sql_query <- renderUI({
         req(input$navig_table)
         req(NAVIG_displayTable())
-        # actionButton(NS(id,"sql_query_button"),"Show SQL query")
         shinyBS::tipify(
           el = actionButton(
             NS(id, "sql_query_button"),
@@ -536,7 +541,7 @@ viewTabServer <- function(id,parent_session,logins){
       })
       
       observeEvent(input$sql_query_button, {
-        shinyjs::toggle("ui_current_query")
+        shinyjs::toggle("ui_navig_current_sql_query")
       })
       
       # observeEvent(input$sql_query_button, {
@@ -556,7 +561,7 @@ viewTabServer <- function(id,parent_session,logins){
       # })
       
       
-      output$ui_current_query <- renderUI({
+      output$ui_navig_current_sql_query <- renderUI({
         ansi2html(NAVIG_sql_query()$colored)
         tags$div(
           style = "position: relative;",
@@ -608,7 +613,7 @@ viewTabServer <- function(id,parent_session,logins){
         }
       })
       
-      output$ui_NAVIG_errors <- renderUI({
+      output$ui_navig_filter_errors <- renderUI({
         if (is.empty(NAVIG_errors[["value_filter_error"]])) {
           return()
         }
