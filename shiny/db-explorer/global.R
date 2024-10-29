@@ -177,6 +177,7 @@ logger <- function(path_out){
   
   res=list(
     sysinfo=data.frame(Sys.info()),
+    wdsize=paste0(window_width,"x",window_height),
     start_Time=format(start_time,"%Y%m%d_%H%M%S"),
     package=bind_rows(list_pkg)|>arrange(pkg.Package),
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S"),
@@ -191,7 +192,6 @@ logger <- function(path_out){
 
 
 tab_title_removable <- function(name, removeInputName) {
-  
   tags$span(
     name,
     tags$span(icon("remove"),
@@ -200,7 +200,6 @@ tab_title_removable <- function(name, removeInputName) {
               Shiny.setInputValue(\"", removeInputName , "\", \"", name, "\", {priority: \"event\"});
               "))
   )
-  
 }
 
 uiLabelWithIcon <- function(inputId, label, icon = "question-circle") {
@@ -221,9 +220,6 @@ uiLabelWithIcon <- function(inputId, label, icon = "question-circle") {
     )
   )
 }
-
-
-
 
 IsDateWithoutTime <- function(col){
   if (inherits(col, "POSIXct")) {

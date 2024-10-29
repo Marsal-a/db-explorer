@@ -20,6 +20,7 @@ sqlLite_objects <- list(
 
 netezza_objects <- list(
   connect_function = function(user,pw){
+    library(nzsdse)
     connectNzSDSE()
   },
   req_login = FALSE,
@@ -61,15 +62,16 @@ netezza_objects <- list(
   remote_table_function = function(con,dbname,tablename){
     table_name <- stringr::str_extract(tablename, "^[^ ]*")
     if(packageVersion("dbplyr")>"2.2.0"){
-      lz <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),".", tablename))
+      lz <- dplyr::tbl(con, dbplyr::in_catalog(dbplyr::sql(isolate(dbname)),"ADMIN", tablename))
     }else{
-      lz <- dplyr::tbl(con, dbplyr::in_schema(dbplyr::sql(paste0(isolate(dbname),".")), tablename))
+      lz <- dplyr::tbl(con, dbplyr::in_schema(dbplyr::sql(paste0(isolate(dbname),"ADMIN")), tablename))
     }
   }
 )
 
 oracle_objects_prod <- list(
   connect_function = function(user,pw){
+    library(orasdse)
     connectOraSDSE()
   },
   req_login = FALSE,
@@ -90,6 +92,7 @@ oracle_objects_prod <- list(
 
 oracle_objects_test <- list(
   connect_function = function(user,pw){
+    library(orasdse)
     connectOraSDSE(dbname = "TEST10", dbhost = "10.33.0.24")
   },
   req_login = FALSE,
@@ -111,6 +114,7 @@ oracle_objects_test <- list(
 postgre_objects_prod <- list(
   connect_function = function(user,pw){
     if(!is.null(user) & !is.null(pw)){
+      library(pgsdse)
       con <- connectPostgreSDSE(user = user, password=pw)
     }else{
       con <- NULL
@@ -133,6 +137,7 @@ postgre_objects_prod <- list(
 
 postgre_objects_test <- list(
   connect_function = function(user,pw){
+    library(pgsdse)
     if(!is.null(user) & !is.null(pw)){
       con <- connectPostgreSDSE(dbhost="10.21.2.217",dbport = "5432",dbname = "test",user = user, password=pw)
     }else{
@@ -154,8 +159,79 @@ postgre_objects_test <- list(
   }
 )
 
+base_arrow_test <- list(
+  connect_function=function(){
+    library(arrow)
+    invisible(NULL)
+  },
+  req_login = FALSE,
+  list_schemas_function = function(con){
+    print(con)
+    schemas=c("parquet partitioned"="~/nfs-slr1/données parquet/parquet_part/",
+              "parquet un-partitionned"="~/nfs-slr1/données parquet/parquet_unpart/")
+  },
+  list_tables_function = function(con,dbname){
+    print(con)
+    tables_unpart <- list.files(dbname,pattern = "*.parquet$",full.names = F,include.dirs = F)
+    tables_part   <- list.dirs(dbname,recursive = F,full.names = F)
+    tables <- c(tables_unpart,tables_part)
+    return(tables)
+  },
+  remote_table_function = function(con,dbname,tablename){
+    # browser()
+    file=paste0(con,dbname,tablename)
+    lz_ds <- arrow::open_dataset(file)
+    
+    return(lz_ds)
+  }
+)
+
+base_duckdb_test <- list(
+  connect_function=function(){
+    library(duckdb)
+    con <- dbConnect(duckdb())
+  },
+  req_login = FALSE,
+  list_schemas_function = function(con){
+    print(con)
+    schemas=c("parquet partitioned"="~/nfs-slr1/données parquet/parquet_part/",
+              "parquet un-partitionned"="~/nfs-slr1/données parquet/parquet_unpart/")
+    return(schemas)
+  },
+  list_tables_function = function(con,dbname){
+    
+    print(con)
+    tables_unpart <- list.files(dbname,pattern = "*.parquet$",full.names = F,include.dirs = F)
+    tables_part   <- list.dirs(dbname,recursive = F,full.names = F)
+    
+    tables <- c(tables_unpart,tables_part)
+    
+    return(tables)
+  },
+  remote_table_function = function(con,dbname,tablename){
+    
+    lz_ds <- NULL
+    
+    full_fn <-  paste0(dbname,tablename)
+    if(dir.exists(full_fn)){
+      tablename_pq <- paste0(dbname,tablename,"/**/*.parquet")
+      lz_ds <- tbl(con,glue::glue("read_parquet('{tablename_pq}', hive_partitioning = true)"))
+    }else{
+      tablename_pq <- paste0(dbname,tablename)
+      lz_ds <- tbl(con,glue::glue("read_parquet('{tablename_pq}', hive_partitioning = false)"))
+    }
+    
+    return(lz_ds)
+  } 
+)
+
+
 connectors <- list("Netezza"=netezza_objects,
                    "Oracle - Prod"=oracle_objects_prod,
                    "Oracle - Test"=oracle_objects_test,
                    "PostgreSQL - Prod" = postgre_objects_prod,
-                   "PostgreSQL - Test" = postgre_objects_test)
+                   "PostgreSQL - Test" = postgre_objects_test,
+                   "arrow" = base_arrow_test,
+                   "duckdb" = base_duckdb_test,
+                   NULL)
+

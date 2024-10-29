@@ -49,6 +49,14 @@
   background-color: #5cb85c;
 }
 
+.btn-link, .btn-link:focus, .btn-link:hover {
+  padding: 0; 
+  border: none; 
+  background: none;
+  color: #5cb85c;
+  
+}
+
 /* allow all textareas and multiple-select inputs to resize vertically */
 /* have to set overflow to make resize work on Safari                   */
 /* based on https://css-tricks.com/almanac/properties/r/resize/         */
@@ -64,6 +72,14 @@ select {
 /*
 ### PARAMETRAGE DU NAVBAR 
 */
+
+.list_button {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-top: 2.2px;
+  padding-left: 10px;
+  transform: scale(1.15);
+}
 
 .navbar {
   margin-bottom: 10px;
@@ -92,21 +108,6 @@ select {
   background-image: none !important;
 }
 
-
-.datatables{
-  overflow-y:auto;
-  min-height:750px;
-}
-
-
-#dataviewer,#sql_dt{
-  overflow-y:auto;
-  min-height:750px;
-}
-
-
-
-/* disposition des onglets et du bouton pour ajouter des onglets */
 .nav-pills {
   margin-bottom: 8px;
 }
@@ -129,9 +130,29 @@ select {
 
 
 
+
+
+
+
+
+
+
 /*
 ### PARAMETRAGE DU DATATABLE 
 */
+
+.datatables{
+  overflow-y:auto;
+  min-height:750px;
+}
+
+
+#dataviewer,#sql_dt{
+  overflow-y:auto;
+  min-height:750px;
+}
+
+
 
 table.dataTable tfoot td,
 table.dataTable thead td {
@@ -158,11 +179,4 @@ table.dataTable{
 }
 
 
-.list_button {
-  margin-left: 0px;
-  margin-right: 0px;
-  padding-top: 2.2px;
-  padding-left: 10px;
-  transform: scale(1.15);
-}
 

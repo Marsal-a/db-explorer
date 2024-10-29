@@ -7,7 +7,7 @@ viewTabUi <- function(id,label="Tab"){
         uiOutput(NS(id,"ui_navig_tables")),
       ),
       uiOutput(NS(id,"ui_navig_filters")),
-      uiOutput(NS(id,"ui_NAVIG_errors")),
+      uiOutput(NS(id,"ui_navig_filter_errors")),
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
@@ -15,17 +15,16 @@ viewTabUi <- function(id,label="Tab"){
       width = 3
     ),
     mainPanel(
-      fluidRow(
-        column(12,htmlOutput(NS(id,"ui_navig_summary"))),
-        # column(4,htmlOutput(NS(id,"ui_current_query")))
-        ),
-      fluidRow(
-        column(10),
-        column(1,uiOutput(NS(id,"ui_clip_current_query_button"))),
-        column(1,uiOutput(NS(id,"ui_navig_dl_view_tab")))
-      ),
-      # uiOutput(NS(id,"ui_button_sql_query")),
-      
+      fluidRow(column(12,
+        div(
+          # style = "display: flex; justify-content: flex-end; align-items: center; gap: 10px;",
+          style = "position: absolute; top: -22px; right: 15px; display: flex; justify-content: flex-end; gap: 10px;",
+          uiOutput(NS(id, "ui_navig_button_show_sql_query")),
+          uiOutput(NS(id, "ui_navig_dl_view_tab"))
+        )
+      )),
+      fluidRow(column(12,htmlOutput(NS(id,"ui_navig_summary")))),
+      fluidRow(column(12,hidden(uiOutput(NS(id,"ui_navig_current_sql_query"))))),
       DT::dataTableOutput(NS(id,"ui_navig_dataviewer"),height = NULL), # le height = NULL permet de laisser la taille ajusté par CSS 
       width = 9
     )
@@ -51,7 +50,6 @@ viewTabServer <- function(id,parent_session,logins){
             }
         });
     ", NS(id,'modal_pw'), NS(id,'modal_submit_login')))
-      
       
       
       connexion_modal <- function(failed = FALSE,title='Login for PostgreSQL (Production)') {
@@ -269,7 +267,7 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_errors<-reactiveValues()
       
       NAVIG_prepared_tbl_lazy <- eventReactive(
-        eventExpr=c(NAVIG_raw_tbl_lazy(),input$navig_data_filter,input$navig_data_arrange),
+        eventExpr=list(NAVIG_raw_tbl_lazy(),input$navig_data_filter,input$navig_data_arrange),
         ignoreInit = T,
         ignoreNULL = T,{
           
@@ -395,7 +393,7 @@ viewTabServer <- function(id,parent_session,logins){
       )
       
       NAVIG_displayTable <- eventReactive(
-        eventExpr = c(NAVIG_collected_data(),input$navig_view_vars),
+        eventExpr = list(NAVIG_collected_data(),input$navig_view_vars),
         ignoreNULL=T,ignoreInit = F,{
           
           req(input$navig_view_vars)
@@ -411,7 +409,7 @@ viewTabServer <- function(id,parent_session,logins){
         })
       
       NAVIG_tableSummary <- eventReactive(
-        eventExpr = c(input$navig_table,input$navig_data_filter),
+        eventExpr = list(input$navig_table,input$navig_data_filter),
         ignoreInit = T,
         ignoreNULL=F,{
           
@@ -419,13 +417,13 @@ viewTabServer <- function(id,parent_session,logins){
           req(NAVIG_prepared_tbl_lazy())
           
           preview_information <- function(connexion,prepared_data,raw_data_lz,selected_table){
-            current_query <- dbplyr::remote_query(prepared_data)
-            rowcount_query <- glue::glue("SELECT COUNT(*) AS COUNT FROM (\n{current_query}\n) SUB")
-            rowcount <- DBI::dbGetQuery(connexion, rowcount_query)
+            
+            # On enleve le paramétre de tri avec arrange() avant de compter les lignes
+            rowcount <- prepared_data %>% arrange() %>%  count() %>% collect()
+           
             rowcountPretty <- trimws(prettyNum(rowcount, big.mark = ","))
             
             colcount=dim(raw_data_lz)[2]
-            # length(C_FAIT$lazy_query$vars)
             
             glue1 <- glue::glue("
             Prévisualisation de la table {crayon::bold$blue(input$navig_table)} ({min(n_rows_collected,as.integer(rowcount))} premières lignes)
@@ -470,18 +468,47 @@ viewTabServer <- function(id,parent_session,logins){
       #   }
       # )
       
-      # NAVIG_sql_query <- eventReactive(
-      #   eventExpr = c(NAVIG_prepared_tbl_lazy()),
-      #   ignoreNULL=T,ignoreInit = F,{
-      #     # browser()
-      #     lazy_tbl <- NAVIG_prepared_tbl_lazy()
-      # 
-      #     uncolored_query <- as.character(lazy_tbl %>% dbplyr::remote_query() %>% as.character())
-      #     withr::local_options(list(dbplyr_use_colour = TRUE))
-      #     colored_query <- lazy_tbl %>% dbplyr::remote_query()
-      # 
-      #     return(list(uncolored=uncolored_query,colored=colored_query))
-      # })
+      NAVIG_sql_query <- eventReactive(
+        eventExpr = c(NAVIG_prepared_tbl_lazy()),
+        ignoreNULL=T,ignoreInit = F,{
+          
+          lazy_tbl <- NAVIG_prepared_tbl_lazy() 
+          con <- lazy_tbl$src$con
+          
+          ### S'il s'agit d'un tbl_lazy, on peut récupérer la requete via dbplyr::remote_query() 
+          if(inherits(lazy_tbl,"tbl_lazy")){
+            
+            withr::local_options(list(dbplyr_use_colour = TRUE))
+            colored_query <- lazy_tbl %>% head(n_rows_collected) %>% dbplyr::remote_query()
+            withr::local_options(list(dbplyr_use_colour = FALSE))
+            
+            ### Spécifique Oracle version <12, la sélection d'un subset de nombre de ligne via `WHERE ROWNUM < n` 
+            ### n'est pas compatible avec une condition order by sans faire une requete imbriqué. 
+            ### dbplyr ne sait pas traiter ce cas de figure, donc besoin d'un cas spécifique : 
+            
+            if(inherits(con,"OraConnection")){
+              if(ROracle:::.oci.ConnectionInfo(con)$serverVersion<"12"){
+                if(!is.null(lazy_tbl$lazy_query$order_by)){
+                  withr::local_options(list(dbplyr_use_colour = TRUE))
+                  colored_query <- glue::glue("SELECT * FROM (\n{dbplyr::remote_query(lazy_tbl)})\nWHERE ROWNUM < {n_rows_collected}")  
+                  withr::local_options(list(dbplyr_use_colour = FALSE))
+                }
+              }
+            } 
+          
+          ### Cas du traitement sur fichiers parquets : 
+          }else{
+            colored_query <- lazy_tbl %>% head(n_rows_collected) %>% dplyr::show_query() 
+          }
+          
+          colored_query <- colored_query %>% 
+            as.character() %>% 
+            str_replace_all("\"","")
+          
+          uncolored_query <- strip_style(colored_query)
+          
+          return(list(uncolored=uncolored_query,colored=colored_query))
+      })
       
       # output$ui_clip_current_query_button <- renderUI({
       #   req(input$navig_table)
@@ -498,11 +525,25 @@ viewTabServer <- function(id,parent_session,logins){
       #   )
       # })
       
-      # output$ui_button_sql_query <- renderUI({
-      #   req(input$navig_table)
-      #   req(NAVIG_displayTable())
-      #   actionButton(NS(id,"sql_query_button"),"la")
-      # })
+      output$ui_navig_button_show_sql_query <- renderUI({
+        req(input$navig_table)
+        req(NAVIG_displayTable())
+        shinyBS::tipify(
+          el = actionButton(
+            NS(id, "navig_button_show_sql_query"),
+            label = NULL,
+            icon = icon("code"),
+            class = "btn-link",
+          ),
+          title="Afficher / Masquer la requete SQL",
+          placement="bottom",
+          trigger="hover"
+          )
+      })
+      
+      observeEvent(input$navig_button_show_sql_query, {
+        shinyjs::toggle("ui_navig_current_sql_query")
+      })
       
       # observeEvent(input$sql_query_button, {
       #   query <- NAVIG_sql_query()
@@ -521,8 +562,41 @@ viewTabServer <- function(id,parent_session,logins){
       # })
       
       
-      output$ui_current_query <- renderUI({
+      output$ui_navig_current_sql_query <- renderUI({
         ansi2html(NAVIG_sql_query()$colored)
+        tags$div(
+          style = "position: relative;",
+          tags$div(
+            style = "position: absolute; top: 3px; right: 5px;",
+            shinyBS::tipify(
+              el=actionButton(
+                NS(id, "ui_navig_copy_sql_query_button"),
+                label = NULL,
+                icon = icon("copy"),
+                class = "btn-link"
+              ),
+            title="Copier la requête dans le presse-papier",
+            placement="bottom",
+            trigger="hover"
+            )
+          ),
+          tags$div(
+            HTML(ansi2html(NAVIG_sql_query()$colored))
+          )
+        )
+        
+      })
+      
+      observeEvent(input$ui_navig_copy_sql_query_button,{
+        queryToCopy <- NAVIG_sql_query()$uncolored
+        session$sendCustomMessage("copyToClipboard", queryToCopy)
+        shinyWidgets::show_toast(title="Copie de la requête",
+                                 text="La requête a été copiée",
+                                 type="info",
+                                 timer="1500",
+                                 timerProgressBar = T,
+                                 position="bottom-end"
+                                 )
       })
           
       output$navig_dl_data <- downloadHandler(
@@ -537,13 +611,23 @@ viewTabServer <- function(id,parent_session,logins){
       
       output$ui_navig_dl_view_tab <- renderUI({
         if(!is.null(NAVIG_displayTable())){
-          downloadButton(NS(id,"navig_dl_data"),label="Ctrl + S",ic = "download",class = "alignright")
+          shinyBS::tipify(
+            el = downloadButton(
+              NS(id,"navig_dl_data"),
+              label=NULL,
+              ic = "download",
+              class = "btn-link"
+            ),
+            title="Télécharger les données en cliquant ici ou avec CTRL+S",
+            placement="bottom",
+            trigger="hover"
+          )
         }else{
           NULL
         }
       })
       
-      output$ui_NAVIG_errors <- renderUI({
+      output$ui_navig_filter_errors <- renderUI({
         if (is.empty(NAVIG_errors[["value_filter_error"]])) {
           return()
         }
