@@ -159,8 +159,9 @@ postgre_objects_test <- list(
   }
 )
 
-base_parquet_test <- list(
+base_arrow_test <- list(
   connect_function=function(){
+    library(arrow)
     invisible(NULL)
   },
   req_login = FALSE,
@@ -187,6 +188,7 @@ base_parquet_test <- list(
 
 base_duckdb_test <- list(
   connect_function=function(){
+    library(duckdb)
     con <- dbConnect(duckdb())
   },
   req_login = FALSE,
@@ -229,7 +231,7 @@ connectors <- list("Netezza"=netezza_objects,
                    "Oracle - Test"=oracle_objects_test,
                    "PostgreSQL - Prod" = postgre_objects_prod,
                    "PostgreSQL - Test" = postgre_objects_test,
-                   # "arrow" = base_parquet_test,
-                   # "duckdb" = base_duckdb_test,
+                   "arrow" = base_arrow_test,
+                   "duckdb" = base_duckdb_test,
                    NULL)
 
