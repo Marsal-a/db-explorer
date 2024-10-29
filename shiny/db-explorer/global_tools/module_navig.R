@@ -17,7 +17,8 @@ viewTabUi <- function(id,label="Tab"){
     mainPanel(
       fluidRow(column(12,
         div(
-          style = "display: flex; justify-content: flex-end; align-items: center; gap: 10px;",
+          # style = "display: flex; justify-content: flex-end; align-items: center; gap: 10px;",
+          style = "position: absolute; top: -22px; right: 15px; display: flex; justify-content: flex-end; gap: 10px;",
           uiOutput(NS(id, "ui_navig_button_show_sql_query")),
           uiOutput(NS(id, "ui_navig_dl_view_tab"))
         )
