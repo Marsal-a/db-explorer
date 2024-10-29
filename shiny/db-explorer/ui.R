@@ -18,13 +18,9 @@ ui <- navbarPage(
            tags$head(
              tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css")
            ),
-           tags$script("
-            Shiny.addCustomMessageHandler('txt', function (txt) {
-                navigator.clipboard.writeText(txt);
-            });
-            "), # this is new
-           
-           
+
+           includeScript("www/js/collectWindowSize.js"),
+           includeScript("www/js/copyToClipboard.js"),
            includeScript("www/js/CreateTabButton.js"),
            includeScript("www/js/changeActiveTabTitle.js"),
            includeScript("www/js/enter_password.js"),
