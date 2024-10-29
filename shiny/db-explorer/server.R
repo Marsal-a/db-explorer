@@ -20,10 +20,6 @@ shinyServer(function(input, output, session) {
   
   current_time<-reactiveTimer()
 
-  observeEvent(input$changed_value,{
-    logg_full <<- c(logg_full,input$changed_value)
-  })
-  
   observe({
     if(current_time()-start_time>max_session_time){
       logger(path_out_log)
@@ -42,7 +38,21 @@ shinyServer(function(input, output, session) {
 
   
   rv <- reactiveValues(
-    logg_full = c()
+    logg_full = c(),
+    window_height = NULL,
+    window_width = NULL  
   )
+  
+  observeEvent(input$changed_value,{
+    logg_full <<- c(logg_full,input$changed_value)
+  })
+  
+  observeEvent(input$windowHeight,{
+    window_height <<- input$windowHeight
+  })
+  observeEvent(input$windowWidth,{
+    window_width <<- input$windowWidth
+  })
+  
 
 })

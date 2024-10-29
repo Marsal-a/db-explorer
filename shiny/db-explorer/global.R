@@ -177,6 +177,7 @@ logger <- function(path_out){
   
   res=list(
     sysinfo=data.frame(Sys.info()),
+    wdsize=paste0(window_width,"x",window_height),
     start_Time=format(start_time,"%Y%m%d_%H%M%S"),
     package=bind_rows(list_pkg)|>arrange(pkg.Package),
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S"),
