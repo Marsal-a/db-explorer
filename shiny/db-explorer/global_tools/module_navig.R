@@ -529,7 +529,7 @@ viewTabServer <- function(id,parent_session,logins){
         req(NAVIG_displayTable())
         shinyBS::tipify(
           el = actionButton(
-            NS(id, "sql_query_button"),
+            NS(id, "navig_button_show_sql_query"),
             label = NULL,
             icon = icon("code"),
             class = "btn-link",
@@ -540,7 +540,7 @@ viewTabServer <- function(id,parent_session,logins){
           )
       })
       
-      observeEvent(input$sql_query_button, {
+      observeEvent(input$navig_button_show_sql_query, {
         shinyjs::toggle("ui_navig_current_sql_query")
       })
       
@@ -566,23 +566,36 @@ viewTabServer <- function(id,parent_session,logins){
         tags$div(
           style = "position: relative;",
           tags$div(
-            style = "position: absolute; bottom: 1; right: 0;",
-            actionButton(
-              NS(id, "AAAA"),
-              label = NULL,
-              icon = icon("copy"),
-              class = "btn-link"
+            style = "position: absolute; top: 3px; right: 5px;",
+            shinyBS::tipify(
+              el=actionButton(
+                NS(id, "ui_navig_copy_sql_query_button"),
+                label = NULL,
+                icon = icon("copy"),
+                class = "btn-link"
+              ),
+            title="Copier la requête dans le presse-papier",
+            placement="bottom",
+            trigger="hover"
             )
           ),
           tags$div(
             HTML(ansi2html(NAVIG_sql_query()$colored))
           )
         )
+        
       })
       
-      observeEvent(input$AAAA,{
-        text <- NAVIG_sql_query()$uncolored
-        session$sendCustomMessage("txt", text)
+      observeEvent(input$ui_navig_copy_sql_query_button,{
+        queryToCopy <- NAVIG_sql_query()$uncolored
+        session$sendCustomMessage("copyToClipboard", queryToCopy)
+        shinyWidgets::show_toast(title="Copie de la requête",
+                                 text="La requête a été copiée",
+                                 type="info",
+                                 timer="1500",
+                                 timerProgressBar = T,
+                                 position="bottom-end"
+                                 )
       })
           
       output$navig_dl_data <- downloadHandler(
