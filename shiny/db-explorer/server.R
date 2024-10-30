@@ -32,9 +32,9 @@ shinyServer(function(input, output, session) {
   
   logins <- reactiveValues()
   
-  viewTabServer("NAVIG_TAB_1",parent_session=session,logins=logins)
+  viewTabServer("NAVIG_TAB1",parent_session=session,logins=logins)
 
-  viewSqlServer("SQL_TAB_1",parent_session=session,logins=logins)
+  viewSqlServer("SQL_TAB1",parent_session=session,logins=logins)
 
   
   rv <- reactiveValues(
