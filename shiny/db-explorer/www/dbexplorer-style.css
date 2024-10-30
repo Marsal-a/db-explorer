@@ -7,6 +7,10 @@
   height: 10px;
 }
 
+.selectize-control {
+  margin-bottom:10px;
+}
+
 .control-label {
     width:100%;
 }
