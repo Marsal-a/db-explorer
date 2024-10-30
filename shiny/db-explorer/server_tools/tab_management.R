@@ -39,20 +39,27 @@ observeEvent(input$navig_create_tab,{
 
 observeEvent(input$sql_create_tab,{
   
+  active_tab_id <- rv_sql_tab$tab_list_id[which(rv_sql_tab$tab_list_name==input$ConsoleSQL_tabset_panel)]
+  active_tab_db <- input[[NS(active_tab_id,"sql_db")]]
+  
   rv_sql_tab$tab_count <- rv_sql_tab$tab_count+1
   tab_id         <- paste0("SQL_TAB",rv_sql_tab$tab_count)
   tab_title      <- paste0("SQL_",rv_sql_tab$tab_count)
   viewSqlServer(tab_id,parent_session=session,logins=logins)
   
   insertTab("ConsoleSQL_tabset_panel",
-            target=tail(rv_sql_tab$tab_list,n=1),
+            target=tail(rv_sql_tab$tab_list_name,n=1),
             position = 'after',
             tab=tabPanel(value=tab_title,
                          title = tab_title_removable(tab_title,removeInputName="remove_sql_tab"),
                          viewSqlUi(tab_id)),
             select=TRUE
   )
-  rv_sql_tab$tab_list <- c(rv_sql_tab$tab_list,tab_title)
+  
+  updateSelectInput(inputId = NS(tab_id,"sql_db"),selected=active_tab_db)
+  
+  rv_sql_tab$tab_list_name <- c(rv_sql_tab$tab_list_name,tab_title)
+  rv_sql_tab$tab_list_id <- c(rv_sql_tab$tab_list_id,tab_id)
   
 })
 
@@ -73,10 +80,15 @@ observeEvent(input$remove_navig_tab, {
 })
 
 observeEvent(input$remove_sql_tab, {
-  if(length(rv_sql_tab$tab_list)>1){
+  if(length(rv_sql_tab$tab_list_id)>1){
+    tab_name_to_remove <- input$remove_sql_tab
+    tab_id_to_remove   <- rv_sql_tab$tab_list_id[which(rv_sql_tab$tab_list_name==tab_name_to_remove)]
     active_tab=input$ConsoleSQL_tabset_panel
+    
     removeTab(inputId = "ConsoleSQL_tabset_panel", target = input$remove_sql_tab)
     updateTabsetPanel(inputId = "ConsoleSQL_tabset_panel",selected = active_tab)
-    rv_sql_tab$tab_list <- rv_sql_tab$tab_list[!rv_sql_tab$tab_list == input$remove_sql_tab]
+    
+    rv_sql_tab$tab_list_name <- rv_sql_tab$tab_list_name[!rv_sql_tab$tab_list_name == tab_name_to_remove]
+    rv_sql_tab$tab_list_id   <- rv_sql_tab$tab_list_id[!rv_sql_tab$tab_list_id == tab_id_to_remove]
   }
 })
