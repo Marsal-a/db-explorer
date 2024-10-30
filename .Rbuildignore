@@ -1,3 +1,5 @@
 ^db-explorer\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+dev/
+R/dev_package.R

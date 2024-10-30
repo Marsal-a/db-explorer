@@ -1,4 +1,4 @@
-Package: db-explorer
+Package: dbExplorer
 Title: Explore databases 
 Version: 0.0.0.9000
 Authors@R: 
