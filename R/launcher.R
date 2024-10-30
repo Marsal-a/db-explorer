@@ -6,7 +6,10 @@
 #' @param name nom du job
 #' @param opt_cmd commande optionnelle à lancer avant le run de l'appl
 #'
-#'
+#' @importFrom rstudioapi jobRunScript
+#' @importFrom glue glue
+#' @importFrom httr GET use_proxy
+#' @importFrom shiny p_randomInt
 #' @return rien
 launch_shiny_backgroundJob <- function(shinyPath,port=NULL,sleep=5,name=NULL,opt_cmd=NULL){
 
