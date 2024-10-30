@@ -1,5 +1,5 @@
-### Fonction utilitaires pour l'application : 
-### La plupart des fonctions sont issues ou inspirées du package Radiant : 
+### Fonction utilitaires pour l'application :
+### La plupart des fonctions sont issues ou inspirées du package Radiant :
 ### https://github.com/radiant-rstats
 
 # options(
@@ -11,9 +11,9 @@
 ## Si l'application est lancé par un job rstudio, stocké sur R_commun (temporaire pour les tests beta) : on veut path_db_explorer = "./"
 
 options(
-  path_db_explorer = ifelse(grepl("/shiny/db-explorer|R_Commun/Adam", getwd()),"./","./shiny/db-explorer/")
+  path_db_explorer = ifelse(grepl("/shiny/db-explorer|R_Commun/Adam|/inst/shinyApp", getwd()),"./","./inst/shinyApp/")
 )
-
+print(getOption("path_db_explorer"))
 options(shiny.reactlog = TRUE)
 enc <- getOption("db-explorer.encoding", "UTF-8")
 
@@ -33,7 +33,7 @@ source(paste0(getOption("path_db_explorer"),"global_tools/","module_consoleSql.R
 
 
 ### Issu du package radiant
-### > Permet d'ajouter le type de variable à la liste des variables 
+### > Permet d'ajouter le type de variable à la liste des variables
 get_class <- function(dat) {
   sapply(dat, function(x) class(x)[1]) %>%
     sub("ordered", "factor", .) %>%
@@ -46,7 +46,7 @@ get_class <- function(dat) {
 
 ### Issu du package radiant
 ### permet de corriger certains caractères spéciaux dans la création de la condition de filtre
-### Ainsi que de traiter les retour à la ligne  
+### Ainsi que de traiter les retour à la ligne
 fix_smart <- function(text, all = FALSE) {
   if (all) {
     ## to remove all non-ascii symbols use ...
@@ -138,10 +138,10 @@ returnTextAreaInput <- function(inputId, label = NULL, rows = 2,
 
 ### Fonction de débogage, à insérer dans les fonctions réactives pour suivre l'éxecution des déclenchements
 ts_print <- function(x,...){
-  
+
   p=paste0(format(Sys.time(), "%H:%M:%OS3")," - ",x)
   print(p,...)
-  
+
 }
 
 ansi2html <- function(ansi){
@@ -152,29 +152,29 @@ ansi2html <- function(ansi){
 }
 
 print_session <- function(){
-  
+
   session=sessionInfo()
   pkg_load=c(session$loadedOnly,session$otherPkgs)
-  
+
   list_pkg=purrr::map(pkg_load,function(pkg){
     df=data.frame(pkg$Package,pkg$Version)
   })
   print(bind_rows(list_pkg)|>arrange(pkg.Package),row.names=FALSE)
-  
+
 }
 
 logger <- function(path_out){
-  
+
   # browser()
   Sys.sleep(1)
   fname=paste0(path_out,fs::path_sanitize(paste0("log_db-explorer_",Sys.info()['user'],"_",format(Sys.time(), "%Y%m%d_%H%M%S"),".txt")))
   session=sessionInfo()
   pkg_load=c(session$loadedOnly,session$otherPkgs)
-  
+
   list_pkg=purrr::map(pkg_load,function(pkg){
     df=data.frame(pkg$Package,pkg$Version)
   })
-  
+
   res=list(
     sysinfo=data.frame(Sys.info()),
     wdsize=paste0(window_width,"x",window_height),
@@ -183,11 +183,11 @@ logger <- function(path_out){
     end_Time=format(Sys.time(),"%Y%m%d_%H%M%S"),
     full_l=tibble(logg_full)
   )
-  
+
   options(tibble.print_max = Inf)
   writeLines(capture.output(print(res)), con = fname)
   options(tibble.print_max = NULL)
-  
+
 }
 
 
