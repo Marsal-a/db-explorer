@@ -9,7 +9,7 @@
 #' @importFrom rstudioapi jobRunScript
 #' @importFrom glue glue
 #' @importFrom httr GET use_proxy
-#' @importFrom shiny p_randomInt
+#' @importFrom utils browseURL
 #' @return rien
 launch_shiny_backgroundJob <- function(shinyPath,port=NULL,sleep=5,name=NULL,opt_cmd=NULL){
 
@@ -64,12 +64,24 @@ launch_shiny_backgroundJob <- function(shinyPath,port=NULL,sleep=5,name=NULL,opt
   for (i in 1:max_attempts) {
 
     if (test_url(url)) {
-      browseURL(url)
+      utils::browseURL(url)
       rstudioapi::executeCommand("activateConsole")
       break
     } else {
       Sys.sleep(1)
     }
   }
+
+  return(invisible(NULL))
+
+}
+
+#' Lancement d'une appli Shiny en fond
+#'
+#' @export
+ExplorerDonnees <- function(){
+
+  path_shinyApp <- system.file("shinyApp",package="dbExplorer")
+  launch_shiny_backgroundJob(path_shinyApp)
 
 }
