@@ -1,5 +1,6 @@
 
-.libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
+# .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
+.libPaths(c(system.file("library",package = "dbExplorer"),.libPaths()))
 # .libPaths(.libPaths()[1])
 
 library(crayon)

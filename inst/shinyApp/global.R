@@ -11,8 +11,10 @@
 ## Si l'application est lancé par un job rstudio, stocké sur R_commun (temporaire pour les tests beta) : on veut path_db_explorer = "./"
 
 options(
-  path_db_explorer = ifelse(grepl("/shiny/db-explorer|R_Commun/Adam|/inst/shinyApp", getwd()),"./","./inst/shinyApp/")
+  path_db_explorer = ifelse(grepl("/shiny/db-explorer|R_Commun/Adam|/inst/shinyApp|dbExplorer/shinyApp", getwd()),"./","./inst/shinyApp/")
 )
+print(getwd())
+print(grepl("/shiny/db-explorer|R_Commun/Adam|/inst/shinyApp|dbExplorer/shinyApp", getwd()))
 print(getOption("path_db_explorer"))
 options(shiny.reactlog = TRUE)
 enc <- getOption("db-explorer.encoding", "UTF-8")
