@@ -1,7 +1,12 @@
+## Si l'application est lancé depuis R_Commun ou depuis le projet R, on source des versions particulières des librairies.
+if(grepl("db-explorer/inst/shinyApp|R_Commun",getwd())){
+  .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
+}
 
-# .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
-.libPaths(c(system.file("library",package = "dbExplorer"),.libPaths()))
-# .libPaths(.libPaths()[1])
+## Si l'application est lancé via la fonction du package, on source les librairies depuis le répertoire du package
+if(grepl("/4.1/dbExplorer/shinyApp",getwd())){
+  .libPaths(c(system.file("library",package = "dbExplorer"),.libPaths()))
+}
 
 library(crayon)
 library(shinyAce)
@@ -17,7 +22,6 @@ library(stringi)
 library(stringr)
 library(shinyjs)
 library(shinyBS)
-# library(rclipboard)
 
 options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx8192m","-Xss3m"))
 
