@@ -8,6 +8,7 @@ if(grepl("/4.1/dbExplorer/shinyApp",getwd())){
   .libPaths(c(system.file("library",package = "dbExplorer"),.libPaths()))
 }
 
+library(magrittr)
 library(crayon)
 library(shinyAce)
 library(shiny)
@@ -18,10 +19,18 @@ library(dbplyr)
 library(purrr)
 library(rlang)
 library(fontawesome)
-library(stringi)
 library(stringr)
 library(shinyjs)
 library(shinyBS)
 
-options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx8192m","-Xss3m"))
+# library(DT)
+# library(fan)
+# library(tidyr)
+# library(rmarkdown)
+# library(stringi)
+# library(data.table)
+# library(htmltools)
+# library(shinyWidgets)
+# library(withr)
 
+options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx8192m","-Xss3m"))
