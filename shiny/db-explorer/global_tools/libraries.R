@@ -16,6 +16,7 @@ library(stringi)
 library(stringr)
 library(shinyjs)
 library(shinyBS)
+# library(rclipboard)
 
 options(java.parameters = c("-XX:+UseConcMarkSweepGC", "-Xmx8192m","-Xss3m"))
 
