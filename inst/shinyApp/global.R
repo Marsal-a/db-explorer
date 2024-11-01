@@ -2,23 +2,10 @@
 ### La plupart des fonctions sont issues ou inspirées du package Radiant :
 ### https://github.com/radiant-rstats
 
-# options(
-#   path_db_explorer = ifelse(grepl("/shiny/db-explorer", getwd()),"../../","./")
-# )
-
-
-## Si l'application est lancé depuis le projet Rstudio : on veut path_db_explorer = "./"
-## Si l'application est lancé par un job rstudio, stocké sur R_commun (temporaire pour les tests beta) : on veut path_db_explorer = "./"
-
-options(
-  path_db_explorer = ifelse(grepl("/shiny/db-explorer|R_Commun/Adam|/inst/shinyApp|dbExplorer/shinyApp", getwd()),"./","./inst/shinyApp/")
-)
-print(getwd())
-print(grepl("/shiny/db-explorer|R_Commun/Adam|/inst/shinyApp|dbExplorer/shinyApp", getwd()))
-print(getOption("path_db_explorer"))
 options(shiny.reactlog = TRUE)
 enc <- getOption("db-explorer.encoding", "UTF-8")
 
+options(path_db_explorer = "./")
 
 source(paste0(getOption("path_db_explorer"),"global_tools/","libraries.R"))
 source(paste0(getOption("path_db_explorer"),"global_tools/","connector.R"))
@@ -29,10 +16,6 @@ source(paste0(getOption("path_db_explorer"),"global_tools/","module_consoleSql.R
 # for (file in list.files(c("global_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
 #   source(file, encoding = enc, local = TRUE)
 # }
-
-
-
-
 
 ### Issu du package radiant
 ### > Permet d'ajouter le type de variable à la liste des variables
@@ -179,6 +162,7 @@ logger <- function(path_out){
 
   res=list(
     sysinfo=data.frame(Sys.info()),
+    wd=getwd(),
     wdsize=paste0(window_width,"x",window_height),
     start_Time=format(start_time,"%Y%m%d_%H%M%S"),
     package=bind_rows(list_pkg)|>arrange(pkg.Package),
