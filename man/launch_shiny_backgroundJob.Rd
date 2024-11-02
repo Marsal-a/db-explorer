@@ -2,22 +2,23 @@
 % Please edit documentation in R/launcher.R
 \name{launch_shiny_backgroundJob}
 \alias{launch_shiny_backgroundJob}
-\title{Lancement d'une appli Shiny en fond}
+\title{Lancement d'une appli Shiny en background}
 \usage{
 launch_shiny_backgroundJob(
   shinyPath,
+  host = "127.0.0.1",
   port = NULL,
-  sleep = 5,
   name = NULL,
-  opt_cmd = NULL
+  opt_cmd = NULL,
+  max_attempts = 30
 )
 }
 \arguments{
 \item{shinyPath}{le chemin de l'application shiny}
 
-\item{port}{le port d'ecoute}
+\item{host}{l'adresse de connexion à l'application}
 
-\item{sleep}{temp sleep avant lancement}
+\item{port}{le port d'ecoute}
 
 \item{name}{nom du job}
 
@@ -27,5 +28,5 @@ launch_shiny_backgroundJob(
 rien
 }
 \description{
-Lancement d'une appli Shiny en fond
+Lancement d'une appli Shiny en background
 }
