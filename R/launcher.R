@@ -32,8 +32,6 @@ launch_shiny_backgroundJob <- function(shinyPath,host="127.0.0.1",port=NULL,name
   writeLines(c(script),fileConn)
   close.connection(fileConn)
 
-  print(filename)
-
   job <- rstudioapi::jobRunScript(path = filename ,importEnv =FALSE,exportEnv = "R_GlobalEnv",name = paste0(name," (port = ", port,")"))
 
   url <- glue::glue("http://127.0.0.1:{port}")
@@ -79,9 +77,24 @@ launch_shiny_backgroundJob <- function(shinyPath,host="127.0.0.1",port=NULL,name
 #' Lancement d'une appli Shiny en fond
 #'
 #' @export
-ExplorerDonnees <- function(){
+ExplorerDonnees <- function(connectorFile=NULL){
+
+  if(is.null(connectorFile)){
+    if(is.null(getOption("dbExplorer.connectorFile"))){
+      stop(paste0("Veuillez spécifier un fichier de connexion :\n",
+      "- dans le paramètre connectorFile : ExplorerDonnees(connectorFile=FICHIER_CONNEXION)\n",
+      "ou \n",
+      "- dans via l'option R \"dbExplorer.connectorFile\" : options(dbExplorer.connectorFile = FICHIER_CONNEXION)"))
+    }else{
+      connectorFile=getOption("dbExplorer.connectorFile")
+    }
+  }
+
+  if(TRUE){
+    cmd_load_connector = paste0("source(\"",connectorFile,"\")")
+  }
 
   path_shinyApp <- system.file("shinyApp",package="dbExplorer")
-  launch_shiny_backgroundJob(path_shinyApp)
+  launch_shiny_backgroundJob(path_shinyApp,opt_cmd = cmd_load_connector)
 
 }
