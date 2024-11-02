@@ -9,10 +9,14 @@
 
 if(grepl("db-explorer/inst/shinyApp|R_Commun",getwd())){
   .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
-  options(dbExplorer.connectorFile="../connecteursJustice.R")
 }else{
   .libPaths(c(getOption("dbExplorer.libPath"),.libPaths()))
-  # options(dbExplorer.connectorFile="./inst/connecteursJustice.R")
+}
+
+if(grepl("R_Commun",getwd())){
+  options(dbExplorer.connectorFile="./connecteursJustice.R")
+}else if(grepl("db-explorer/inst/shinyApp",getwd())){
+  options(dbExplorer.connectorFile="../connecteursJustice.R")
 }
 
 
