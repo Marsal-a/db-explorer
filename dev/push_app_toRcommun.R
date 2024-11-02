@@ -6,6 +6,10 @@ pushAppToDir <- function(dir){
             recursive = TRUE)
 }
 
+pushConnectorsToDir <- function(dir,file){
+  file.copy(from=file,to = dir,overwrite = TRUE)
+}
+
 archiveApp <- function(appPath,archive_path){
 
   archive_f=paste0(archive_path,"db-explorer-",format(Sys.time(), "%Y%m%d_%H%M%S"))
@@ -30,10 +34,12 @@ push_db_explorer <- function(launch=FALSE){
     if(ask){
       archiveApp(appPath = master_location,archive_path = archive_location)
       pushAppToDir(master_location)
+      pushConnectorsToDir(master_location,"./inst/connecteursJustice.R")
     }
   }else{
     branch_dir<-paste0("~/R_Commun/Adam/db-explorer","-",fs::path_sanitize(current_branch),"/")
     pushAppToDir(branch_dir)
+    pushConnectorsToDir(branch_dir,"./inst/connecteursJustice.R")
 
   }
   if(launch)
