@@ -31,9 +31,9 @@ netezza_objects <- list(
   },
   list_tables_function = function(con,dbname){
     NAVIG_all_nz_tables_function <- function(con){
-      
+
       React <- reactive({
-        
+
         query_nz_tables <- "
       SELECT
         _V_OBJECT_DATA.OBJTYPE,
@@ -47,12 +47,12 @@ netezza_objects <- list(
       ORDER BY _V_OBJECT_DATA.OBJNAME
       "
         all_tables <- dplyr::as_tibble(DBI::dbGetQuery(con, query_nz_tables))
-        
+
         all_tables <- all_tables %>% filter(OBJTYPE %in% c("TABLE","VIEW"))
-        
-        
+
+
         return(all_tables)
-        
+
       }) %>% bindCache(con,cache = "session")
       return(React)
     }
@@ -181,7 +181,7 @@ base_arrow_test <- list(
     # browser()
     file=paste0(con,dbname,tablename)
     lz_ds <- arrow::open_dataset(file)
-    
+
     return(lz_ds)
   }
 )
@@ -193,25 +193,25 @@ base_duckdb_test <- list(
   },
   req_login = FALSE,
   list_schemas_function = function(con){
-    print(con)
+    print(invisible(con))
     schemas=c("parquet partitioned"="~/nfs-slr1/données parquet/parquet_part/",
               "parquet un-partitionned"="~/nfs-slr1/données parquet/parquet_unpart/")
     return(schemas)
   },
   list_tables_function = function(con,dbname){
-    
+
     print(con)
     tables_unpart <- list.files(dbname,pattern = "*.parquet$",full.names = F,include.dirs = F)
     tables_part   <- list.dirs(dbname,recursive = F,full.names = F)
-    
+
     tables <- c(tables_unpart,tables_part)
-    
+
     return(tables)
   },
   remote_table_function = function(con,dbname,tablename){
-    
+
     lz_ds <- NULL
-    
+
     full_fn <-  paste0(dbname,tablename)
     if(dir.exists(full_fn)){
       tablename_pq <- paste0(dbname,tablename,"/**/*.parquet")
@@ -220,9 +220,9 @@ base_duckdb_test <- list(
       tablename_pq <- paste0(dbname,tablename)
       lz_ds <- tbl(con,glue::glue("read_parquet('{tablename_pq}', hive_partitioning = false)"))
     }
-    
+
     return(lz_ds)
-  } 
+  }
 )
 
 
@@ -232,6 +232,6 @@ connectors <- list("Netezza"=netezza_objects,
                    "PostgreSQL - Prod" = postgre_objects_prod,
                    "PostgreSQL - Test" = postgre_objects_test,
                    # "arrow" = base_arrow_test,
-                   # "duckdb" = base_duckdb_test,
+                   "duckdb" = base_duckdb_test,
                    NULL)
 
