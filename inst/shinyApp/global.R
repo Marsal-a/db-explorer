@@ -2,16 +2,46 @@
 ### La plupart des fonctions sont issues ou inspirées du package Radiant :
 ### https://github.com/radiant-rstats
 
+
+
+### PARTIE à SUPPRIMER à l'avenir, et spécifique à un déploiement sur 'R_COMMUN'
+## Si l'application est lancé depuis R_Commun ou depuis le projet R, on source des versions particulières des librairies.
+
+if(grepl("db-explorer/inst/shinyApp|R_Commun",getwd())){
+  .libPaths(c( "~/R_Commun/Adam/custom_lib/db-explorer/",.libPaths()))
+  options(dbExplorer.connectorFile="../connecteursJustice.R")
+}else{
+  .libPaths(c(getOption("dbExplorer.libPath"),.libPaths()))
+  # options(dbExplorer.connectorFile="./inst/connecteursJustice.R")
+}
+
+
+
 options(shiny.reactlog = TRUE)
 enc <- getOption("db-explorer.encoding", "UTF-8")
 
-options(path_db_explorer = "./")
 
-source(paste0(getOption("path_db_explorer"),"global_tools/","libraries.R"))
-source(paste0(getOption("path_db_explorer"),"global_tools/","connector.R"))
-source(paste0(getOption("path_db_explorer"),"global_tools/","init.R"))
-source(paste0(getOption("path_db_explorer"),"global_tools/","module_navig.R"))
-source(paste0(getOption("path_db_explorer"),"global_tools/","module_consoleSql.R"))
+if(!is.null(getOption("dbExplorer.connectorFile"))){
+  tryCatch(expr = {
+    source(getOption("dbExplorer.connectorFile"))
+  },
+  error=function(err){
+    cat(paste0("Impossible de charger le fichier de connexion :",as.character(getOption("dbExplorer.connectorFile"))))
+    cat("\nVérifier l'option R : getOption(\"dbExplorer.connectorFile\")")
+  })
+}
+
+source(paste0("./global_tools/","libraries.R"))
+source(paste0("./global_tools/","init.R"))
+source(paste0("./global_tools/","module_navig.R"))
+source(paste0("./global_tools/","module_consoleSql.R"))
+
+
+
+
+
+
+
 
 # for (file in list.files(c("global_tools"), pattern = "\\.(r|R)$", full.names = TRUE)) {
 #   source(file, encoding = enc, local = TRUE)
