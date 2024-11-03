@@ -4,9 +4,9 @@ postgreSQLConnector <- list(
 
   connect_function = function(user,pw){
 
-    dbhost="10.21.2.210"
-    dbport="5432"
-    dbname="prod"
+    dbhost="{{HOST}}"
+    dbport="{{PORT]}"
+    dbname="{{DBNAME]}"
 
     if(!is.null(user) & !is.null(pw)){
       con <- DBI::dbConnect(drv = RPostgres::Postgres(),
