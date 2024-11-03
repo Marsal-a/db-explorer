@@ -89,7 +89,7 @@ ExplorerDonnees <- function(connectorFile=NULL){
       connectorFile=getOption("dbExplorer.connectorFile")
     }
   }
-
+  connectorFile <- normalizePath(connectorFile)
   if(TRUE){
     cmd_load_connector = paste0("source(\"",connectorFile,"\")")
   }
