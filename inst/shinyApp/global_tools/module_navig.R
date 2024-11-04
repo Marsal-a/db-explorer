@@ -11,7 +11,7 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
@@ -169,14 +169,20 @@ viewTabServer <- function(id,parent_session,logins){
         return(raw_tbl_lazy)
       })
 
+      NAVIG_col_sorted <- reactiveVal(FALSE)
+
       NAVIG_varnames <- eventReactive(
-        eventExpr = c(NAVIG_raw_tbl_lazy()),{
+        eventExpr = list(NAVIG_raw_tbl_lazy(),NAVIG_col_sorted()),{
 
         req(input$navig_table)
 
         var_class = get_class(NAVIG_raw_tbl_lazy() %>% head(10) %>% collect())
         res <-names(var_class) %>%
           set_names(., paste0(., " {", var_class, "}"))
+
+        if(NAVIG_col_sorted()){
+          res<-sort(res)
+        }
 
         return(res)
       })
@@ -241,7 +247,29 @@ viewTabServer <- function(id,parent_session,logins){
         vars <- NAVIG_varnames()
         wellPanel(
           fluidPage(
-            uiLabelWithIcon(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
+            tags$div(
+              style = "display: flex; justify-content: space-between",
+              tags$label("mlabel",`for` = NS(id,"navig_view_vars")),
+              tags$div(
+                style = "text-align: right;",
+                tags$span(
+                  icon("sort-alpha-down"),
+                  onclick = paste0("event.stopPropagation();
+                                   Shiny.setInputValue(\"", paste0(NS(id,"navig_view_vars_sort"), '_icon_clicked'), "\", Math.random(), {priority: \"event\"});"),
+                  class = "help_btn",
+                  style = "cursor: pointer;"
+                ),
+                tags$span(
+                  icon("question-circle"),
+                  onclick = paste0("event.stopPropagation();
+                                   Shiny.setInputValue(\"", paste0(NS(id,"navig_view_vars_help"), '_icon_clicked'), "\", Math.random(), {priority: \"event\"});"),
+                  class = "help_btn",
+                  style = "cursor: pointer;"
+                )
+              )
+            ),
+
+            # uiLabelWithIcon(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
             selectInput(
               inputId   = NS(id,"navig_view_vars"),
               label = NULL,
@@ -256,7 +284,13 @@ viewTabServer <- function(id,parent_session,logins){
         )
       })
 
-      observeEvent(input$navig_view_vars_icon_clicked,{
+      observeEvent(input$navig_view_vars_sort_icon_clicked,{
+
+        NAVIG_col_sorted(!NAVIG_col_sorted())
+
+      })
+
+      observeEvent(input$navig_view_vars_help_icon_clicked,{
         showModal(modalDialog(
           tags$iframe(src="help/selectColumn_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
           size="l",
@@ -400,8 +434,12 @@ viewTabServer <- function(id,parent_session,logins){
           req(all(input$navig_view_vars %in% NAVIG_varnames()))
           display_data <- NAVIG_collected_data()
 
+          initial_col_order <- colnames(NAVIG_collected_data())
+          selected_cols <- initial_col_order[sort(match(input$navig_view_vars, initial_col_order))]
+
           if(!is.null(input$navig_view_vars)){
-            display_data <- select_at(display_data, .vars = input$navig_view_vars)
+            # display_data <- select_at(display_data, .vars = input$navig_view_vars)
+            display_data <- select_at(display_data, .vars = selected_cols)
           }
 
           return(display_data)
@@ -469,10 +507,15 @@ viewTabServer <- function(id,parent_session,logins){
       # )
 
       NAVIG_sql_query <- eventReactive(
-        eventExpr = c(NAVIG_prepared_tbl_lazy()),
+        eventExpr = c(NAVIG_prepared_tbl_lazy(),input$navig_view_vars),
         ignoreNULL=T,ignoreInit = F,{
 
+
           lazy_tbl <- NAVIG_prepared_tbl_lazy()
+          initial_col_order <- colnames(lazy_tbl)
+          selected_cols <- initial_col_order[sort(match(input$navig_view_vars, initial_col_order))]
+          lazy_tbl <- lazy_tbl %>% select_at(selected_cols)
+
           con <- lazy_tbl$src$con
 
           ### S'il s'agit d'un tbl_lazy, on peut récupérer la requete via dbplyr::remote_query()
