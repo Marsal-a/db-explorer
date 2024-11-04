@@ -2,7 +2,9 @@
 
 export(ExplorerDonnees)
 importFrom(glue,glue)
+importFrom(httpuv,randomPort)
 importFrom(httr,GET)
 importFrom(httr,use_proxy)
 importFrom(rstudioapi,jobRunScript)
 importFrom(utils,browseURL)
+importFrom(utils,file.edit)

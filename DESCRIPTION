@@ -18,6 +18,8 @@ RoxygenNote: 7.1.1
 Imports: 
     dbplyr,
     dplyr,
+    glue,
+    httpuv,
     httr,
     purrr,
     rlang,
