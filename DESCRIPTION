@@ -15,14 +15,23 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Imports: 
-    dbplyr,
-    dplyr,
+Imports:
     glue,
     httpuv,
     httr,
+    rstudioapi
+Suggests: 
+    data.table,
+    crayon,
+    DBI,
+    dbplyr,
+    dplyr,
+    DT,
+    fansi,
+    fontawesome,
+    fs,
+    htmltools,
+    magrittr,
     purrr,
     rlang,
-    rstudioapi,
-    shiny,
-    stringr
+    shiny
