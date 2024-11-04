@@ -169,8 +169,10 @@ viewTabServer <- function(id,parent_session,logins){
         return(raw_tbl_lazy)
       })
 
+      NAVIG_col_sorted <- reactiveVal(FALSE)
+
       NAVIG_varnames <- eventReactive(
-        eventExpr = c(NAVIG_raw_tbl_lazy()),{
+        eventExpr = list(NAVIG_raw_tbl_lazy()),{
 
         req(input$navig_table)
 
@@ -237,11 +239,37 @@ viewTabServer <- function(id,parent_session,logins){
       output$ui_navig_view_vars <- renderUI({
 
         req(input$navig_table)
-
         vars <- NAVIG_varnames()
+        if(NAVIG_col_sorted()){
+          vars <- sort(vars)
+        }
         wellPanel(
           fluidPage(
-            uiLabelWithIcon(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
+            tags$div(
+              style = "display: flex; justify-content: space-between",
+              tags$label("Sélection des colonnes :"),
+              tags$div(
+                style = "text-align: right;",
+                tags$span(
+                  icon("sort-alpha-down"),
+                  onclick = paste0("event.stopPropagation();
+                                   Shiny.setInputValue(\"", paste0(NS(id,"navig_view_vars_sort"), '_icon_clicked'), "\", Math.random(), {priority: \"event\"});"),
+                  class = "help_btn",
+                  style = "cursor: pointer;"
+                ),
+                tags$span(
+                  icon("question-circle"),
+                  onclick = paste0("event.stopPropagation();
+                                   Shiny.setInputValue(\"", paste0(NS(id,"navig_view_vars_help"), '_icon_clicked'), "\", Math.random(), {priority: \"event\"});"),
+                  class = "help_btn",
+                  style = "cursor: pointer;"
+                )
+              )
+            ),
+
+
+
+            # uiLabelWithIcon(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
             selectInput(
               inputId   = NS(id,"navig_view_vars"),
               label = NULL,
@@ -254,9 +282,19 @@ viewTabServer <- function(id,parent_session,logins){
             style="padding-left: 0px;padding-right:0px"
           )
         )
+
       })
 
-      observeEvent(input$navig_view_vars_icon_clicked,{
+      observeEvent(input$navig_view_vars_sort_icon_clicked,{
+
+
+        selected_col <- input$navig_view_vars
+        NAVIG_col_sorted(!NAVIG_col_sorted())
+        updateSelectInput(inputId = "navig_view_vars",selected=selected_col)
+
+      })
+
+      observeEvent(input$navig_view_vars_help_icon_clicked,{
         showModal(modalDialog(
           tags$iframe(src="help/selectColumn_helper.html", width="800", height="800", scrolling="no", seamless="seamless", frameBorder="0"),
           size="l",
@@ -272,14 +310,12 @@ viewTabServer <- function(id,parent_session,logins){
         ignoreNULL = T,{
 
           req(input$navig_table)
-
           prepared_data <- NAVIG_raw_tbl_lazy()
 
           if(is.empty(input$navig_data_filter)){
             isolate(NAVIG_errors[["value_filter_error"]] <- "")
           }else{
             if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
-
 
               isolate(NAVIG_errors[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
 
@@ -303,7 +339,6 @@ viewTabServer <- function(id,parent_session,logins){
               }
             }
           }
-
 
           if(is.empty(input$navig_data_arrange)){
             isolate(NAVIG_errors[["value_arrange_error"]] <- "")
@@ -396,12 +431,19 @@ viewTabServer <- function(id,parent_session,logins){
         eventExpr = list(NAVIG_collected_data(),input$navig_view_vars),
         ignoreNULL=T,ignoreInit = F,{
 
+
+
           req(input$navig_view_vars)
           req(all(input$navig_view_vars %in% NAVIG_varnames()))
+
           display_data <- NAVIG_collected_data()
 
+          initial_col_order <- colnames(NAVIG_collected_data())
+          selected_cols <- initial_col_order[sort(match(input$navig_view_vars, initial_col_order))]
+
           if(!is.null(input$navig_view_vars)){
-            display_data <- select_at(display_data, .vars = input$navig_view_vars)
+            # display_data <- select_at(display_data, .vars = input$navig_view_vars)
+            display_data <- select_at(display_data, .vars = selected_cols)
           }
 
           return(display_data)
@@ -469,10 +511,15 @@ viewTabServer <- function(id,parent_session,logins){
       # )
 
       NAVIG_sql_query <- eventReactive(
-        eventExpr = c(NAVIG_prepared_tbl_lazy()),
+        eventExpr = c(NAVIG_prepared_tbl_lazy(),input$navig_view_vars),
         ignoreNULL=T,ignoreInit = F,{
 
+
           lazy_tbl <- NAVIG_prepared_tbl_lazy()
+          initial_col_order <- colnames(lazy_tbl)
+          selected_cols <- initial_col_order[sort(match(input$navig_view_vars, initial_col_order))]
+          lazy_tbl <- lazy_tbl %>% select_at(selected_cols)
+
           con <- lazy_tbl$src$con
 
           ### S'il s'agit d'un tbl_lazy, on peut récupérer la requete via dbplyr::remote_query()
