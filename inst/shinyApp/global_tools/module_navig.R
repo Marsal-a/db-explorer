@@ -663,9 +663,12 @@ viewTabServer <- function(id,parent_session,logins){
         caption <- if (is.empty(input$view_tab_slice)) NULL else htmltools::tags$caption(glue("Table slice {input$view_tab_slice} will be applied on Download, Store, or Report"))
 
         columnCliked = NS(id,"columnClicked")
-
         cellClicked = NS(id,"cellClicked")
         cellClickType = NS(id,"cellClickType")
+
+        isPOSIXct <- sapply(dat,function(x) inherits(x,"POSIXct"))
+
+
 
         withProgress(
           message = "Generating view table", value = 1,
@@ -739,7 +742,8 @@ viewTabServer <- function(id,parent_session,logins){
                       });")
             )),
             selection = list(target = 'cell')
-          )
+          ) %>%
+            (function(x) if(sum(isPOSIXct) > 0) DT::formatDate(x, names(isPOSIXct)[isPOSIXct],"toLocaleString") else x)
 
         )
       })
