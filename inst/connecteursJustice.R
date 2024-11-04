@@ -232,6 +232,6 @@ connectors <- list("Netezza"=netezza_objects,
                    "PostgreSQL - Prod" = postgre_objects_prod,
                    "PostgreSQL - Test" = postgre_objects_test,
                    # "arrow" = base_arrow_test,
-                   "duckdb" = base_duckdb_test,
+                   # "duckdb" = base_duckdb_test,
                    NULL)
 
