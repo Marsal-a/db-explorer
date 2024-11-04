@@ -4,7 +4,11 @@
 \alias{ExplorerDonnees}
 \title{Lancement d'une appli Shiny en fond}
 \usage{
-ExplorerDonnees()
+ExplorerDonnees(connectorFile = NULL)
+}
+\arguments{
+\item{connectorFile}{Nom et chemin du fichier de connexion. Le fichier de connexion doit permettre la construction
+d'une liste de connecteur, nommé connectors.}
 }
 \description{
 Lancement d'une appli Shiny en fond

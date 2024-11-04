@@ -5,11 +5,13 @@
 #' @param port le port d'ecoute
 #' @param name nom du job
 #' @param opt_cmd commande optionnelle à lancer avant le run de l'appl
+#' @param max_attempts Nombre de tentative de connexion à l'application
 #'
 #' @importFrom rstudioapi jobRunScript
 #' @importFrom glue glue
 #' @importFrom httr GET use_proxy
 #' @importFrom utils browseURL
+#' @importFrom httpuv randomPort
 #' @return rien
 launch_shiny_backgroundJob <- function(shinyPath,host="127.0.0.1",port=NULL,name=NULL,opt_cmd=NULL,max_attempts=30){
 
@@ -75,6 +77,9 @@ launch_shiny_backgroundJob <- function(shinyPath,host="127.0.0.1",port=NULL,name
 }
 
 #' Lancement d'une appli Shiny en fond
+#'
+#'@param connectorFile Nom et chemin du fichier de connexion. Le fichier de connexion doit permettre la construction
+#' d'une liste de connecteur, nommé connectors.
 #'
 #' @export
 ExplorerDonnees <- function(connectorFile=NULL){

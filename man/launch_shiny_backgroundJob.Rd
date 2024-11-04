@@ -23,6 +23,8 @@ launch_shiny_backgroundJob(
 \item{name}{nom du job}
 
 \item{opt_cmd}{commande optionnelle à lancer avant le run de l'appl}
+
+\item{max_attempts}{Nombre de tentative de connexion à l'application}
 }
 \value{
 rien
