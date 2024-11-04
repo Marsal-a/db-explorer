@@ -287,6 +287,7 @@ viewTabServer <- function(id,parent_session,logins){
 
       observeEvent(input$navig_view_vars_sort_icon_clicked,{
 
+
         selected_col <- input$navig_view_vars
         NAVIG_col_sorted(!NAVIG_col_sorted())
         updateSelectInput(inputId = "navig_view_vars",selected=selected_col)
@@ -316,7 +317,6 @@ viewTabServer <- function(id,parent_session,logins){
           }else{
             if (grepl("([^=!<>])=([^=])", input$navig_data_filter)){
 
-
               isolate(NAVIG_errors[["value_filter_error"]] <- "Filtre invalide : Ne pas utiliser le signe '=' dans un filtre, mais utiliser '==' à la place (ex : I_ELST==\"123456\"")
 
             }else{
@@ -339,7 +339,6 @@ viewTabServer <- function(id,parent_session,logins){
               }
             }
           }
-
 
           if(is.empty(input$navig_data_arrange)){
             isolate(NAVIG_errors[["value_arrange_error"]] <- "")
