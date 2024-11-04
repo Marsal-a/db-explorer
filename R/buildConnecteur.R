@@ -7,10 +7,12 @@ createPostgreSQLConnector <- function(host,dbname,port=5432,filename=NULL){
   read_template <- gsub("{{DBNAME]}",dbname, read_template,fixed = T)
 
   if(is.null(filename)){
-    filename="PostgreSQLConnector.R"
+    filename="./PostgreSQLConnector.R"
   }
 
-  writeLines(read_template,paste0("./",filename))
-  file.edit(paste0("./",filename))
+  filename = normalizePath(filename,mustWork = FALSE)
+
+  writeLines(read_template,filename)
+  file.edit(filename)
 
 }
