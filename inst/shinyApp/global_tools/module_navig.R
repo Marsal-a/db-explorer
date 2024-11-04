@@ -11,7 +11,7 @@ viewTabUi <- function(id,label="Tab"){
       uiOutput(NS(id,"ui_navig_arrange")),
       uiOutput(NS(id,"ui_navig_arrange_error")),
       uiOutput(NS(id,"ui_navig_view_vars")),
-      actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
+      # actionButton(NS(id,"trigtest_DEV"), "button_test", icon = icon("sync", verify_fa = FALSE), style = "color:black"),
       width = 3
     ),
     mainPanel(
@@ -172,17 +172,13 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_col_sorted <- reactiveVal(FALSE)
 
       NAVIG_varnames <- eventReactive(
-        eventExpr = list(NAVIG_raw_tbl_lazy(),NAVIG_col_sorted()),{
+        eventExpr = list(NAVIG_raw_tbl_lazy()),{
 
         req(input$navig_table)
 
         var_class = get_class(NAVIG_raw_tbl_lazy() %>% head(10) %>% collect())
         res <-names(var_class) %>%
           set_names(., paste0(., " {", var_class, "}"))
-
-        if(NAVIG_col_sorted()){
-          res<-sort(res)
-        }
 
         return(res)
       })
@@ -243,13 +239,15 @@ viewTabServer <- function(id,parent_session,logins){
       output$ui_navig_view_vars <- renderUI({
 
         req(input$navig_table)
-
         vars <- NAVIG_varnames()
+        if(NAVIG_col_sorted()){
+          vars <- sort(vars)
+        }
         wellPanel(
           fluidPage(
             tags$div(
               style = "display: flex; justify-content: space-between",
-              tags$label("mlabel",`for` = NS(id,"navig_view_vars")),
+              tags$label("Sélection des colonnes :"),
               tags$div(
                 style = "text-align: right;",
                 tags$span(
@@ -269,6 +267,8 @@ viewTabServer <- function(id,parent_session,logins){
               )
             ),
 
+
+
             # uiLabelWithIcon(NS(id,"navig_view_vars"),"Sélectionner les colonnes :"),
             selectInput(
               inputId   = NS(id,"navig_view_vars"),
@@ -282,11 +282,14 @@ viewTabServer <- function(id,parent_session,logins){
             style="padding-left: 0px;padding-right:0px"
           )
         )
+
       })
 
       observeEvent(input$navig_view_vars_sort_icon_clicked,{
 
+        selected_col <- input$navig_view_vars
         NAVIG_col_sorted(!NAVIG_col_sorted())
+        updateSelectInput(inputId = "navig_view_vars",selected=selected_col)
 
       })
 
@@ -306,7 +309,6 @@ viewTabServer <- function(id,parent_session,logins){
         ignoreNULL = T,{
 
           req(input$navig_table)
-
           prepared_data <- NAVIG_raw_tbl_lazy()
 
           if(is.empty(input$navig_data_filter)){
@@ -430,8 +432,11 @@ viewTabServer <- function(id,parent_session,logins){
         eventExpr = list(NAVIG_collected_data(),input$navig_view_vars),
         ignoreNULL=T,ignoreInit = F,{
 
+
+
           req(input$navig_view_vars)
           req(all(input$navig_view_vars %in% NAVIG_varnames()))
+
           display_data <- NAVIG_collected_data()
 
           initial_col_order <- colnames(NAVIG_collected_data())
