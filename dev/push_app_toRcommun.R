@@ -23,7 +23,7 @@ archiveApp <- function(appPath,archive_path){
 
 }
 
-master_location <- "~/R_Commun/Adam/db-explorerT/"
+master_location <- "~/R_Commun/Adam/db-explorer/"
 archive_location <- "~/R_Commun/Adam/archive/"
 
 push_db_explorer <- function(launch=FALSE){
