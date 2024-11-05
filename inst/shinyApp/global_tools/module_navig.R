@@ -164,7 +164,28 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_raw_tbl_lazy <- eventReactive(c(input$navig_table),{
 
         req(input$navig_table)
-        raw_tbl_lazy <- connectors[[input$navig_db]]$remote_table_function(NAVIG_connector(),input$navig_schema,input$navig_table)
+
+         raw_tbl_lazy<- tryCatch(
+          expr  = {connectors[[input$navig_db]]$remote_table_function(NAVIG_connector(),input$navig_schema,input$navig_table)},
+          error = function(e){
+            # browser()
+            shinyWidgets::show_toast(title=paste0("Erreur de lecture !"),
+                                     text=HTML(glue::glue(
+                                       "La table <b>{input$navig_table}</b> semble être inaccessible ou corrompue.
+                                       <br><br> Message d'erreur renvoyé par la base :
+                                       <br><br> <code>{e$message}</code>")),
+                                     type="error",
+                                     timer="15000",
+                                     timerProgressBar = T,
+                                     width = "600px",
+                                     position="center-start"
+            )
+          }
+        )
+
+        if(inherits(raw_tbl_lazy,"error")){
+          return(NULL)
+        }
 
         return(raw_tbl_lazy)
       })
@@ -174,8 +195,8 @@ viewTabServer <- function(id,parent_session,logins){
       NAVIG_varnames <- eventReactive(
         eventExpr = list(NAVIG_raw_tbl_lazy()),{
 
-        req(input$navig_table)
-
+        req(NAVIG_raw_tbl_lazy())
+        # browser()
         var_class = get_class(NAVIG_raw_tbl_lazy() %>% head(10) %>% collect())
         res <-names(var_class) %>%
           set_names(., paste0(., " {", var_class, "}"))
@@ -237,7 +258,7 @@ viewTabServer <- function(id,parent_session,logins){
       })
 
       output$ui_navig_view_vars <- renderUI({
-
+        # browser()
         req(input$navig_table)
         vars <- NAVIG_varnames()
         if(NAVIG_col_sorted()){
@@ -642,7 +663,7 @@ viewTabServer <- function(id,parent_session,logins){
                                  type="info",
                                  timer="1500",
                                  timerProgressBar = T,
-                                 position="bottom-end"
+                                 position="center-end"
                                  )
       })
 
