@@ -7,7 +7,7 @@
 #' @param port port du serveur postgreSQL
 #' @param filename nom du fichier R de connexion
 #' @importFrom utils file.edit
-
+#' @export
 createPostgreSQLConnector <- function(host,dbname,port=5432,filename="./PostgreSQLConnector.R"){
 
   read_template <- readLines(system.file("template_connector","template_postgre.R",package="dbExplorer"))
